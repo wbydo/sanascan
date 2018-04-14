@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 import pymysql
@@ -28,13 +28,15 @@ class Post(Base):
     contents = Column(Text)
     file_id = Column(
         Integer,
-        ForeignKey('files.id',onupdate='CASCADE', ondelete='CASCADE')
+        ForeignKey('files.id', onupdate='CASCADE', ondelete='CASCADE'),
+        primary_key=True
     )
+    UniqueConstraint('id', 'file_id')
 
     def __repr__(self):
-        return "<Post(id='{}', contents='{}')".format(
+        return "<Post(id={}, contents='{:<10}', file_id={})".format(
             self.id,
-            self.contents[10],
+            self.contents,
             self.file_id
         )
 
