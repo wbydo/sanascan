@@ -15,7 +15,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 base = os.path.dirname(os.path.abspath(__file__))
-data_dir = os.path.abspath(os.path.join(base, '../data'))
+data_dir = os.path.abspath(os.path.join(base, 'data'))
 
 for file in session.query(File).all():
     path = os.path.join(data_dir, file.name)
