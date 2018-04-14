@@ -12,7 +12,7 @@ class File(Base):
     __tablename__ = 'files'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100))
+    name = Column(String(100), unique=True)
     posts = relationship('Post')
 
     def __repr__(self):
