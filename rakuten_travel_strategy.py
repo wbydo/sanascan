@@ -1,4 +1,5 @@
 import re
+import jaconv
 
 class RakutenTravelStrategy():
     p = re.compile(r'(?P<period>(?:。|．|\.|！|!|？|\?)+)')

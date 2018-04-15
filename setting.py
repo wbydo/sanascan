@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, UniqueConstraint
+from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, UniqueConstraint, ForeignKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 import pymysql
@@ -38,6 +38,31 @@ class Post(Base):
             self.id,
             self.contents,
             self.file_id
+        )
+
+class Sentence(Base):
+    __tablename__ = 'sentences'
+    __table_args__ = (ForeignKeyConstraint(
+        ['post_id','post_file_id'],
+        ['posts.id', 'posts.file_id']
+    ), {})
+
+
+    id = Column(Integer, primary_key=True)
+    contents = Column(Text)
+    post_id = Column(
+        Integer,
+        ForeignKey('posts.id', onupdate='CASCADE', ondelete='CASCADE'),
+    )
+    post_file_id = Column(
+        Integer,
+        ForeignKey('posts.file_id', onupdate='CASCADE', ondelete='CASCADE'),
+    )
+
+    def __repr__(self):
+        return "<Sentence(id={}, contents='{}')".format(
+            self.id,
+            self.contents
         )
 
 DATABASE = 'mysql://{}:{}@{}/{}?charset=utf8'.format(
