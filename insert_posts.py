@@ -1,22 +1,19 @@
 import os
 import glob
 
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.mysql import insert
 
-from setting import ENGINE, Base, File, Post
+from setting import ENGINE, Base, File, Post, Session
 from posts_extractor import PostsExtractor
 from rakuten_travel_strategy import RakutenTravelStrategy
 
 engine = ENGINE
 Base.metadata.bind=engine
 
-Session = sessionmaker(bind=engine)
-session = Session()
-
 base = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.abspath(os.path.join(base, 'data'))
 
+session = Session()
 for file in session.query(File).all():
     path = os.path.join(data_dir, file.name)
 

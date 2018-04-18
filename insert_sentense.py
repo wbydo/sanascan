@@ -1,15 +1,15 @@
 import re
 
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.mysql import insert
 
 from natto import MeCab
 
-from setting import ENGINE, Base, Post, Sentence
+from setting import ENGINE, Base, Post, Sentence, Session
 from cleaner import Cleaner
 
-def iter_sentence(session, cleaner, mecab):
+def iter_sentence(cleaner, mecab):
     blank_ = re.compile(r'^\W*$')
+    session = Session()
     for post in session.query(Post).all():
         for sentence in cleaner.clean(post.contents, mecab):
             sentence_str = ' '.join(map(str, sentence))
@@ -20,13 +20,10 @@ def iter_sentence(session, cleaner, mecab):
 engine = ENGINE
 Base.metadata.bind=engine
 
-Session = sessionmaker(bind=engine)
-session = Session()
-
 cleaner = Cleaner()
 
 with engine.begin() as conn, MeCab() as me:
-    sentences = iter_sentence(session, cleaner, me)
+    sentences = iter_sentence(cleaner, me)
     insert_stmt = insert(Sentence)
     on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
         contents=insert_stmt.inserted.contents

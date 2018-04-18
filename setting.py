@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, UniqueConstraint, ForeignKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 import pymysql
 
 import env
@@ -76,6 +76,8 @@ ENGINE = create_engine(
     encoding = "utf-8",
     echo=True
 )
+
+Session = sessionmaker(bind=ENGINE)
 
 # Base.metadata.drop_all(ENGINE)
 Base.metadata.create_all(ENGINE)
