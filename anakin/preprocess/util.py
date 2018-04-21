@@ -16,8 +16,6 @@ from anakin.preprocess.posts_extractor import PostsExtractor
 from anakin.preprocess.rakuten_travel_strategy import RakutenTravelStrategy
 from anakin.preprocess.cleaner import Cleaner
 
-Base.metadata.bind=ENGINE
-
 def insert_files(data_dir):
     p = os.path.join(data_dir, '*')
 
