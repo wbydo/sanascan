@@ -3,7 +3,7 @@ import re
 
 import jaconv
 
-from word import Word
+from anakin.util.word import Word
 
 class Cleaner:
     stop_symbol = re.compile(r'(?P<period>(?:。|．|\.|！|!|？|\?)+)')
