@@ -7,10 +7,7 @@ from natto import MeCab
 from sqlalchemy.dialects.mysql import insert
 
 from anakin.db.session import ENGINE, Session
-from anakin.db.base import Base
-from anakin.db.file import File
-from anakin.db.post import Post
-from anakin.db.sentence import Sentence
+from anakin.db.model import Base, File, Post, Sentence
 
 from anakin.preprocess.posts_extractor import PostsExtractor
 from anakin.preprocess.rakuten_travel_strategy import RakutenTravelStrategy
