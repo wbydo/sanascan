@@ -4,20 +4,18 @@ import os
 from sqlalchemy import func
 from more_itertools import chunked
 
-from lang_model.lang_model import LangModel
-from lang_model.srilm import srilm
+from anakin.lang_model.lang_model import LangModel
+from anakin.lang_model.srilm import srilm
 
-from setting import ENGINE, Sentence, Session, LangModelFile
+from anakin.db.session import ENGINE, Session
+from anakin.db.model import Sentence, LangModelFile
 
 class CreateLangModelError(Exception):
     pass
 
 class LangModelFactory():
-    _base = os.path.dirname(os.path.abspath(__file__))
-    _lm_dir = os.path.abspath(os.path.join(_base, 'lm'))
-    _pattern = os.path.join(_lm_dir + '*')
-
-    def __init__(self, max_get_size=500000):
+    def __init__(self, lang_model_dir, max_get_size=500000):
+        self._dir = lang_model_dir
         self._max_get_size = max_get_size
 
     def _sentence_num(self):
@@ -49,10 +47,11 @@ class LangModelFactory():
         return arpa_text
 
     def _write_lang_model_file(self, file_name, arpa_text):
-        if file_name in map(os.path.basename, glob.iglob(LangModelFactory._pattern)):
+        pattern = os.path.join(self._dir, '*')
+        if file_name in map(os.path.basename, glob.iglob(pattern)):
             raise LangModelFileExistError()
 
-        with open(os.path.join(LangModelFactory._lm_dir, file_name), 'w') as f:
+        with open(os.path.join(self._dir, file_name), 'w') as f:
             f.write(arpa_text)
 
     def _insert_lang_model_to_db(self, file_name, id_list, order):
@@ -87,12 +86,3 @@ class LangModelFactory():
         self._write_lang_model_file(file_name, arpa_text)
         lm = self._insert_lang_model_to_db(file_name, id_list, order)
         return lm
-
-
-# lmf = LangModelFactory()
-# id_list = list(lmf._all_sentence_id())[:20]
-# a = lmf.get_lang_model(id_list, order=3, file_name='test00555.arpa')
-#
-# id_list = list(lmf._all_sentence_id())[50:70]
-# lmf.get_lang_model(id_list, order=3, file_name='test002.arpa')
-# print(a)
