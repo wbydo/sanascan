@@ -18,12 +18,10 @@ from anakin.preprocess.cleaner import Cleaner
 
 Base.metadata.bind=ENGINE
 
-def insert_files():
-    # pathの指定をコマンドラインから求めたほうが良いかも
-    dirname_ = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.abspath(os.path.join(dirname_, '../../data/*'))
+def insert_files(data_dir):
+    p = os.path.join(data_dir, '*')
 
-    file_names = [{'name':name} for name in map(os.path.basename, glob.iglob(path))]
+    file_names = [{'name':name} for name in map(os.path.basename, glob.iglob(p))]
     insert_stmt = insert(File)
     on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
         name=insert_stmt.inserted.name
@@ -32,11 +30,7 @@ def insert_files():
     conn = ENGINE.connect()
     conn.execute(on_duplicate_key_stmt, file_names)
 
-def insert_posts():
-    # pathの指定をコマンドラインから求めたほうが良いかも
-    dirname_ = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.abspath(os.path.join(dirname_, '../../data'))
-
+def insert_posts(data_dir):
     session = Session()
     for file in session.query(File).all():
         path = os.path.join(data_dir, file.name)
