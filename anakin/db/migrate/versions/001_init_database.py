@@ -1,12 +1,30 @@
-from sqlalchemy import MetaData, Table, Column,\
-    Integer, String, Text, ForeignKey, PrimaryKeyConstraint
+from sqlalchemy import (
+    MetaData, Table, Column,
+    Integer, String, Text,
+    ForeignKey,PrimaryKeyConstraint
+)
+from sqlalchemy.types import BINARY
+from sqlalchemy.dialects.mysql import LONGBLOB
+
 from migrate import *
 
 meta = MetaData()
+dataset_table = Table(
+    'datasets', meta,
+    Column('id', Integer, primary_key=True),
+    Column('name', String(100), unique=True),
+)
+
 file_table = Table(
     'files', meta,
     Column('id', Integer, primary_key=True),
-    Column('name', String(100), unique=True),
+    Column(
+        'dataset_id', Integer,
+        ForeignKey('datasets.id', onupdate='CASCADE', ondelete='CASCADE'),
+    ),
+    Column('file_name', String(100), unique=True),
+    Column('contents', LONGBLOB),
+    Column('checksum', BINARY(255), unique=True)
 )
 
 post_table = Table(

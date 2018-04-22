@@ -1,29 +1,44 @@
 import os
 import glob
 import re
+from hashlib import sha1
 
 from natto import MeCab
 
 from sqlalchemy.dialects.mysql import insert
+from sqlalchemy.orm import Load
 
 from anakin.db.session import ENGINE, Session
-from anakin.db.model import Base, File, Post, Sentence
+from anakin.db.model import Base, Dataset, File, Post, Sentence
 
 from anakin.preprocess.posts_extractor import PostsExtractor
 from anakin.preprocess.rakuten_travel_strategy import RakutenTravelStrategy
 from anakin.preprocess.cleaner import Cleaner
 
-def insert_files(data_dir):
-    p = os.path.join(data_dir, '*')
+def register_single_file(file_path, dataset_name):
+    file_name = os.path.basename(file_path)
 
-    file_names = [{'name':name} for name in map(os.path.basename, glob.iglob(p))]
-    insert_stmt = insert(File)
-    on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
-        name=insert_stmt.inserted.name
+    # f.read()でメモリリークしたら逐次読み込みを考える
+    with open(file_path, 'rb') as f:
+        contents = f.read()
+        checksum = sha1().digest()
+
+    session = Session()
+    dataset = session.query(Dataset).filter(Dataset.name==dataset_name).scalar()
+
+    if dataset is None:
+        dataset = Dataset(name=dataset_name)
+        session.add(dataset)
+
+    file = File(
+        file_name=file_name,
+        dataset=dataset,
+        contents=contents,
+        checksum=checksum
     )
-
-    conn = ENGINE.connect()
-    conn.execute(on_duplicate_key_stmt, file_names)
+    session.add(file)
+    session.commit()
+    session.close()
 
 def insert_posts(data_dir):
     session = Session()

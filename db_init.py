@@ -8,6 +8,8 @@ if __name__ == '__main__':
         raise ValueError('引数にdataディレクトリを指定')
 
     path = os.path.abspath(argv[1])
-    util.insert_files(path)
-    util.insert_posts(path)
-    util.insert_sentence(1000)
+    util.register_single_file(path, 'rakuten_travel02_userReview')
+
+    # util.insert_posts()
+    # util.insert_posts(path)
+    # util.insert_sentence(1000)

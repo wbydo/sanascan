@@ -5,15 +5,27 @@ from anakin.db.session import ENGINE
 
 Base = automap_base()
 
+class Dataset(Base):
+    __tablename__ = 'datasets'
+
+    files = relationship('File')
+
+    def __repr(self):
+        return "<Dataset(id='{}', name='{}')>".format(
+            self.id,
+            self.name
+        )
+
 class File(Base):
     __tablename__ = 'files'
 
     posts = relationship('Post')
 
     def __repr__(self):
-        return "<File(id='{}', name='{}')".format(
+        return "<File(id='{}', dataset='{}', file_name='{}')".format(
             self.id,
-            self.name
+            self.dataset.name,
+            self.file_name
         )
 
 class Post(Base):
