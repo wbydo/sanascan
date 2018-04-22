@@ -3,25 +3,19 @@ from sqlalchemy import (
     Integer, String, Text,
     ForeignKey,PrimaryKeyConstraint
 )
-from sqlalchemy.types import BINARY
+from sqlalchemy.types import BINARY, Enum
 from sqlalchemy.dialects.mysql import LONGBLOB
 
 from migrate import *
 
+from anakin.preprocess.dataset import Dataset
+
 meta = MetaData()
-dataset_table = Table(
-    'datasets', meta,
-    Column('id', Integer, primary_key=True),
-    Column('name', String(100), unique=True),
-)
 
 file_table = Table(
     'files', meta,
     Column('id', Integer, primary_key=True),
-    Column(
-        'dataset_id', Integer,
-        ForeignKey('datasets.id', onupdate='CASCADE', ondelete='CASCADE'),
-    ),
+    Column('dataset', Enum(Dataset)),
     Column('file_name', String(100), unique=True),
     Column('contents', LONGBLOB),
     Column('checksum', BINARY(255), unique=True)

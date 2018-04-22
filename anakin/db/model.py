@@ -1,30 +1,25 @@
+from sqlalchemy import Column
+
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
+from sqlalchemy.types import Enum
 
 from anakin.db.session import ENGINE
+from anakin.preprocess.dataset import Dataset
 
 Base = automap_base()
 
-class Dataset(Base):
-    __tablename__ = 'datasets'
-
-    files = relationship('File')
-
-    def __repr(self):
-        return "<Dataset(id='{}', name='{}')>".format(
-            self.id,
-            self.name
-        )
-
 class File(Base):
     __tablename__ = 'files'
+
+    dataset = Column('dataset', Enum(Dataset))
 
     datum = relationship('Data')
 
     def __repr__(self):
         return "<File(id='{}', dataset='{}', file_name='{}')".format(
             self.id,
-            self.dataset.name,
+            self.dataset,
             self.file_name
         )
 

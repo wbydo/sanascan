@@ -9,13 +9,13 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Load
 
 from anakin.db.session import ENGINE, Session
-from anakin.db.model import Base, Dataset, File, Data, Sentence
+from anakin.db.model import Base, File, Data, Sentence
 
 from anakin.preprocess.posts_extractor import PostsExtractor
 from anakin.preprocess.rakuten_travel_strategy import RakutenTravelStrategy
 from anakin.preprocess.cleaner import Cleaner
 
-def register_single_file(file_path, dataset_name):
+def register_single_file(file_path, dataset):
     file_name = os.path.basename(file_path)
 
     # f.read()でメモリリークしたら逐次読み込みを考える
@@ -24,11 +24,6 @@ def register_single_file(file_path, dataset_name):
         checksum = sha1().digest()
 
     session = Session()
-    dataset = session.query(Dataset).filter(Dataset.name==dataset_name).scalar()
-
-    if dataset is None:
-        dataset = Dataset(name=dataset_name)
-        session.add(dataset)
 
     file = File(
         file_name=file_name,
@@ -40,7 +35,7 @@ def register_single_file(file_path, dataset_name):
     session.commit()
     session.close()
 
-def insert_posts(data_dir):
+def extract_data(file_model):
     session = Session()
     for file in session.query(File).all():
         path = os.path.join(data_dir, file.name)
