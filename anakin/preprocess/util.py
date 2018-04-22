@@ -11,7 +11,6 @@ from sqlalchemy.orm import Load
 from anakin.db.session import ENGINE, Session
 from anakin.db.model import Base, File, Data, Sentence
 
-from anakin.preprocess.rakuten_travel_strategy import RakutenTravelStrategy
 from anakin.preprocess.cleaner import Cleaner
 
 def register_single_file(file_path, dataset):
@@ -49,13 +48,13 @@ def extract_data():
         with ENGINE.begin() as conn:
             conn.execute(on_duplicate_key_stmt, datum)
 
-def insert_sentence(max):
+def split_sentence(max):
     def iter_sentence(cleaner, mecab, max=None):
         blank_ = re.compile(r'^\W*$')
         session = Session()
         i = 0
-        for post in session.query(Post).all():
-            for sentence in cleaner.clean(post.contents, mecab):
+        for data in session.query(Data).all():
+            for sentence in cleaner.clean(data.contents, mecab):
                 sentence_str = ' '.join(map(str, sentence))
                 if not blank_.match(sentence_str):
                     if not max is None and i >= max:
@@ -63,7 +62,7 @@ def insert_sentence(max):
 
                     print(sentence_str)
                     i += 1
-                    yield {'contents':sentence_str, 'post_id':post.id, 'post_file_id':post.file_id}
+                    yield {'contents':sentence_str, 'data_id':data.id, 'data_file_id':data.file_id}
 
     cleaner = Cleaner()
     with ENGINE.begin() as conn, MeCab() as me:

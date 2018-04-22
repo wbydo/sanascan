@@ -8,8 +8,8 @@ from anakin.util.word import Word
 class Cleaner:
     stop_symbol = re.compile(r'(?P<period>(?:。|．|\.|！|!|？|\?)+)')
 
-    def clean(self, post, mecab):
-        normalized = jaconv.normalize(post)
+    def clean(self, data, mecab):
+        normalized = jaconv.normalize(data)
         for sentence in re.sub(Cleaner.stop_symbol, '\n', normalized).split():
             yield self._process_sentence(sentence, mecab)
 
