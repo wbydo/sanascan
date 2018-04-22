@@ -1,15 +1,17 @@
 import enum
 import re
-import jaconv
 
 from collections import namedtuple
 
-DatasetAttribute = namedtuple('DatasetAttribute', ['formal_name', 'strategy'])
+DatasetAttribute = namedtuple('DatasetAttribute', ['formal_name', 'extractor'])
 
 def _rakuten_travel_user_review(contents):
+    # !!変更には注意!!
+    # DBで管理されているので変更するなら新しいenum作ること
+
     # 大きなバイナリを一気にdecodeが不安
     # メモリリークしたら逐次処理を考える
-    for line in iter(contents.decode('utf-8').split()):
+    for line in contents.decode('utf-8').strip().split('\n'):
         tsv = line.split('\t')
         contents = tsv[2].strip()
         id = int(tsv[3])
@@ -19,5 +21,5 @@ def _rakuten_travel_user_review(contents):
 class Dataset(enum.Enum):
     RTUR = DatasetAttribute(
         formal_name='Rakuten_travel02_userReview',
-        strategy=_rakuten_travel_user_review
+        extractor=_rakuten_travel_user_review
     )

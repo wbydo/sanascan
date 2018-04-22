@@ -11,7 +11,6 @@ from sqlalchemy.orm import Load
 from anakin.db.session import ENGINE, Session
 from anakin.db.model import Base, File, Data, Sentence
 
-from anakin.preprocess.posts_extractor import PostsExtractor
 from anakin.preprocess.rakuten_travel_strategy import RakutenTravelStrategy
 from anakin.preprocess.cleaner import Cleaner
 
@@ -35,21 +34,20 @@ def register_single_file(file_path, dataset):
     session.commit()
     session.close()
 
-def extract_data(file_model):
+def extract_data():
     session = Session()
-    for file in session.query(File).all():
-        path = os.path.join(data_dir, file.name)
+    query = session.query(File)\
+        .options(Load(File).defer('contents'))
+    for file in query:
+        extractor = file.dataset.value.extractor
 
-        ext = PostsExtractor()
-        strategy = RakutenTravelStrategy()
-
-        posts = [dict(file_id=file.id, **e) for e in ext.apply(strategy, path)]
-        insert_stmt = insert(Post)
+        datum= [dict(file_id=file.id, **e) for e in extractor(file.contents)]
+        insert_stmt = insert(Data)
         on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
             contents=insert_stmt.inserted.contents
         )
-        conn = ENGINE.connect()
-        conn.execute(on_duplicate_key_stmt, posts)
+        with ENGINE.begin() as conn:
+            conn.execute(on_duplicate_key_stmt, datum)
 
 def insert_sentence(max):
     def iter_sentence(cleaner, mecab, max=None):
