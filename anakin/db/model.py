@@ -19,7 +19,7 @@ class Dataset(Base):
 class File(Base):
     __tablename__ = 'files'
 
-    posts = relationship('Post')
+    datum = relationship('Data')
 
     def __repr__(self):
         return "<File(id='{}', dataset='{}', file_name='{}')".format(
@@ -28,13 +28,13 @@ class File(Base):
             self.file_name
         )
 
-class Post(Base):
-    __tablename__ = 'posts'
+class Data(Base):
+    __tablename__ = 'datum'
 
     sentences = relationship('Sentence')
 
     def __repr__(self):
-        return "<Post(id={}, contents='{:<10}', file_id={})".format(
+        return "<Data(id={}, contents='{:<10}', file_id={})".format(
             self.id,
             self.contents,
             self.file_id

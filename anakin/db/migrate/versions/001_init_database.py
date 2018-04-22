@@ -27,8 +27,8 @@ file_table = Table(
     Column('checksum', BINARY(255), unique=True)
 )
 
-post_table = Table(
-    'posts', meta,
+data_table = Table(
+    'datum', meta,
     Column('id', Integer),
     Column('contents', Text),
     Column(
@@ -43,12 +43,12 @@ sentence_table = Table(
     'sentences', meta,
     Column('id', Integer, primary_key=True),
     Column('contents', Text),
-    Column('post_id', Integer),
-    Column('post_file_id', Integer),
+    Column('data_id', Integer),
+    Column('data_file_id', Integer),
 
     ForeignKeyConstraint(
-        ['post_id','post_file_id'],
-        ['posts.id', 'posts.file_id']
+        ['data_id','data_file_id'],
+        ['datum.id', 'datum.file_id']
     )
 )
 
