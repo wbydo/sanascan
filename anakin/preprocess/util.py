@@ -8,12 +8,19 @@ from natto import MeCab
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Load
 
-from anakin.db.session import ENGINE, Session
 from anakin.db.model import Base, File, Data, Sentence
-
+from anakin.db.session import engine_and_session
 from anakin.preprocess.cleaner import Cleaner
 
-def register_single_file(file_path, dataset):
+def _prepare(database):
+    ENGINE, Session = engine_and_session(database)
+
+    Base.prepare(ENGINE, reflect=True)
+    return ENGINE, Session
+
+def register_single_file(file_path, dataset, database):
+    ENGINE, Session = _prepare(database)
+
     file_name = os.path.basename(file_path)
 
     # f.read()でメモリリークしたら逐次読み込みを考える
@@ -33,7 +40,9 @@ def register_single_file(file_path, dataset):
     session.commit()
     session.close()
 
-def extract_data():
+def extract_data(database):
+    ENGINE, Session = _prepare(database)
+
     session = Session()
     query = session.query(File)\
         .options(Load(File).defer('contents'))
@@ -48,7 +57,9 @@ def extract_data():
         with ENGINE.begin() as conn:
             conn.execute(on_duplicate_key_stmt, datum)
 
-def split_sentence(max):
+def split_sentence(max, database):
+    ENGINE, Session = _prepare(database)
+
     def iter_sentence(cleaner, mecab, max=None):
         blank_ = re.compile(r'^\W*$')
         session = Session()

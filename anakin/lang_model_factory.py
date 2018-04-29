@@ -7,30 +7,30 @@ from more_itertools import chunked
 from anakin.lang_model.lang_model import LangModel
 from anakin.lang_model.srilm import srilm
 
-from anakin.db.session import ENGINE, Session
 from anakin.db.model import Sentence, LangModelFile
 
 class CreateLangModelError(Exception):
     pass
 
 class LangModelFactory():
-    def __init__(self, lang_model_dir, max_get_size=500000):
+    def __init__(self, lang_model_dir, session_class max_get_size=500000):
         self._dir = lang_model_dir
         self._max_get_size = max_get_size
+        self._Session = session_class
 
     def _sentence_num(self):
-        session = Session()
+        session = self._Session()
         return session.query(Sentence.id).count()
 
     def _all_sentence_id(self):
-        session = Session()
+        session = self._Session()
         for s in session.query(Sentence):
             yield s.id
 
     def _sentences_by_id(self, id_list):
         gen = chunked(id_list, self._max_get_size)
         for i in gen:
-            session = Session()
+            session = self._Session()
             q = session.query(Sentence)\
                 .filter(Sentence.id.in_(i))
             for j in q:
@@ -58,7 +58,7 @@ class LangModelFactory():
         sentences = list(self._sentences_by_id(id_list))
         lm = LangModelFile(name=file_name, sentences=sentences, order=order)
 
-        session = Session()
+        session = self._Session()
         session.add(lm)
         session.commit()
         session.close()
@@ -70,7 +70,7 @@ class LangModelFactory():
         if not len(id_list) == len(id_set):
             raise CreateLangModelError('id_listに重複有り')
 
-        session = Session()
+        session = self._Session()
         for lm in session.query(LangModelFile):
             if id_set == set(s.id for s in lm.sentences)\
                 and order == lm.order:

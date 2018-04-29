@@ -4,7 +4,6 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import Enum
 
-from anakin.db.session import ENGINE
 from anakin.preprocess.dataset import Dataset
 
 Base = automap_base()
@@ -51,4 +50,5 @@ class LangModelFile(Base):
 
     sentences = relationship('Sentence', secondary='created_lang_model')
 
-Base.prepare(ENGINE, reflect=True)
+# importしたら以下を実行
+# Base.prepare(ENGINE, reflect=True)
