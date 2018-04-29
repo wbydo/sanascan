@@ -26,7 +26,7 @@ def register_single_file(file_path, dataset, database):
     # f.read()でメモリリークしたら逐次読み込みを考える
     with open(file_path, 'rb') as f:
         contents = f.read()
-        checksum = sha1().digest()
+        checksum = sha1(contents).digest()
 
     session = Session()
 
