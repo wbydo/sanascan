@@ -1,5 +1,6 @@
 from anakin.util.key import Key
 from anakin.util.key_to_word import yomi2tuple
+from anakin.util.word import Word
 
 class Node:
     def __init__(self, word, root=False):
@@ -69,4 +70,5 @@ def estimate(words, key_to_word, lang_model, order):
     eos_node = Node('</s>')
     eos_node.search_parent(wait_child[l], lang_model, order)
     # return eos_node
-    return ' '.join(eos_node.sentence.split(' ')[1:-1])
+    est_sentence = ' '.join(eos_node.sentence.split(' ')[1:-1])
+    return Word.from_sentence(est_sentence)
