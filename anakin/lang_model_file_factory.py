@@ -16,7 +16,7 @@ from anakin.db.session import database, engine_and_session
 class CreateLangModelError(Exception):
     pass
 
-class LangModelFactory():
+class LangModelFileFactory():
     def __init__(self, database, max_get_size=500000, echo=True):
         self._ENGINE, self._Session = engine_and_session(database, echo)
         Base.prepare(self._ENGINE, reflect=True)
@@ -45,7 +45,7 @@ class LangModelFactory():
                 yield j
             session.close()
 
-    def get_lang_model(self, id_list, order):
+    def get_lang_model_file(self, id_list, order):
         id_set = set(id_list)
         if not len(id_list) == len(id_set):
             raise CreateLangModelError('id_listに重複有り')
