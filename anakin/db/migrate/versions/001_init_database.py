@@ -18,7 +18,7 @@ file_table = Table(
     Column('dataset', Enum(Dataset)),
     Column('file_name', String(100), unique=True),
     Column('contents', LONGBLOB),
-    Column('checksum', BINARY(255), unique=True)
+    Column('checksum', BINARY(20), unique=True)
 )
 
 data_table = Table(
@@ -49,8 +49,9 @@ sentence_table = Table(
 lang_model_file_table = Table(
     'lang_model_files', meta,
     Column('id', Integer, primary_key=True),
-    Column('name', String(100), unique=True),
-    Column('order', Integer)
+    Column('order', Integer),
+    Column('contents', LONGBLOB),
+    Column('checksum', BINARY(20), unique=True)
 )
 
 created_lang_model_table = Table(
