@@ -5,6 +5,10 @@ class Word(namedtuple('Word', ['surface', 'yomi'])):
   MARK = {'unk':'<unk>', 'eng':'<eng>', 'num':'<num>'}
 
   @staticmethod
+  def from_sentence(sentence):
+      return [Word.from_str(w) for w in sentence.split(' ')]
+
+  @staticmethod
   def from_str(str_):
     if str_ in Word.MARK.values():
         return Word(surface=str_, yomi=str_)
