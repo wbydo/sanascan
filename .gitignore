@@ -1,2 +1,4 @@
-src/env.py
+env.py
 __pycache__
+.ipynb_checkpoints/
+lm/
