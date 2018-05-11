@@ -4,6 +4,7 @@ import re
 from hashlib import sha1
 
 from natto import MeCab
+from more_itertools import chunked
 
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Load
@@ -57,14 +58,14 @@ def extract_data(database):
         with ENGINE.begin() as conn:
             conn.execute(on_duplicate_key_stmt, datum)
 
-def split_sentence(max, database):
+def split_sentence(max, database, chunk=100):
     ENGINE, Session = _prepare(database)
 
     def iter_sentence(cleaner, mecab, max=None):
         blank_ = re.compile(r'^\W*$')
         session = Session()
         i = 0
-        for data in session.query(Data).all():
+        for data in session.query(Data):
             for sentence in cleaner.clean(data.contents, mecab):
                 sentence_str = ' '.join(map(str, sentence))
                 if not blank_.match(sentence_str):
@@ -77,9 +78,9 @@ def split_sentence(max, database):
 
     cleaner = Cleaner()
     with ENGINE.begin() as conn, MeCab() as me:
-        sentences = iter_sentence(cleaner, me, max)
-        insert_stmt = insert(Sentence)
-        on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
-            contents=insert_stmt.inserted.contents
-        )
-        conn.execute(on_duplicate_key_stmt, list(sentences))
+        for sentences in chunked(iter_sentence(cleaner, me, max), chunk):
+            insert_stmt = insert(Sentence)
+            on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
+                contents=insert_stmt.inserted.contents
+            )
+            conn.execute(on_duplicate_key_stmt, list(sentences))

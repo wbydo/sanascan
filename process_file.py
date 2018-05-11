@@ -6,5 +6,5 @@ from env import LOCAL
 if __name__ == '__main__':
     db = database(**LOCAL)
 
-    util.extract_data(db)
-    util.split_sentence(1000, db)
+    # util.extract_data(db)
+    util.split_sentence(None, db)
