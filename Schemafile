@@ -1,55 +1,49 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-create_table "created_lang_model", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.integer "sentence_id"
-  t.integer "lang_model_id"
-  t.index ["lang_model_id"], name: "lang_model_id"
-  t.index ["sentence_id"], name: "sentence_id"
-end
-
-create_table "datasets", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.string "name", limit: 100
-  t.string "enum", limit: 4
-  t.index ["name"], name: "name", unique: true
-end
-
-create_table "datum", primary_key: ["id", "file_id"], options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.integer "id", null: false
-  t.text "contents"
-  t.integer "file_id", null: false
-  t.index ["file_id"], name: "file_id"
+create_table "corpora", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.text "name", unique: true, null: false
+  t.string "symbol", limit: 16, unique: true, null: false
 end
 
 create_table "files", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.string "dataset", limit: 4
-  t.string "file_name", limit: 100
-  t.binary "contents", limit: 4294967295
-  t.binary "checksum", limit: 20
-  t.index ["checksum"], name: "checksum", unique: true
-  t.index ["file_name"], name: "file_name", unique: true
+  t.text "name", null: false, unique: true
+  t.integer "corpus_id", null: false
+  t.index ["corpus_id"], name: "corpus_id"
+  t.text "checksum", null:false, unique:true
 end
+add_foreign_key(
+  "files", "corpora",
+  column: "corpus_id",
+  name: "files_corpus_id_corpora_id",
+  on_update: :cascade,
+  on_delete: :cascade
+)
 
-create_table "lang_model_files", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.integer "order"
-  t.binary "contents", limit: 4294967295
-  t.binary "checksum", limit: 20
-  t.index ["checksum"], name: "checksum", unique: true
-end
+create_table "datum", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.integer "file_id", null: false
+  t.index ["file_id"], name: "file_id"
 
-create_table "migrate_version", primary_key: "repository_id", id: :string, limit: 250, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.text "repository_path"
-  t.integer "version"
+  t.integer "original_data_id"
+  t.text "contents", null: false
+  t.text "symbol", unique: true, null: false
 end
+add_foreign_key(
+  "datum", "files",
+  column: "file_id",
+  name: "datum_file_id_files_id",
+  on_update: :cascade,
+  on_delete: :cascade
+)
 
 create_table "sentences", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.text "contents"
-  t.integer "data_id"
-  t.integer "data_file_id"
-  t.index ["data_id", "data_file_id"], name: "data_id"
+  t.integer "data_id", null:false
+  t.index ["data_id"], name: "data_id"
+  t.text "symbol", unique: true, null: false
 end
-
-add_foreign_key "created_lang_model", "lang_model_files", column: "lang_model_id", name: "created_lang_model_ibfk_2", on_update: :cascade, on_delete: :cascade
-add_foreign_key "created_lang_model", "sentences", name: "created_lang_model_ibfk_1", on_update: :cascade, on_delete: :cascade
-add_foreign_key "datum", "files", name: "datum_ibfk_1", on_update: :cascade, on_delete: :cascade
-add_foreign_key "sentences", "datum", column: "data_file_id", primary_key: "file_id", name: "sentences_ibfk_1"
-add_foreign_key "sentences", "datum", column: "data_id", name: "sentences_ibfk_1"
+add_foreign_key(
+  "sentences", "datum",
+  column: "data_id",
+  name: "sentences_data_id_datum_id",
+  on_update: :cascade,
+  on_delete: :cascade
+)
