@@ -10,6 +10,16 @@
 # DB作成コマンド - 20180614
 - `mysql> CREATE DATABASE (db_name) DEFAULT CHARACTER SET utf8;`
 
+# DATABASEの作り方
+```python
+'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
+      user_name,
+      password,
+      host_ip,
+      db_name
+)
+```
+
 # create_engineの使い方
 ```python
 from sqlalchemy import create_engine
