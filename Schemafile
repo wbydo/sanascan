@@ -1,49 +1,80 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-create_table "corpora", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.text "name", unique: true, null: false
-  t.string "symbol", limit: 16, unique: true, null: false
+
+# corpora
+create_table 'corpora', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+  t.text 'name', unique: true, null: false
+
+  t.string 'symbol', limit: 16, null: false
+  t.index ['symbol'], name: 'symbol', unique: true
 end
 
-create_table "files", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.text "name", null: false, unique: true
-  t.integer "corpus_id", null: false
-  t.index ["corpus_id"], name: "corpus_id"
-  t.text "checksum", null:false, unique:true
+# files
+create_table 'files', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+  t.string 'name', null: false, limit: 255
+  t.index ['name'], name:'name', unique: true
+
+  t.integer 'corpus_id', null: false
+  t.index ['corpus_id'], name: 'corpus_id'
+
+  t.string 'checksum', null:false, limit: 64
+  t.index ['checksum'], name: 'checksum', unique: true
 end
 add_foreign_key(
-  "files", "corpora",
-  column: "corpus_id",
-  name: "files_corpus_id_corpora_id",
+  'files', 'corpora',
+  column: 'corpus_id',
+  name: 'files_corpus_id_corpora_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
-create_table "datum", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.integer "file_id", null: false
-  t.index ["file_id"], name: "file_id"
+# original_datum
+create_table 'original_datum', id: :integer, renamed_from: "datum", options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+  t.integer 'file_id', null: false
+  t.index ['file_id'], name: 'file_id'
 
-  t.integer "original_data_id"
-  t.text "contents", null: false
-  t.text "symbol", unique: true, null: false
+  t.integer 'id_in_corpus'
+  t.text 'contents', null: false
+
+  t.string 'symbol', limit: 255, null: false
+  t.index ['symbol'], name: 'symbol', unique: true
 end
 add_foreign_key(
-  "datum", "files",
-  column: "file_id",
-  name: "datum_file_id_files_id",
+  'original_datum', 'files',
+  column: 'file_id',
+  name: 'original_datum_file_id_files_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
-create_table "sentences", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-  t.integer "data_id", null:false
-  t.index ["data_id"], name: "data_id"
-  t.text "symbol", unique: true, null: false
+# split_methods
+create_table 'split_methods', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+  t.string 'name', null: false, limit: 255
+  t.index ['name'], name: 'name', unique: true
+end
+
+# sentences
+create_table 'sentences', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+  t.integer 'data_id', null:false
+  t.index ['data_id'], name: 'data_id'
+
+  t.string 'symbol', limit: 255, null: false
+  t.index ['symbol'], name: 'symbol', unique: true
+
+  t.integer 'split_method_id', unique: true, null: false
+  t.index ['split_method_id'], name: 'split_method_id'
 end
 add_foreign_key(
-  "sentences", "datum",
-  column: "data_id",
-  name: "sentences_data_id_datum_id",
+  'sentences', 'original_datum',
+  column: 'data_id',
+  name: 'sentences_data_id_original_datum_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+add_foreign_key(
+  'sentences', 'split_methods',
+  column: 'split_method_id',
+  name: 'sentences_split_method_id_split_methods_id',
   on_update: :cascade,
   on_delete: :cascade
 )
