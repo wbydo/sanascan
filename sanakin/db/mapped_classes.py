@@ -30,6 +30,7 @@ class OriginalData(Base):
 class Sentence(Base):
     __tablename__ = 'sentences'
 
-class SplitMethod(Base):
-    __tablename__ = 'split_methods'
+
+class Splitter(Base):
+    __tablename__ = 'splitters'
     sentences = relationship('Sentence')

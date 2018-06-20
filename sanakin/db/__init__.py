@@ -4,7 +4,7 @@ from .mapped_classes import(
     SNKFile,
     OriginalData,
     Sentence,
-    SplitMethod
+    Splitter
 )
 
 def init(engine):
