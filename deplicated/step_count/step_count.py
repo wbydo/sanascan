@@ -46,7 +46,7 @@ _COL_NUM_SQ = np.vstack([
 METHODS = ['traditional', 'pair_wise', 'col_num_all', 'col_num_sq']
 
 def _yomi2pos(words):
-    yomi_only = ''.join([w.yomi for w in words])
+    yomi_only = ''.join([w.yomi for w in words if not w.yomi in Word.MARK.values()])
     clean = yomi_only.translate(_CONV_TABLE)
 
     def _mozi2pos(mozi):
@@ -56,7 +56,7 @@ def _yomi2pos(words):
             cons = idx
             vow = same_cons.index(mozi)
             return Position(cons=cons, vow=vow)
-
+        raise ValueError(f'[{mozi}]はない')
     return tuple(_mozi2pos(mozi) for mozi in clean)
 
 def words2step(words, method=None):
@@ -66,6 +66,9 @@ def words2step(words, method=None):
     positions = _yomi2pos(words)
 
     def _pos2step(position, table):
+        if position is None:
+            return Step(num=0)
+        
         vow = position.vow
         cons = position.cons
         num = table[cons][vow]
