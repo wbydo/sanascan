@@ -9,8 +9,8 @@ create_table 'corpora', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=ut
   t.index ['symbol'], name: 'symbol', unique: true
 end
 
-# files
-create_table 'files', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+# snkfiles
+create_table 'snkfiles', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
   t.string 'name', null: false, limit: 255
   t.index ['name'], name:'name', unique: true
 
@@ -21,17 +21,17 @@ create_table 'files', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8
   t.index ['checksum'], name: 'checksum', unique: true
 end
 add_foreign_key(
-  'files', 'corpora',
+  'snkfiles', 'corpora',
   column: 'corpus_id',
-  name: 'files_corpus_id_corpora_id',
+  name: 'snkfiles_corpus_id_corpora_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
 # original_datum
 create_table 'original_datum', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
-  t.integer 'file_id', null: false
-  t.index ['file_id'], name: 'file_id'
+  t.integer 'snkfile_id', null: false
+  t.index ['snkfile_id'], name: 'file_id'
 
   t.integer 'id_in_corpus'
   t.text 'contents', null: false
@@ -40,9 +40,9 @@ create_table 'original_datum', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHA
   t.index ['symbol'], name: 'symbol', unique: true
 end
 add_foreign_key(
-  'original_datum', 'files',
-  column: 'file_id',
-  name: 'original_datum_file_id_files_id',
+  'original_datum', 'snkfiles',
+  column: 'snkfile_id',
+  name: 'original_datum_snkfile_id_snkfiles_id',
   on_update: :cascade,
   on_delete: :cascade
 )

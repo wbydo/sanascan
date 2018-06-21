@@ -7,12 +7,10 @@ Base = automap_base()
 
 class Corpus(Base):
     __tablename__ = 'corpora'
+    files = relationship('SKNFile')
 
-    files = relationship('File')
-
-class File(Base):
-    __tablename__ = 'files'
-
+class SKNFile(Base):
+    __tablename__ = 'snkfiles'
     files = relationship('OriginalData')
 
 class OriginalData(Base):
@@ -22,9 +20,6 @@ class OriginalData(Base):
 class Sentence(Base):
     __tablename__ = 'sentences'
 
-
 class SplitMethod(Base):
     __tablename__ = 'split_methods'
     sentences = relationship('Sentence')
-# importしたら以下を実行
-# Base.prepare(ENGINE, reflect=True)

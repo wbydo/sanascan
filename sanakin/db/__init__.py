@@ -1,8 +1,11 @@
 from .mapped_classes import(
     Base,
     Corpus,
-    File,
+    SKNFile,
     OriginalData,
     Sentence,
     SplitMethod
 )
+
+def init(engine):
+    Base.prepare(engine, reflect=True)
