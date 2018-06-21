@@ -13,6 +13,7 @@ import sys
 
 #サードパーティパッケージ
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 path_ = os.path.abspath(
     os.path.join(
@@ -39,7 +40,30 @@ ENGINE = create_engine(
     echo=True
 )
 
+Session = sessionmaker(bind=ENGINE)
+
 sanakin.db.init(ENGINE)
 
+def insert_corpus(cname, csymbol):
+    c = sanakin.db.Corpus(
+        name=cname,
+        symbol=csymbol,)
+
+    session = Session()
+
+    try:
+        session.add(c)
+        session.commit()
+    except Exception as e:
+        err_code, _ = e.orig.args
+        if err_code == 1062:
+            LOGGER.info('格納済み')
+        else:
+            raise e
+    finally:
+        session.close()
+
 if __name__ == '__main__':
-    print('script的な処理はここで書く')
+    insert_corpus(
+        '楽天データセット::楽天トラベル::ユーザレビュー',
+        'RTUR',)
