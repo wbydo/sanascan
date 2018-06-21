@@ -10,14 +10,14 @@ Base = automap_base()
 
 class Corpus(Base):
     __tablename__ = 'corpora'
-    files = relationship('SNKFile')
+    snkfiles = relationship('SNKFile')
 
     def extract_data(self, line):
         return corpus._extract_data(self.symbol)(line)
 
 class SNKFile(Base):
     __tablename__ = 'snkfiles'
-    files = relationship('OriginalData')
+    origin_datum = relationship('OriginalData')
 
     def readline(self, dir_):
         for line in snkfile._readline(self, dir_):
