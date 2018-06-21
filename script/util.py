@@ -47,15 +47,11 @@ Session = sessionmaker(bind=ENGINE)
 
 db.init(ENGINE)
 
-def insert_corpus(cname, csymbol):
-    c = db.Corpus(
-        name=cname,
-        symbol=csymbol,)
-
+def _insert_single_record(r):
     session = Session()
 
     try:
-        session.add(c)
+        session.add(r)
         session.commit()
     except Exception as e:
         err_code, _ = e.orig.args
@@ -65,6 +61,13 @@ def insert_corpus(cname, csymbol):
             raise e
     finally:
         session.close()
+
+def insert_corpus(cname, csymbol):
+    c = db.Corpus(
+        name=cname,
+        symbol=csymbol,)
+
+    _insert_single_record(c)
 
 def insert_snkfile(file_path, corpus_id):
     h = hashlib.sha256()
@@ -156,3 +159,8 @@ def insert_original_datum(corpus_symbol, file_dir):
     if datum:
         LOGGER.info(f'INSERT: {len(datum)}件挿入!!!')
         insert_original_datum(datum)
+
+def insert_splitter(sname):
+    s = db.Splitter(name=sname)
+
+    _insert_single_record(s)
