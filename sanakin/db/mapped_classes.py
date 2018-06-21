@@ -3,6 +3,8 @@ from sqlalchemy import Column
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
 
+from . import snkfile
+
 Base = automap_base()
 
 class Corpus(Base):
@@ -12,6 +14,10 @@ class Corpus(Base):
 class SNKFile(Base):
     __tablename__ = 'snkfiles'
     files = relationship('OriginalData')
+
+    def readline(self, dir_):
+        for line in snkfile._readline(self, dir_):
+            yield line
 
 class OriginalData(Base):
     __tablename__ = 'original_datum'
