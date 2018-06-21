@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 from . import snkfile
 from . import corpus
+from . import splitter
 
 Base = automap_base()
 
@@ -34,3 +35,8 @@ class Sentence(Base):
 class Splitter(Base):
     __tablename__ = 'splitters'
     sentences = relationship('Sentence')
+
+    def split(self, multi_sentence):
+        func = splitter._split_function(self.name)
+        for sentence in func(multi_sentence):
+            yield sentence
