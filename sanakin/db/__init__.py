@@ -1,7 +1,7 @@
 from .mapped_classes import(
     Base,
     Corpus,
-    SKNFile,
+    SNKFile,
     OriginalData,
     Sentence,
     SplitMethod

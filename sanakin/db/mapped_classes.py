@@ -7,9 +7,9 @@ Base = automap_base()
 
 class Corpus(Base):
     __tablename__ = 'corpora'
-    files = relationship('SKNFile')
+    files = relationship('SNKFile')
 
-class SKNFile(Base):
+class SNKFile(Base):
     __tablename__ = 'snkfiles'
     files = relationship('OriginalData')
 
