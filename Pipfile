@@ -7,6 +7,8 @@ name = "pypi"
 sqlalchemy = "*"
 pymysql = "*"
 jupyter = "*"
+natto-py = "*"
+jaconv = "*"
 
 [dev-packages]
 
