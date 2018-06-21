@@ -4,12 +4,16 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
 
 from . import snkfile
+from . import corpus
 
 Base = automap_base()
 
 class Corpus(Base):
     __tablename__ = 'corpora'
     files = relationship('SNKFile')
+
+    def extract_data(self, line):
+        return corpus._extract_data(self.symbol)(line)
 
 class SNKFile(Base):
     __tablename__ = 'snkfiles'
