@@ -29,7 +29,7 @@ add_foreign_key(
 )
 
 # original_datum
-create_table 'original_datum', id: :integer, renamed_from: "datum", options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+create_table 'original_datum', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
   t.integer 'file_id', null: false
   t.index ['file_id'], name: 'file_id'
 
