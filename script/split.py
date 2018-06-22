@@ -20,5 +20,15 @@ if __name__ == '__main__':
 
     session.close()
 
-    for sentence in sp.split(od.contents):
-        print(sentence)
+
+    import time
+    start = time.time()
+
+    for _ in range(30):
+        list(sp.split(od.contents))
+
+    elapsed_time = time.time() - start
+    print()
+    print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
+    print()
+    print()
