@@ -9,6 +9,9 @@ pymysql = "*"
 jupyter = "*"
 natto-py = "*"
 jaconv = "*"
+ipython-sql = "*"
+pandas = "*"
+notedown = "*"
 
 [dev-packages]
 
