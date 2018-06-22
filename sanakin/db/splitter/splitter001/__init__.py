@@ -1,21 +1,19 @@
 import re
 
 import jaconv
-from natto import MeCab
 
 from ....word import Word
 from .analize_morpheme import AnalyzeMorpheme
 
 STOP_SYMBOL = re.compile(r'[。．\.！!？\?\n]+')
 
-def split(multi_sentence):
+def split(multi_sentence, mecab):
     normalized = jaconv.normalize(multi_sentence)
-    with MeCab() as mecab:
-        for sentence in re.split(STOP_SYMBOL, normalized):
-            striped = sentence.strip()
-            if striped:
-                word_iter = _process_sentence(striped, mecab)
-                yield ' '.join(map(str, word_iter))
+    for sentence in re.split(STOP_SYMBOL, normalized):
+        striped = sentence.strip()
+        if striped:
+            word_iter = _process_sentence(striped, mecab)
+            yield ' '.join(map(str, word_iter))
 
 def _process_sentence(sentence, mecab):
     for mec_node in mecab.parse(sentence, as_nodes=True):

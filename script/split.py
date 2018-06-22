@@ -2,6 +2,8 @@ import os
 import sys
 import fnmatch
 
+from natto import MeCab
+
 path_ = os.path.abspath(
     os.path.dirname(__file__))
 sys.path.insert(0, path_)
@@ -22,12 +24,13 @@ if __name__ == '__main__':
 
 
     import time
-    start = time.time()
+    with MeCab() as mecab:
+        start = time.time()
 
-    for _ in range(30):
-        list(sp.split(od.contents))
+        for _ in range(30):
+            list(sp.split(od.contents, mecab))
 
-    elapsed_time = time.time() - start
+        elapsed_time = time.time() - start
     print()
     print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
     print()

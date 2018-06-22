@@ -36,7 +36,7 @@ class Splitter(Base):
     __tablename__ = 'splitters'
     sentences = relationship('Sentence')
 
-    def split(self, multi_sentence):
+    def split(self, multi_sentence, mecab):
         func = splitter._split_function(self.name)
-        for sentence in func(multi_sentence):
+        for sentence in func(multi_sentence, mecab):
             yield sentence
