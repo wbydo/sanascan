@@ -10,14 +10,14 @@ STOP_SYMBOL = re.compile(r'[。．\.！!？\?\n]+')
 
 def split(multi_sentence):
     normalized = jaconv.normalize(multi_sentence)
-    for sentence in re.split(STOP_SYMBOL, normalized):
-        striped = sentence.strip()
-        if striped:
-            word_iter = _process_sentence(striped)
-            yield ' '.join(map(str, word_iter))
+    with MeCab() as mecab:
+        for sentence in re.split(STOP_SYMBOL, normalized):
+            striped = sentence.strip()
+            if striped:
+                word_iter = _process_sentence(striped, mecab)
+                yield ' '.join(map(str, word_iter))
 
-def _process_sentence(sentence):
-    mecab = MeCab()
+def _process_sentence(sentence, mecab):
     for mec_node in mecab.parse(sentence, as_nodes=True):
         if mec_node.is_eos():
             break
