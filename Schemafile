@@ -55,6 +55,8 @@ end
 
 # sentences
 create_table 'sentences', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
+  t.text 'contents', null:false
+
   t.integer 'data_id', null:false
   t.index ['data_id'], name: 'data_id'
 
@@ -63,6 +65,9 @@ create_table 'sentences', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=
 
   t.integer 'splitter_id', unique: true, null: false
   t.index ['splitter_id'], name: 'splitter_id'
+
+  t.integer 'sentence_number', null: false
+  t.integer 'sentence_number_max,', null:false
 end
 add_foreign_key(
   'sentences', 'original_datum',

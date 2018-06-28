@@ -16,6 +16,7 @@ import hashlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.mysql import insert
+from natto import MeCab
 
 path_ = os.path.abspath(
     os.path.join(
@@ -164,3 +165,61 @@ def insert_splitter(sname):
     s = db.Splitter(name=sname)
 
     _insert_single_record(s)
+
+def insert_sentence(corpus_symbol, splitter_name):
+    def iterate_all_sentence(splitter, snkfiles, mecab):
+        for snkfile in snkfiles:
+            session = Session()
+            datum = snkfile.original_datum
+            session.close()
+
+            for data in datum:
+                sentences = list(splitter.split(data.contents, mecab))
+                n = len(sentences)
+
+                for i, sentence in enumerate(sentences):
+                    yield {
+                        'data_id': data.id,
+                        'symbol': f'{data.symbol}_{n:0>2}{i+1:0>2}',
+                        'splitter_id': splitter.id,
+                        'contents': sentence,
+                        'sentence_number': i+1,
+                        'sentence_number_max':n,
+                    }
+
+    def insert_sentences(sentence):
+        insert_stmt = insert(db.Sentence)
+        on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
+            contents=insert_stmt.inserted.contents,
+            data_id=insert_stmt.inserted.data_id,
+            symbol=insert_stmt.inserted.symbol,
+            splitter_id=insert_stmt.inserted.splitter_id,
+        )
+        with ENGINE.begin() as conn:
+            conn.execute(on_duplicate_key_stmt, sentence)
+        LOGGER.info(f'INSERT: {len(sentences)}件挿入!!!')
+
+    session = Session()
+
+    sp = session.query(db.Splitter).filter(
+        db.Splitter.name == splitter_name).one()
+
+    snkfiles = session.query(db.SNKFile).filter(
+        db.SNKFile.corpus.has(symbol=corpus_symbol))
+
+    session.close()
+
+    with MeCab() as mecab:
+        itr = iterate_all_sentence(sp, snkfiles, mecab)
+
+        sentences = []
+        max_size = 500_000_000
+        for s in itr:
+            if sys.getsizeof(sentences) < max_size:
+                LOGGER.info(f'{s["symbol"]}:\t\t{s["contents"]}')
+                sentences.append(s)
+            else:
+                insert_sentences(sentences)
+                sentences = []
+        if sentence:
+            insert_sentences(sentences)

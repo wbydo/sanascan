@@ -18,7 +18,7 @@ class Corpus(Base):
 
 class SNKFile(Base):
     __tablename__ = 'snkfiles'
-    origin_datum = relationship('OriginalData')
+    original_datum = relationship('OriginalData')
 
     def readline(self, dir_):
         for line in snkfile._readline(self, dir_):
