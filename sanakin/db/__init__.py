@@ -1,10 +1,10 @@
 from .mapped_classes import(
     Base,
     Corpus,
-    SNKFile,
-    OriginalData,
-    Sentence,
-    SplitMethod
+    CorpusFile,
+    CorpusData,
+    # Sentence,
+    # SplitMethod
 )
 
 def init(engine):
