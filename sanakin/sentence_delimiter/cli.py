@@ -1,31 +1,24 @@
 from logging import getLogger
 
-from sqlalchemy.exc import IntegrityError
+from ..base_cli import _simple_insert
+from ..base_cli import _simple_delete
 
 from .. import SentenceDelimiter
 
 LOGGER = getLogger(__name__)
 
 def insert(session, regex, sentence_delimiter_id):
-    d = SentenceDelimiter(
-        regex=regex,
-        sentence_delimiter_id=sentence_delimiter_id,)
-
-    try:
-        session.add(d)
-        session.commit()
-    except IntegrityError as e:
-        err_code, _ = e.orig.args
-        if err_code == 1062:
-            LOGGER.info('格納済み')
-            session.rollback()
-        else:
-            raise e
+    func = _simple_insert(
+        SentenceDelimiter,
+        LOGGER,
+        'regex',
+        'sentence_delimiter_id'
+    )
+    func(session, regex, sentence_delimiter_id)
 
 def delete(session, sentence_delimiter_id):
-    d = session.query(SentenceDelimiter).filter(
-        SentenceDelimiter.sentence_delimiter_id == sentence_delimiter_id
+    func = _simple_delete(
+        SentenceDelimiter,
+        'sentence_delimiter_id'
     )
-
-    d.delete()
-    session.commit()
+    func(session,sentence_delimiter_id)

@@ -1,31 +1,21 @@
 from logging import getLogger
 
-from sqlalchemy.exc import IntegrityError
+from ..base_cli import _simple_insert
+from ..base_cli import _simple_delete
 
 from .. import Corpus
 
 LOGGER = getLogger(__name__)
 
 def insert(session, cname, corpus_id):
-    c = Corpus(
-        name=cname,
-        corpus_id=corpus_id,)
-
-    try:
-        session.add(c)
-        session.commit()
-    except IntegrityError as e:
-        err_code, _ = e.orig.args
-        if err_code == 1062:
-            LOGGER.info('格納済み')
-            session.rollback()
-        else:
-            raise e
+    func = _simple_insert(
+        Corpus,
+        LOGGER,
+        'name',
+        'corpus_id'
+    )
+    func(session, cname, corpus_id)
 
 def delete(session, corpus_id):
-    c = session.query(Corpus).filter(
-        Corpus.corpus_id == corpus_id
-    )
-
-    c.delete()
-    session.commit()
+    func = _simple_delete(Corpus, 'corpus_id')
+    func(session, corpus_id)
