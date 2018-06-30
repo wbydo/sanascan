@@ -65,7 +65,7 @@ add_foreign_key(
   on_delete: :cascade
 )
 
-# sentence_delimiter
+# sentence_delimiters
 create_table(
   'sentence_delimiters',
   id: :integer,
