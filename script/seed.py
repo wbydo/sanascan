@@ -22,6 +22,7 @@ import sanakin.corpus.cli as corpus
 import sanakin.corpus_file.cli as corpus_file
 import sanakin.corpus_data.cli as corpus_data
 import sanakin.sentence_delimiter.cli as delimiter
+import sanakin.sentence.cli as sentence
 
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
@@ -102,16 +103,8 @@ if __name__ == '__main__':
 
     # 実験用
     elif args.dev:
-        with Session(ENGINE) as session:
-            data = session.query(sanakin.CorpusData).filter_by(
-                corpus_data_id='RTUR00000287'
-            ).one()
-
-            sd = session.query(sanakin.SentenceDelimiter).one()
-
-            for i in sd.split(data.text):
-                print(i)
-
+        pass
+        
     # DELETEモードでないとき
     else:
         develop_mode = not args.all
@@ -145,5 +138,12 @@ if __name__ == '__main__':
                 ENGINE,
                 c.corpus_id,
                 RAKUTEN_TRAVEL_DIR,
+                develop_mode
+            )
+
+            sentence.insert(
+                session,
+                ENGINE,
+                'SD0001',
                 develop_mode
             )

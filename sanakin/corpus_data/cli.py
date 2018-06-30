@@ -59,3 +59,4 @@ def insert(session, engine, corpus_id, file_dir, is_develop_mode):
     if datum:
         LOGGER.info(f'INSERT: {len(datum)}件挿入!!!')
         insert_(datum)
+    session.commit()

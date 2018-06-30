@@ -12,5 +12,5 @@ class BaseSentenceDelimiter:
             yield {
                 'length': length,
                 'nth': idx + 1,
-                'text': sentence,
+                'text': sentence.strip(),
             }
