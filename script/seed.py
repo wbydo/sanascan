@@ -21,6 +21,7 @@ import sanakin
 import sanakin.corpus.cli as corpus
 import sanakin.corpus_file.cli as corpus_file
 import sanakin.corpus_data.cli as corpus_data
+import sanakin.sentence_delimiter.cli as delimiter
 
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
@@ -78,8 +79,16 @@ if __name__ == '__main__':
         action='store_true',
         help='RTURのすべてのデータをinsert'
     )
+
+    group.add_argument(
+        '--dev',
+        action='store_true',
+        help='実験用'
+    )
+
     args = parser.parse_args()
 
+    # DELETEモード
     if args.delete:
         while True:
             ans = input('RTURのすべてのデータを削除しますか？[Y/n] ')
@@ -89,8 +98,12 @@ if __name__ == '__main__':
         if ans == 'Y':
             with Session(ENGINE) as session:
                 corpus.delete(session, 'RTUR')
+                delimiter.delete(session, 'SD0001')
 
-    # deleteモードでないとき
+    # 実験用
+    elif args.dev:
+        pass
+    # DELETEモードでないとき
     else:
         develop_mode = not args.all
 
@@ -99,6 +112,12 @@ if __name__ == '__main__':
                 session,
                 '楽天データセット::楽天トラベル::ユーザレビュー',
                 'RTUR'
+            )
+
+            delimiter.insert(
+                session,
+                r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
+                'SD0001'
             )
 
             c = session.query(sanakin.Corpus).one()
