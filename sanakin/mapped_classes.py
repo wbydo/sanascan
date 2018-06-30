@@ -23,7 +23,7 @@ class CorpusFile(Base, BaseCorpusFile):
     origin_datum = relationship('CorpusData')
 
     def readline(self, dir_):
-        file_path_ = os.path.join(dir_ + self.corpus_file_id)
+        file_path_ = os.path.join(dir_, self.corpus_file_id)
         for line in self._readline(file_path_):
             yield line
 

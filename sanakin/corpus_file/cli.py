@@ -4,6 +4,7 @@ import os
 import hashlib
 
 from .. import CorpusFile
+from .. import SNKException
 
 LOGGER = getLogger(__name__)
 
@@ -38,7 +39,7 @@ def insert(session, file_path, corpus_id):
     else:
         in_file = query.one()
         if not in_file.checksum == target_file.checksum:
-            raise sanakin.SNKException(
+            raise SNKException(
                 f'DB:\t{in_file.corpus_file_id}\t{in_file.checksum}\n'+
                 f'target:\t{target_file.corpus_file_id}\t{target_file.checksum}\n'+
                 '一致しません!!!\n')
