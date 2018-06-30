@@ -1,6 +1,6 @@
 # ロガー設定
 from logging import getLogger,StreamHandler,DEBUG
-LOGGER = getLogger(__name__)
+LOGGER = getLogger('sanakin.corpus_data.cli')
 LOGGER.setLevel(DEBUG)
 
 HANDLER = StreamHandler()
@@ -30,6 +30,7 @@ sys.path.insert(0, path_)
 import sanakin
 import sanakin.corpus.cli as corpus
 import sanakin.corpus_file.cli as corpus_file
+import sanakin.corpus_data.cli as corpus_data
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
 # 定数
@@ -60,53 +61,6 @@ def Session():
 
 sanakin.init(ENGINE)
 
-def insert_corpus_datum(corpus_id, file_dir):
-    def process_all_line():
-        session = Session()
-        corpus = session.query(db.Corpus).filter(
-            db.Corpus.corpus_id == corpus_id).one()
-        corpus_files = corpus.corpus_files
-        session.close()
-
-        for corpus_file in corpus_files:
-            for line in corpus_file.readline(RAKUTEN_TRAVEL_DIR):
-                extracted = corpus.extract_data(line)
-                result =  {
-                    'corpus_data_id': ''.join([
-                        corpus.corpus_id,
-                        '{:0>8}'.format(extracted['id_in_corpus'])
-                    ]),
-                    'corpus_file_id':corpus_file.corpus_file_id,
-                    'id_in_corpus': extracted['id_in_corpus'],
-                    'text': extracted['text'],
-                }
-                LOGGER.info('proccess_file: ' + str(result['corpus_data_id']) + '  ' + result['text'][:20])
-                yield result
-
-    def insert_(corpus_datam):
-        insert_stmt = insert(db.CorpusData)
-        on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
-            corpus_file_id=insert_stmt.inserted.corpus_file_id,
-            id_in_corpus=insert_stmt.inserted.id_in_corpus,
-            text=insert_stmt.inserted.text,
-            corpus_data_id=insert_stmt.inserted.corpus_data_id,
-        )
-        with ENGINE.begin() as conn:
-            conn.execute(on_duplicate_key_stmt, datum)
-
-    datum = []
-    max_size = 500_000_000
-    for d in process_all_line():
-        if sys.getsizeof(datum) < max_size:
-            datum.append(d)
-        else:
-            LOGGER.info(f'INSERT: {len(datum)}件挿入!!!')
-            insert_(datum)
-            datum = []
-    if datum:
-        LOGGER.info(f'INSERT: {len(datum)}件挿入!!!')
-        insert_(datum)
-
 if __name__ == '__main__':
     with Session() as session:
         corpus.insert(
@@ -117,6 +71,9 @@ if __name__ == '__main__':
 
         c = session.query(sanakin.Corpus).one()
 
-        file_name = 'travel02_userReview00_20160304.txt'
-        file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
-        corpus_file.insert(session, file_path, c.corpus_id)
+        # file_name = 'travel02_userReview00_20160304.txt'
+        # file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
+        # corpus_file.insert(session, file_path, c.corpus_id)
+
+        # 選べるようにする
+        corpus_data.insert(session, ENGINE, c.corpus_id, RAKUTEN_TRAVEL_DIR)
