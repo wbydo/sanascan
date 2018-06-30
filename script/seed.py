@@ -3,6 +3,7 @@ import os
 import sys
 from contextlib import contextmanager
 import argparse
+import fnmatch
 
 #サードパーティパッケージ
 from sqlalchemy import create_engine
@@ -23,21 +24,21 @@ import sanakin.corpus_data.cli as corpus_data
 
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
+DATABASE = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
+      TARGET_DB['user_name'],
+      TARGET_DB['password'],
+      TARGET_DB['host_ip'],
+      TARGET_DB['db_name']
+)
+
+ENGINE = create_engine(
+    DATABASE,
+    encoding='utf-8',
+    echo=False
+)
+
 @contextmanager
-def Session():
-    database = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
-          TARGET_DB['user_name'],
-          TARGET_DB['password'],
-          TARGET_DB['host_ip'],
-          TARGET_DB['db_name']
-    )
-
-    engine = create_engine(
-        database,
-        encoding='utf-8',
-        echo=True
-    )
-
+def Session(engine):
     sanakin.init(engine)
 
     _Session = sessionmaker(bind=engine)
@@ -50,6 +51,12 @@ def Session():
     finally:
         session.close()
 
+# ロガー設定
+import logging
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.INFO)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             description='''\
@@ -58,10 +65,18 @@ if __name__ == '__main__':
             ''',
             formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+
+    group.add_argument(
         '-d', '--delete',
         action='store_true',
         help='RTURのすべてのデータを削除'
+    )
+
+    group.add_argument(
+        '-a', '--all',
+        action='store_true',
+        help='RTURのすべてのデータをinsert'
     )
     args = parser.parse_args()
 
@@ -72,8 +87,34 @@ if __name__ == '__main__':
                 break
 
         if ans == 'Y':
-            with Session() as session:
+            with Session(ENGINE) as session:
                 corpus.delete(session, 'RTUR')
 
+    # deleteモードでないとき
     else:
-        pass
+        develop_mode = not args.all
+
+        with Session(ENGINE) as session:
+            corpus.insert(
+                session,
+                '楽天データセット::楽天トラベル::ユーザレビュー',
+                'RTUR'
+            )
+
+            c = session.query(sanakin.Corpus).one()
+
+            for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
+                if develop_mode and idx == 1:
+                    break
+
+                if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
+                    file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
+                    corpus_file.insert(session, file_path, c.corpus_id)
+
+            corpus_data.insert(
+                session,
+                ENGINE,
+                c.corpus_id,
+                RAKUTEN_TRAVEL_DIR,
+                develop_mode
+            )

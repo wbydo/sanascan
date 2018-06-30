@@ -7,7 +7,7 @@ from .. import Corpus, CorpusData
 
 LOGGER = getLogger(__name__)
 
-def insert(session, engine, corpus_id, file_dir):
+def insert(session, engine, corpus_id, file_dir, is_develop_mode):
     def process_all_line():
         corpus = session.query(Corpus).filter(
             Corpus.corpus_id == corpus_id
@@ -15,6 +15,7 @@ def insert(session, engine, corpus_id, file_dir):
 
         corpus_files = corpus.corpus_files
 
+        i = 0
         for corpus_file in corpus_files:
             for line in corpus_file.readline(file_dir):
                 extracted = corpus.extract_data(line)
@@ -29,6 +30,9 @@ def insert(session, engine, corpus_id, file_dir):
                 }
                 LOGGER.info('proccess_file: ' + str(result['corpus_data_id']) + '  ' + result['text'][:20])
                 yield result
+                i+=1
+                if is_develop_mode and i >= 100:
+                    raise StopIteration()
 
     def insert_(corpus_datam):
         insert_stmt = mysql.insert(CorpusData)
