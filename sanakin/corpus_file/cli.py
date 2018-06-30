@@ -4,7 +4,7 @@ import os
 import hashlib
 
 from .. import CorpusFile
-from .. import SNKException
+from ..err import SNKException
 
 LOGGER = getLogger(__name__)
 

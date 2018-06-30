@@ -1,7 +1,8 @@
+from ..err import SNKException
+
 class BaseCorpus:
     def _extract_function(self, corpus_id):
         if not corpus_id == 'CPRTUR':
-            from .. import SNKException
             raise SNKException(
                 f'symbol: {corpus_id}')
         return self._rakuten_travel_user_review

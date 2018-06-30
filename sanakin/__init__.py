@@ -8,8 +8,5 @@ from .mapped_classes import(
     # SplitMethod
 )
 
-class SNKException(Exception):
-    pass
-
 def init(engine):
     Base.prepare(engine, reflect=True)
