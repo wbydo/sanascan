@@ -21,3 +21,11 @@ def insert(session, cname, corpus_id):
             session.rollback()
         else:
             raise e
+
+def delete(session, corpus_id):
+    c = session.query(Corpus).filter(
+        Corpus.corpus_id == corpus_id
+    )
+
+    c.delete()
+    session.commit()

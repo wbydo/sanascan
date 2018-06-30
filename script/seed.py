@@ -63,17 +63,19 @@ sanakin.init(ENGINE)
 
 if __name__ == '__main__':
     with Session() as session:
-        corpus.insert(
-            session,
-            '楽天データセット::楽天トラベル::ユーザレビュー',
-            'RTUR',
-        )
+        # corpus.insert(
+        #     session,
+        #     '楽天データセット::楽天トラベル::ユーザレビュー',
+        #     'RTUR',
+        # )
 
-        c = session.query(sanakin.Corpus).one()
+        # c = session.query(sanakin.Corpus).one()
 
         # file_name = 'travel02_userReview00_20160304.txt'
         # file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
         # corpus_file.insert(session, file_path, c.corpus_id)
 
         # 選べるようにする
-        corpus_data.insert(session, ENGINE, c.corpus_id, RAKUTEN_TRAVEL_DIR)
+        # corpus_data.insert(session, ENGINE, c.corpus_id, RAKUTEN_TRAVEL_DIR)
+
+        corpus.delete(session, 'RTUR')
