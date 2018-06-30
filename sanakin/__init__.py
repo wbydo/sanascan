@@ -3,6 +3,7 @@ from .mapped_classes import(
     Corpus,
     CorpusFile,
     CorpusData,
+    SentenceDelimiter
     # Sentence,
     # SplitMethod
 )

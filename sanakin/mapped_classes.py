@@ -31,6 +31,9 @@ class CorpusData(Base):
     __tablename__ = 'corpus_datum'
     # sentences = relationship('Sentence')
 
+class SentenceDelimiter(Base):
+    __tablename__ = 'sentence_delimiters'
+
 # class Sentence(Base):
 #     __tablename__ = 'sentences'
 #
