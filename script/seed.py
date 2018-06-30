@@ -29,6 +29,7 @@ sys.path.insert(0, path_)
 #自前パッケージ
 import sanakin
 import sanakin.corpus.cli as corpus
+import sanakin.corpus_file.cli as corpus_file
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
 # 定数
@@ -58,49 +59,6 @@ def Session():
         session.close()
 
 sanakin.init(ENGINE)
-
-def insert_corpus_file(file_path, corpus_id):
-    h = hashlib.sha256()
-    with open(file_path, 'rb') as f:
-        for chunk in iter(lambda: f.read(2048 * h.block_size), b''):
-            h.update(chunk)
-    checksum = h.hexdigest()
-
-    target_file = db.CorpusFile(
-        corpus_file_id=os.path.basename(file_path),
-        checksum=checksum,
-        corpus_id=corpus_id
-    )
-
-    LOGGER.info(f'name:\t\t{target_file.corpus_file_id}')
-    LOGGER.info(f'checksum:\t{target_file.checksum}')
-    LOGGER.info('')
-
-    session = Session()
-    query = session.query(db.CorpusFile).filter(
-        db.CorpusFile.corpus_file_id == target_file.corpus_file_id
-    )
-    exists = session.query(query.exists()).scalar()
-    if not exists:
-        n = target_file.corpus_file_id
-        session.add(target_file)
-        session.commit()
-        session.close()
-
-        LOGGER.info(f'{n}:\t格納完了!')
-        LOGGER.info('')
-    else:
-        in_file = query.one()
-        if not in_file.checksum == target_file.checksum:
-            session.close()
-            raise sanakin.SNKException(
-                f'DB:\t{in_file.corpus_file_id}\t{in_file.checksum}\n'+
-                f'target:\t{target_file.corpus_file_id}\t{target_file.checksum}\n'+
-                '一致しません!!!\n')
-        else:
-            LOGGER.info(f'{target_file.corpus_file_id}:\t格納済み!')
-            LOGGER.info('')
-            session.close()
 
 def insert_corpus_datum(corpus_id, file_dir):
     def process_all_line():
@@ -156,3 +114,9 @@ if __name__ == '__main__':
             '楽天データセット::楽天トラベル::ユーザレビュー',
             'RTUR',
         )
+
+        c = session.query(sanakin.Corpus).one()
+
+        file_name = 'travel02_userReview00_20160304.txt'
+        file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
+        corpus_file.insert(session, file_path, c.corpus_id)
