@@ -34,8 +34,8 @@ class CorpusData(Base):
 class SentenceDelimiter(Base):
     __tablename__ = 'sentence_delimiters'
 
-# class Sentence(Base):
-#     __tablename__ = 'sentences'
+class Sentence(Base):
+    __tablename__ = 'sentences'
 #
 # class SplitMethod(Base):
 #     __tablename__ = 'split_methods'

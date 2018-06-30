@@ -78,3 +78,41 @@ create_table(
   t.string 'regex', null:false
   t.index ['regex'], name: 'regex', unique: true
 end
+
+# sentences
+create_table(
+  'sentences',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_data_id', limit: 100, null: false
+  t.index ['corpus_data_id'], name: 'corpus_data_id'
+
+  t.string 'sentence_delimiter_id', limit: 30, null: false
+  t.index ['sentence_delimiter_id'], name: 'sentence_delimiter_id'
+
+  t.string 'sentence_id', limit: 150, null: false
+  t.index ['sentence_id'], name: 'sentence_id', unique: true
+
+  t.string 'text', null: false
+
+  t.integer 'nth', null: false
+  t.integer 'length', null:false
+end
+add_foreign_key(
+  'sentences', 'corpus_datum',
+  column: 'corpus_data_id',
+  primary_key: 'corpus_data_id',
+  name: 'sentences_corpus_data_id_corpus_datum_corpus_data_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+add_foreign_key(
+  'sentences', 'sentence_delimiters',
+  column: 'sentence_delimiter_id',
+  primary_key: 'sentence_delimiter_id',
+  name: 'sentences_delimiter_id_delimiters_sentence_delimiter_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
