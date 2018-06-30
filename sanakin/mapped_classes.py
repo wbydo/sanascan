@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 
 from .corpus_file import BaseCorpusFile
 from .corpus import BaseCorpus
+from .sentence_delimiter import BaseSentenceDelimiter
 
 Base = automap_base()
 
@@ -31,8 +32,15 @@ class CorpusData(Base):
     __tablename__ = 'corpus_datum'
     # sentences = relationship('Sentence')
 
-class SentenceDelimiter(Base):
+class SentenceDelimiter(Base, BaseSentenceDelimiter):
     __tablename__ = 'sentence_delimiters'
+
+    def split(self, text):
+        for sentence in self._split(self.regex, text):
+            yield {
+                'sentence_delimiter_id': self.sentence_delimiter_id,
+                **sentence,
+            }
 
 class Sentence(Base):
     __tablename__ = 'sentences'

@@ -102,7 +102,16 @@ if __name__ == '__main__':
 
     # 実験用
     elif args.dev:
-        pass
+        with Session(ENGINE) as session:
+            data = session.query(sanakin.CorpusData).filter_by(
+                corpus_data_id='RTUR00000287'
+            ).one()
+
+            sd = session.query(sanakin.SentenceDelimiter).one()
+
+            for i in sd.split(data.text):
+                print(i)
+
     # DELETEモードでないとき
     else:
         develop_mode = not args.all
