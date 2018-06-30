@@ -1,6 +1,8 @@
-from .. import SNKException
+# TODO: __init__.pyじゃないところに記載する
+# from .. import SNKException
 
 def _extract_data(corpus_id):
+
     if not corpus_id == 'RTUR':
         raise SNKException(
             f'symbol: {corpus_id}')

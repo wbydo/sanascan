@@ -12,6 +12,7 @@ import os
 import sys
 import fnmatch
 import hashlib
+from contextlib import contextmanager
 
 #サードパーティパッケージ
 from sqlalchemy import create_engine
@@ -27,7 +28,7 @@ sys.path.insert(0, path_)
 
 #自前パッケージ
 import sanakin
-import sanakin.db as db
+import sanakin.corpus.cli as corpus
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
 # 定数
@@ -44,28 +45,19 @@ ENGINE = create_engine(
     echo=True
 )
 
-Session = sessionmaker(bind=ENGINE)
-
-db.init(ENGINE)
-
-def insert_corpus(cname, corpus_id):
-    c = db.Corpus(
-        name=cname,
-        corpus_id=corpus_id,)
-
-    session = Session()
-
+@contextmanager
+def Session():
+    _Session = sessionmaker(bind=ENGINE)
+    session = _Session()
     try:
-        session.add(c)
-        session.commit()
+        yield session
     except Exception as e:
-        err_code, _ = e.orig.args
-        if err_code == 1062:
-            LOGGER.info('格納済み')
-        else:
-            raise e
+        session.rollback()
+        raise e
     finally:
         session.close()
+
+sanakin.init(ENGINE)
 
 def insert_corpus_file(file_path, corpus_id):
     h = hashlib.sha256()
@@ -158,18 +150,9 @@ def insert_corpus_datum(corpus_id, file_dir):
         insert_(datum)
 
 if __name__ == '__main__':
-    # 楽天データに特化した処理を記載
-    insert_corpus(
-        '楽天データセット::楽天トラベル::ユーザレビュー',
-        'RTUR',)
-
-    session = Session()
-    c = session.query(db.Corpus).one()
-    session.close()
-
-    # for file_name in sorted(os.listdir(RAKUTEN_TRAVEL_DIR)):
-    #     if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
-    #         file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
-    #         insert_corpus_file(file_path, c.corpus_id)
-
-    insert_corpus_datum(c.corpus_id, RAKUTEN_TRAVEL_DIR)
+    with Session() as session:
+        corpus.insert(
+            session,
+            '楽天データセット::楽天トラベル::ユーザレビュー',
+            'RTUR',
+        )
