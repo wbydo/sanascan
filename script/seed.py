@@ -98,13 +98,12 @@ if __name__ == '__main__':
 
         if ans == 'Y':
             with Session(ENGINE) as session:
-                corpus.delete(session, 'RTUR')
+                corpus.delete(session, 'CPRTUR')
                 delimiter.delete(session, 'SD0001')
 
     # 実験用
     elif args.dev:
         pass
-        
     # DELETEモードでないとき
     else:
         develop_mode = not args.all
@@ -113,7 +112,7 @@ if __name__ == '__main__':
             corpus.insert(
                 session,
                 '楽天データセット::楽天トラベル::ユーザレビュー',
-                'RTUR'
+                'CPRTUR'
             )
 
             delimiter.insert(
