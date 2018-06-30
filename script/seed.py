@@ -116,7 +116,8 @@ if __name__ == '__main__':
 
             delimiter.insert(
                 session,
-                r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
+                # r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
+                r'[。．\.！!？\?\n]+',
                 'SD0001'
             )
 
