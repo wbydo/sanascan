@@ -5,6 +5,8 @@ import sqlalchemy.dialects.mysql as mysql
 
 from .. import Corpus, CorpusData
 
+from ..cli_const import INSERT_CORPUS_DATA_NUM
+
 LOGGER = getLogger(__name__)
 
 def insert(session, engine, corpus_id, file_dir, is_develop_mode):
@@ -31,7 +33,7 @@ def insert(session, engine, corpus_id, file_dir, is_develop_mode):
                 LOGGER.info('proccess_file: ' + str(result['corpus_data_id']) + '  ' + result['text'][:20])
                 yield result
                 i+=1
-                if is_develop_mode and i >= 100:
+                if is_develop_mode and i >= INSERT_CORPUS_DATA_NUM:
                     raise StopIteration()
 
     def insert_(corpus_datam):
