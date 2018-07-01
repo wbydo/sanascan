@@ -1,16 +1,14 @@
 import argparse
 
-from ..err import SNKException
+from ..err import NotImplementException
 from .db_api import sessionmaker_
 
 class SNKCLIEngine(argparse.ArgumentParser):
-    def __init__(self, description, *, del_msg=None):
+    def __init__(self, description):
         super(__class__, self).__init__(
             description=description,
             formatter_class=argparse.RawDescriptionHelpFormatter
         )
-
-        self._del_msg = del_msg
 
         self.add_argument('CONFIG', help='config.yml')
         self.add_argument(
@@ -38,29 +36,46 @@ class SNKCLIEngine(argparse.ArgumentParser):
             help='挙動確認用'
         )
 
+    def confirm(self, msg='do it?'):
+        def decorator(f):
+            def wrapper(*args, **kwargs):
+                f(*args, **kwargs)
+            return wrapper
+
+        while True:
+            ans = input('[{}]{}[Y/n] '.format(
+                self._args.environment,
+                msg
+            ))
+            if ans in ['Y', 'n']:
+                break
+        if ans == 'Y':
+            return decorator
+        else:
+            return lambda f: lambda *args, **kwargs: None
+
+    def _delete_mode(self, session):
+        raise NotImplementException()
+
+    def _sandbox_mode(self, session):
+        raise NotImplementException()
+
+    def _insert_mode(self, session, *, is_develop_mode=True):
+        raise NotImplementException()
+
     def run(self):
-        for mode in ['delete_mode', 'sandbox_mode', 'insert_mode']:
-            if not hasattr(self, mode):
-                raise SNKException(f'{mode}が実装されていない')
+        self._args = self.parse_args()
+        Session = sessionmaker_(self._args.CONFIG, self._args.environment)
 
-        args = self.parse_args()
-        Session = sessionmaker_(args.CONFIG, args.environment)
-
-        if args.delete:
-            while True:
-                ans = input(f'{self._del_msg}を削除しますか？[Y/n] ')
-                if ans in ['Y', 'n']:
-                    break
-
-            if ans == 'Y':
-                with Session() as s:
-                    self.delete_mode(s)
-
-        elif args.sandbox:
+        if self._args.delete:
             with Session() as s:
-                self.sandbox_mode(s)
+                self._delete_mode(s)
+
+        elif self._args.sandbox:
+            with Session() as s:
+                self._sandbox_mode(s)
 
         else:
-            is_develop_mode = not args.all
+            is_develop_mode = not self._args.all
             with Session() as s:
-                self.insert_mode(s, is_develop_mode=is_develop_mode)
+                self._insert_mode(s, is_develop_mode=is_develop_mode)

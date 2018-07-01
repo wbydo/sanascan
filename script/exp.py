@@ -19,29 +19,49 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
-def delete_mode(session):
-    manalysis.delete(session)
-
-def sandbox_mode(session):
-    pass
-
-def insert_mode(session, *, is_develop_mode=True):
-    with MeCab() as mecab:
-        manalysis.insert(session, mecab, is_develop_mode=is_develop_mode)
-
-if __name__ == '__main__':
-    cli = SNKCLIEngine(
+class ExpEngine(SNKCLIEngine):
+    def __init__(self):
+        super(__class__, self).__init__(
             description='''\
 
                 !!! 形態素解析用のスクリプトだぞ !!!
 
                 DBに形態素解析結果を投入するためのCLI。
                 引数なしで実行した場合、100件だけやる。\
-            ''',
-            del_msg='RTURのすべての形態素解析データ'
-    )
+            '''
+        )
 
-    cli.delete_mode = delete_mode
-    cli.sandbox_mode = sandbox_mode
-    cli.insert_mode = insert_mode
+    def _delete_mode(self, session):
+        self.confirm(msg='experiment: 消去しますか？')(
+            self._non_wrapped_delete_mode
+        )(session)
+
+    def _non_wrapped_delete_mode(self, session):
+        # TODO: incrementリセット
+        manalysis.delete(session)
+
+    def _sandbox_mode(self, session):
+        pass
+
+    # seedと同じ。DRYじゃない。
+    # 気に入らないがガマン
+    def _insert_mode(self, session, *, is_develop_mode=True):
+        if is_develop_mode:
+            self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
+
+        else:
+            self.confirm(msg='seed: 時間がかかりますがいいですか？')(
+                self._non_wrapped_insert_mode
+            )(session, is_develop_mode=is_develop_mode)
+
+    def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
+        with MeCab() as mecab:
+            manalysis.insert(
+                session,
+                mecab,
+                is_develop_mode=is_develop_mode
+            )
+
+if __name__ == '__main__':
+    cli = ExpEngine()
     cli.run()
