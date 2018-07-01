@@ -2,7 +2,7 @@ import sys
 
 from sqlalchemy.exc import IntegrityError
 
-from .cli_const import INSERT_DATA_NUM, MAX_QUERY_SIZE
+from ..const import INSERT_DATA_NUM, MAX_QUERY_SIZE
 
 def _simple_insert(klass, logger, *column_names):
     def _insert(session, *attr):
