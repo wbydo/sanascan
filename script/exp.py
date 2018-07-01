@@ -37,8 +37,10 @@ class ExpEngine(SNKCLIEngine):
         )(session)
 
     def _non_wrapped_delete_mode(self, session):
-        # TODO: incrementリセット
         manalysis.delete(session)
+        q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+        for t in ['morphological_analysies']:
+            session.execute(q.format(t))
 
     def _sandbox_mode(self, session):
         pass
