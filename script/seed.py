@@ -13,7 +13,8 @@ path_ = os.path.abspath(
 sys.path.insert(0, path_)
 
 #自前パッケージ
-import sanakin
+from sanakin import Corpus
+
 import sanakin.corpus.cli as corpus
 import sanakin.corpus_file.cli as corpus_file
 import sanakin.corpus_data.cli as corpus_data
@@ -89,6 +90,7 @@ if __name__ == '__main__':
     # 実験用
     elif args.dev:
         pass
+
     # DELETEモードでないとき
     else:
         develop_mode = not args.all
@@ -107,7 +109,7 @@ if __name__ == '__main__':
                 'SD0001'
             )
 
-            c = session.query(sanakin.Corpus).one()
+            c = session.query(Corpus).one()
 
             for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
                 if develop_mode and idx == 1:

@@ -5,5 +5,4 @@ from .mapped_classes import(
     CorpusData,
     SentenceDelimiter,
     Sentence,
-    # SplitMethod
 )

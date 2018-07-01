@@ -2,7 +2,7 @@ from logging import getLogger
 
 import sqlalchemy.dialects.mysql as mysql
 
-from .. import CorpusFile, CorpusData
+from ..mapped_classes import CorpusFile, CorpusData
 from ..cli_util.base_function import _bulk_insert
 
 LOGGER = getLogger(__name__)
