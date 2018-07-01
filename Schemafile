@@ -95,7 +95,7 @@ create_table(
   t.string 'sentence_id', limit: 150, null: false
   t.index ['sentence_id'], name: 'sentence_id', unique: true
 
-  t.string 'text', null: false
+  t.text 'text', null: false
 
   t.integer 'nth', null: false
   t.integer 'length', null:false
