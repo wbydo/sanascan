@@ -1,9 +1,9 @@
 from logging import getLogger
 
-from ..base_cli import _simple_insert
-from ..base_cli import _simple_delete
+from ..cli_util.base_function import _simple_insert
+from ..cli_util.base_function import _simple_delete
 
-from .. import SentenceDelimiter
+from ..mapped_classes import SentenceDelimiter
 
 LOGGER = getLogger(__name__)
 

@@ -1,9 +1,9 @@
 from logging import getLogger
 
-from ..base_cli import _simple_insert
-from ..base_cli import _simple_delete
+from ..cli_util.base_function import _simple_insert
+from ..cli_util.base_function import _simple_delete
 
-from .. import Corpus
+from ..mapped_classes import Corpus
 
 LOGGER = getLogger(__name__)
 
