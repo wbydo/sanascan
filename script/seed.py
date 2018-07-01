@@ -1,22 +1,13 @@
-# ロガー設定
-from logging import getLogger,StreamHandler,DEBUG
-LOGGER = getLogger(__name__)
-LOGGER.setLevel(DEBUG)
-
-HANDLER = StreamHandler()
-HANDLER.setLevel(DEBUG)
-LOGGER.addHandler(HANDLER)
-
 #組み込みパッケージ
 import os
 import sys
+from contextlib import contextmanager
+import argparse
 import fnmatch
-import hashlib
 
 #サードパーティパッケージ
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.dialects.mysql import insert
 
 path_ = os.path.abspath(
     os.path.join(
@@ -27,10 +18,14 @@ sys.path.insert(0, path_)
 
 #自前パッケージ
 import sanakin
-import sanakin.db as db
+import sanakin.corpus.cli as corpus
+import sanakin.corpus_file.cli as corpus_file
+import sanakin.corpus_data.cli as corpus_data
+import sanakin.sentence_delimiter.cli as delimiter
+import sanakin.sentence.cli as sentence
+
 from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
 
-# 定数
 DATABASE = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
       TARGET_DB['user_name'],
       TARGET_DB['password'],
@@ -41,135 +36,117 @@ DATABASE = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
 ENGINE = create_engine(
     DATABASE,
     encoding='utf-8',
-    echo=True
+    echo=False
 )
 
-Session = sessionmaker(bind=ENGINE)
+@contextmanager
+def Session(engine):
+    sanakin.init(engine)
 
-db.init(ENGINE)
-
-def insert_corpus(cname, csymbol):
-    c = db.Corpus(
-        name=cname,
-        symbol=csymbol,)
-
-    session = Session()
-
+    _Session = sessionmaker(bind=engine)
+    session = _Session()
     try:
-        session.add(c)
-        session.commit()
+        yield session
     except Exception as e:
-        err_code, _ = e.orig.args
-        if err_code == 1062:
-            LOGGER.info('格納済み')
-        else:
-            raise e
+        session.rollback()
+        raise e
+    else:
+        session.commit()
     finally:
         session.close()
 
-def insert_snkfile(file_path, corpus_id):
-    h = hashlib.sha256()
-    with open(file_path, 'rb') as f:
-        for chunk in iter(lambda: f.read(2048 * h.block_size), b''):
-            h.update(chunk)
-    checksum = h.hexdigest()
-
-    target_file = db.SNKFile(
-        name=os.path.basename(file_path),
-        checksum=checksum,
-        corpus_id=corpus_id
-    )
-
-    LOGGER.info(f'name:\t\t{target_file.name}')
-    LOGGER.info(f'checksum:\t{target_file.checksum}')
-    LOGGER.info('')
-
-    session = Session()
-    query = session.query(db.SNKFile).filter(db.SNKFile.name == target_file.name)
-    exists = session.query(query.exists()).scalar()
-    if not exists:
-        n = target_file.name
-        session.add(target_file)
-        session.commit()
-        session.close()
-
-        LOGGER.info(f'{n}:\t格納完了!')
-        LOGGER.info('')
-    else:
-        in_file = query.one()
-        if not in_file.checksum == target_file.checksum:
-            session.close()
-            raise sanakin.SNKException(
-                f'DB:\t{in_file.name}\t{in_file.checksum}\n'+
-                f'target:\t{target_file.name}\t{target_file.checksum}\n'+
-                '一致しません!!!\n')
-        else:
-            LOGGER.info(f'{target_file.name}:\t格納済み!')
-            LOGGER.info('')
-            session.close()
-
-def insert_original_datum(corpus_symbol, file_dir):
-    def process_all_line():
-        session = Session()
-        corpus = session.query(db.Corpus).filter(
-            db.Corpus.symbol == corpus_symbol).one()
-        snkfiles = corpus.snkfiles
-        session.close()
-
-        for snkfile in snkfiles:
-            for line in snkfile.readline(RAKUTEN_TRAVEL_DIR):
-                extracted = corpus.extract_data(line)
-                result =  {
-                    'snkfile_id':snkfile.id,
-                    'corpus_symbol': corpus.symbol,
-
-                    'snkfile_id': snkfile.id,
-                    'id_in_corpus': extracted['id_in_corpus'],
-                    'contents': extracted['contents'],
-                    'symbol': ''.join([
-                        corpus.symbol,
-                        '{:0>8}'.format(extracted['id_in_corpus'])
-                    ])
-                }
-                LOGGER.info('proccess_file: ' + str(result['symbol']) + '  ' + result['contents'][:20])
-                yield result
-
-    def insert_original_datum(datum):
-        insert_stmt = insert(db.OriginalData)
-        on_duplicate_key_stmt = insert_stmt.on_duplicate_key_update(
-            snkfile_id=insert_stmt.inserted.snkfile_id,
-            id_in_corpus=insert_stmt.inserted.id_in_corpus,
-            contents=insert_stmt.inserted.contents,
-            symbol=insert_stmt.inserted.symbol,
-        )
-        with ENGINE.begin() as conn:
-            conn.execute(on_duplicate_key_stmt, datum)
-
-    datum = []
-    max_size = 500_000_000
-    for d in process_all_line():
-        if sys.getsizeof(datum) < max_size:
-            datum.append(d)
-        else:
-            LOGGER.info(f'INSERT: {len(datum)}件挿入!!!')
-            insert_original_datum(datum)
-            datum = []
-    if datum:
-        LOGGER.info(f'INSERT: {len(datum)}件挿入!!!')
-        insert_original_datum(datum)
+# ロガー設定
+import logging
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.INFO)
 
 if __name__ == '__main__':
-    # 楽天データに特化した処理を記載
-    insert_corpus(
-        '楽天データセット::楽天トラベル::ユーザレビュー',
-        'RTUR',)
+    parser = argparse.ArgumentParser(
+            description='''\
+                DBに初期データを投入するためのCLI。
+                引数なしで実行した場合、開発モードとしてRTURのサブセットをinsert。\
+            ''',
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    group = parser.add_mutually_exclusive_group()
 
-    session = Session()
-    c = session.query(db.Corpus).one()
+    group.add_argument(
+        '-d', '--delete',
+        action='store_true',
+        help='RTURのすべてのデータを削除'
+    )
 
-    for file_name in sorted(os.listdir(RAKUTEN_TRAVEL_DIR)):
-        if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
-            file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
-            insert_snkfile(file_path, c.id)
+    group.add_argument(
+        '-a', '--all',
+        action='store_true',
+        help='RTURのすべてのデータをinsert'
+    )
 
-    insert_original_datum('RTUR', RAKUTEN_TRAVEL_DIR)
+    group.add_argument(
+        '--dev',
+        action='store_true',
+        help='実験用'
+    )
+
+    args = parser.parse_args()
+
+    # DELETEモード
+    if args.delete:
+        while True:
+            ans = input('RTURのすべてのデータを削除しますか？[Y/n] ')
+            if ans in ['Y', 'n']:
+                break
+
+        if ans == 'Y':
+            with Session(ENGINE) as session:
+                corpus.delete(session, 'CPRTUR')
+                delimiter.delete(session, 'SD0001')
+
+                for t in session.get_bind().table_names():
+                    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+                    session.execute(q.format(t))
+
+    # 実験用
+    elif args.dev:
+        pass
+    # DELETEモードでないとき
+    else:
+        develop_mode = not args.all
+
+        with Session(ENGINE) as session:
+            corpus.insert(
+                session,
+                '楽天データセット::楽天トラベル::ユーザレビュー',
+                'CPRTUR'
+            )
+
+            delimiter.insert(
+                session,
+                # r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
+                r'[。．\.！!？\?\n]+',
+                'SD0001'
+            )
+
+            c = session.query(sanakin.Corpus).one()
+
+            for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
+                if develop_mode and idx == 1:
+                    break
+
+                if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
+                    file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
+                    corpus_file.insert(session, file_path, c.corpus_id)
+
+            corpus_data.insert(
+                session,
+                c.corpus_id,
+                RAKUTEN_TRAVEL_DIR,
+                develop_mode
+            )
+
+            sentence.insert(
+                session,
+                'SD0001',
+                develop_mode
+            )

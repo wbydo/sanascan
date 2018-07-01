@@ -2,79 +2,117 @@
 # vi: set ft=ruby :
 
 # corpora
-create_table 'corpora', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
-  t.text 'name', unique: true, null: false
+create_table(
+  'corpora',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade,
+) do |t|
+  t.string 'corpus_id', limit: 16, null: false
+  t.index ['corpus_id'], name: 'corpus_id', unique: true
 
-  t.string 'symbol', limit: 16, null: false
-  t.index ['symbol'], name: 'symbol', unique: true
+  t.string 'name', null: false
 end
 
-# snkfiles
-create_table 'snkfiles', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
-  t.string 'name', null: false, limit: 255
-  t.index ['name'], name:'name', unique: true
+# corpus_files
+create_table(
+  'corpus_files',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_file_id', limit: 50, null: false
+  t.index ['corpus_file_id'], name: 'corpus_file_id', unique: true
 
-  t.integer 'corpus_id', null: false
+  t.string 'corpus_id', limit: 16, null: false
   t.index ['corpus_id'], name: 'corpus_id'
 
-  t.string 'checksum', null:false, limit: 64
+  t.string 'checksum', limit: 64, null:false
   t.index ['checksum'], name: 'checksum', unique: true
 end
 add_foreign_key(
-  'snkfiles', 'corpora',
+  'corpus_files', 'corpora',
   column: 'corpus_id',
-  name: 'snkfiles_corpus_id_corpora_id',
+  primary_key: 'corpus_id',
+  name: 'corpus_files_corpus_id_corpora_corpus_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
-# original_datum
-create_table 'original_datum', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
-  t.integer 'snkfile_id', null: false
-  t.index ['snkfile_id'], name: 'file_id'
+# corpus_datum
+create_table(
+  'corpus_datum',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_data_id', limit: 100, null: false
+  t.index ['corpus_data_id'], name: 'data_id', unique: true
 
-  t.integer 'id_in_corpus'
-  t.text 'contents', null: false
+  t.string 'corpus_file_id', limit: 50, null: false
+  t.index ['corpus_file_id'], name: 'corpus_file_id'
 
-  t.string 'symbol', limit: 255, null: false
-  t.index ['symbol'], name: 'symbol', unique: true
+  t.integer 'id_in_corpus', index: true
+
+  t.text 'text', null: false
 end
 add_foreign_key(
-  'original_datum', 'snkfiles',
-  column: 'snkfile_id',
-  name: 'original_datum_snkfile_id_snkfiles_id',
+  'corpus_datum', 'corpus_files',
+  column: 'corpus_file_id',
+  primary_key: 'corpus_file_id',
+  name: 'corpus_datum_corpus_file_id_corpus_files_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
-# split_methods
-create_table 'split_methods', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
-  t.string 'name', null: false, limit: 255
-  t.index ['name'], name: 'name', unique: true
+# sentence_delimiters
+create_table(
+  'sentence_delimiters',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'sentence_delimiter_id', limit: 30, null: false
+  t.index ['sentence_delimiter_id'], name: 'sentence_delimiter_id', unique: true
+
+  t.string 'regex', null:false
+  t.index ['regex'], name: 'regex', unique: true
 end
 
 # sentences
-create_table 'sentences', id: :integer, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8', force: :cascade do |t|
-  t.integer 'data_id', null:false
-  t.index ['data_id'], name: 'data_id'
+create_table(
+  'sentences',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_data_id', limit: 100, null: false
+  t.index ['corpus_data_id'], name: 'corpus_data_id'
 
-  t.string 'symbol', limit: 255, null: false
-  t.index ['symbol'], name: 'symbol', unique: true
+  t.string 'sentence_delimiter_id', limit: 30, null: false
+  t.index ['sentence_delimiter_id'], name: 'sentence_delimiter_id'
 
-  t.integer 'split_method_id', unique: true, null: false
-  t.index ['split_method_id'], name: 'split_method_id'
+  t.string 'sentence_id', limit: 150, null: false
+  t.index ['sentence_id'], name: 'sentence_id', unique: true
+
+  t.string 'text', null: false
+
+  t.integer 'nth', null: false
+  t.integer 'length', null:false
 end
 add_foreign_key(
-  'sentences', 'original_datum',
-  column: 'data_id',
-  name: 'sentences_data_id_original_datum_id',
+  'sentences', 'corpus_datum',
+  column: 'corpus_data_id',
+  primary_key: 'corpus_data_id',
+  name: 'sentences_corpus_data_id_corpus_datum_corpus_data_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 add_foreign_key(
-  'sentences', 'split_methods',
-  column: 'split_method_id',
-  name: 'sentences_split_method_id_split_methods_id',
+  'sentences', 'sentence_delimiters',
+  column: 'sentence_delimiter_id',
+  primary_key: 'sentence_delimiter_id',
+  name: 'sentences_delimiter_id_delimiters_sentence_delimiter_id',
   on_update: :cascade,
   on_delete: :cascade
 )
