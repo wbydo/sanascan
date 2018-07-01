@@ -49,8 +49,8 @@ class SeedEngine(SNKCLIEngine):
         corpus.delete(session, 'CPRTUR')
         delimiter.delete(session, 'SD0001')
 
+        q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
         for t in session.get_bind().table_names():
-            q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
             session.execute(q.format(t))
 
     def _sandbox_mode(self, session):
