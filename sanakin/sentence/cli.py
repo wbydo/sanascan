@@ -4,7 +4,7 @@ import sys
 import sqlalchemy.dialects.mysql as mysql
 
 from .. import SentenceDelimiter, CorpusData, Sentence
-from ..base_cli import _bulk_insert
+from ..cli_util.base_function import _bulk_insert
 
 LOGGER = getLogger(__name__)
 
