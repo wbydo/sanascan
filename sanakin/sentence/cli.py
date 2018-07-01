@@ -10,7 +10,6 @@ LOGGER = getLogger(__name__)
 
 def insert(
     session,
-    engine,
     sentence_delimiter_id,
     is_develop_mode
 ):
@@ -51,7 +50,6 @@ def insert(
 
     _bulk_insert(
         session,
-        engine,
         _iterator(),
         insert_stmt,
         LOGGER,

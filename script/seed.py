@@ -134,7 +134,6 @@ if __name__ == '__main__':
 
             corpus_data.insert(
                 session,
-                ENGINE,
                 c.corpus_id,
                 RAKUTEN_TRAVEL_DIR,
                 develop_mode
@@ -142,7 +141,6 @@ if __name__ == '__main__':
 
             sentence.insert(
                 session,
-                ENGINE,
                 'SD0001',
                 develop_mode
             )

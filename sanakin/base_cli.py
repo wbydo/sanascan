@@ -35,7 +35,6 @@ def _simple_delete(klass, *column_names):
 
 def _bulk_insert(
     session,
-    engine,
     iterator,
     insert_statement,
     logger,
@@ -43,8 +42,7 @@ def _bulk_insert(
 ):
 
     def _insert(instances):
-        with engine.begin() as conn:
-            conn.execute(insert_statement, instances)
+        session.execute(insert_statement, instances)
         logger.info(f'INSERT: {len(instances)}件挿入!!!')
 
     instances = []
