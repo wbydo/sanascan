@@ -3,7 +3,7 @@ from logging import getLogger
 import os
 import hashlib
 
-from .. import CorpusFile
+from ..mapped_classes import CorpusFile
 from ..err import SNKException
 
 LOGGER = getLogger(__name__)

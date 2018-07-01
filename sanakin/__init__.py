@@ -5,8 +5,5 @@ from .mapped_classes import(
     CorpusData,
     SentenceDelimiter,
     Sentence,
-    # SplitMethod
+    MorphologicalAnalysis
 )
-
-def init(engine):
-    Base.prepare(engine, reflect=True)

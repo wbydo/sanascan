@@ -5,10 +5,6 @@ from contextlib import contextmanager
 import argparse
 import fnmatch
 
-#サードパーティパッケージ
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
 path_ = os.path.abspath(
     os.path.join(
         __file__,
@@ -17,43 +13,17 @@ path_ = os.path.abspath(
 sys.path.insert(0, path_)
 
 #自前パッケージ
-import sanakin
+from sanakin import Corpus
+
 import sanakin.corpus.cli as corpus
 import sanakin.corpus_file.cli as corpus_file
 import sanakin.corpus_data.cli as corpus_data
 import sanakin.sentence_delimiter.cli as delimiter
 import sanakin.sentence.cli as sentence
 
-from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
+from sanakin.cli_util import SNKCLIEngine
 
-DATABASE = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
-      TARGET_DB['user_name'],
-      TARGET_DB['password'],
-      TARGET_DB['host_ip'],
-      TARGET_DB['db_name']
-)
-
-ENGINE = create_engine(
-    DATABASE,
-    encoding='utf-8',
-    echo=False
-)
-
-@contextmanager
-def Session(engine):
-    sanakin.init(engine)
-
-    _Session = sessionmaker(bind=engine)
-    session = _Session()
-    try:
-        yield session
-    except Exception as e:
-        session.rollback()
-        raise e
-    else:
-        session.commit()
-    finally:
-        session.close()
+from env import RAKUTEN_TRAVEL_DIR
 
 # ロガー設定
 import logging
@@ -61,92 +31,64 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
+def delete_mode(session):
+    corpus.delete(session, 'CPRTUR')
+    delimiter.delete(session, 'SD0001')
+
+    for t in session.get_bind().table_names():
+        q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+        session.execute(q.format(t))
+
+def sandbox_mode(session):
+    pass
+
+def insert_mode(session, *, is_develop_mode=True):
+    corpus.insert(
+        session,
+        '楽天データセット::楽天トラベル::ユーザレビュー',
+        'CPRTUR'
+    )
+
+    delimiter.insert(
+        session,
+        # r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
+        r'[。．\.！!？\?\n]+',
+        'SD0001'
+    )
+
+    c = session.query(Corpus).one()
+
+    for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
+        if is_develop_mode and idx == 1:
+            break
+
+        if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
+            file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
+            corpus_file.insert(session, file_path, c.corpus_id)
+
+    corpus_data.insert(
+        session,
+        c.corpus_id,
+        RAKUTEN_TRAVEL_DIR,
+        is_develop_mode=is_develop_mode
+    )
+
+    sentence.insert(
+        session,
+        'SD0001',
+        is_develop_mode=is_develop_mode
+    )
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
+    cli = SNKCLIEngine(
             description='''\
                 DBに初期データを投入するためのCLI。
                 引数なしで実行した場合、開発モードとしてRTURのサブセットをinsert。\
             ''',
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    group = parser.add_mutually_exclusive_group()
-
-    group.add_argument(
-        '-d', '--delete',
-        action='store_true',
-        help='RTURのすべてのデータを削除'
+            del_msg='RTURのすべてのseedデータ'
     )
 
-    group.add_argument(
-        '-a', '--all',
-        action='store_true',
-        help='RTURのすべてのデータをinsert'
-    )
-
-    group.add_argument(
-        '--dev',
-        action='store_true',
-        help='実験用'
-    )
-
-    args = parser.parse_args()
-
-    # DELETEモード
-    if args.delete:
-        while True:
-            ans = input('RTURのすべてのデータを削除しますか？[Y/n] ')
-            if ans in ['Y', 'n']:
-                break
-
-        if ans == 'Y':
-            with Session(ENGINE) as session:
-                corpus.delete(session, 'CPRTUR')
-                delimiter.delete(session, 'SD0001')
-
-                for t in session.get_bind().table_names():
-                    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
-                    session.execute(q.format(t))
-
-    # 実験用
-    elif args.dev:
-        pass
-    # DELETEモードでないとき
-    else:
-        develop_mode = not args.all
-
-        with Session(ENGINE) as session:
-            corpus.insert(
-                session,
-                '楽天データセット::楽天トラベル::ユーザレビュー',
-                'CPRTUR'
-            )
-
-            delimiter.insert(
-                session,
-                # r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
-                r'[。．\.！!？\?\n]+',
-                'SD0001'
-            )
-
-            c = session.query(sanakin.Corpus).one()
-
-            for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
-                if develop_mode and idx == 1:
-                    break
-
-                if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
-                    file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
-                    corpus_file.insert(session, file_path, c.corpus_id)
-
-            corpus_data.insert(
-                session,
-                c.corpus_id,
-                RAKUTEN_TRAVEL_DIR,
-                develop_mode
-            )
-
-            sentence.insert(
-                session,
-                'SD0001',
-                develop_mode
-            )
+    cli.delete_mode = delete_mode
+    cli.sandbox_mode = sandbox_mode
+    cli.insert_mode = insert_mode
+    cli.run()

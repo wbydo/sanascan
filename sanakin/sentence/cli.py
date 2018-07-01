@@ -3,7 +3,7 @@ import sys
 
 import sqlalchemy.dialects.mysql as mysql
 
-from .. import SentenceDelimiter, CorpusData, Sentence
+from ..mapped_classes import SentenceDelimiter, CorpusData, Sentence
 from ..cli_util.base_function import _bulk_insert
 
 LOGGER = getLogger(__name__)
@@ -11,7 +11,8 @@ LOGGER = getLogger(__name__)
 def insert(
     session,
     sentence_delimiter_id,
-    is_develop_mode
+    *,
+    is_develop_mode=True
 ):
 
     def _iterator():
@@ -51,7 +52,7 @@ def insert(
     _bulk_insert(
         session,
         _iterator(),
-        insert_stmt,
+        Sentence,
         LOGGER,
-        is_develop_mode
+        is_develop_mode=is_develop_mode
     )

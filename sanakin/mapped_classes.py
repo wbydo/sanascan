@@ -1,7 +1,5 @@
 import os
 
-from sqlalchemy import Column
-
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import relationship
 
@@ -44,6 +42,10 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 
 class Sentence(Base):
     __tablename__ = 'sentences'
+
+class MorphologicalAnalysis(Base):
+    __tablename__ = 'morphological_analysies'
+
 #
 # class SplitMethod(Base):
 #     __tablename__ = 'split_methods'

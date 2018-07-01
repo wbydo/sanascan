@@ -3,7 +3,7 @@ from logging import getLogger
 from ..cli_util.base_function import _simple_insert
 from ..cli_util.base_function import _simple_delete
 
-from .. import SentenceDelimiter
+from ..mapped_classes import SentenceDelimiter
 
 LOGGER = getLogger(__name__)
 
