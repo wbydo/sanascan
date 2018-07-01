@@ -37,6 +37,9 @@ def insert(session, mecab, is_develop_mode):
         is_develop_mode=is_develop_mode
     )
 
+def delete(session):
+    query = session.query(MorphologicalAnalysis).delete()
+
 def _morphological_analysis(mecab, text):
     for mnode in mecab.parse(text, as_nodes=True):
         if mnode.is_eos():

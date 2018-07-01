@@ -4,11 +4,13 @@ from ..err import SNKException
 from .db_api import sessionmaker_
 
 class SNKCLIEngine(argparse.ArgumentParser):
-    def __init__(self, description):
+    def __init__(self, description, *, del_msg=None):
         super(__class__, self).__init__(
             description=description,
             formatter_class=argparse.RawDescriptionHelpFormatter
         )
+
+        self._del_msg = del_msg
 
         self.add_argument('CONFIG', help='config.yml')
         self.add_argument(
@@ -46,7 +48,7 @@ class SNKCLIEngine(argparse.ArgumentParser):
 
         if args.delete:
             while True:
-                ans = input('RTURのすべてのデータを削除しますか？[Y/n] ')
+                ans = input(f'{self._del_msg}を削除しますか？[Y/n] ')
                 if ans in ['Y', 'n']:
                     break
 

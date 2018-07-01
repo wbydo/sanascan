@@ -85,6 +85,7 @@ if __name__ == '__main__':
                 DBに初期データを投入するためのCLI。
                 引数なしで実行した場合、開発モードとしてRTURのサブセットをinsert。\
             ''',
+            del_msg='RTURのすべてのseedデータ'
     )
 
     cli.delete_mode = delete_mode

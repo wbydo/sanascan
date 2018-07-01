@@ -20,7 +20,7 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
 def delete_mode(session):
-    pass
+    manalysis.delete(session)
 
 def sandbox_mode(session):
     pass
@@ -38,6 +38,7 @@ if __name__ == '__main__':
                 DBに形態素解析結果を投入するためのCLI。
                 引数なしで実行した場合、100件だけやる。\
             ''',
+            del_msg='RTURのすべての形態素解析データ'
     )
 
     cli.delete_mode = delete_mode
