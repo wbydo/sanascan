@@ -103,6 +103,10 @@ if __name__ == '__main__':
                 corpus.delete(session, 'CPRTUR')
                 delimiter.delete(session, 'SD0001')
 
+                for t in session.get_bind().table_names():
+                    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+                    session.execute(q.format(t))
+
     # 実験用
     elif args.dev:
         pass
