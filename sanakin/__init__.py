@@ -7,6 +7,3 @@ from .mapped_classes import(
     Sentence,
     # SplitMethod
 )
-
-def init(engine):
-    Base.prepare(engine, reflect=True)

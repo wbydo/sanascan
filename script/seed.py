@@ -5,10 +5,6 @@ from contextlib import contextmanager
 import argparse
 import fnmatch
 
-#サードパーティパッケージ
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
 path_ = os.path.abspath(
     os.path.join(
         __file__,
@@ -24,36 +20,9 @@ import sanakin.corpus_data.cli as corpus_data
 import sanakin.sentence_delimiter.cli as delimiter
 import sanakin.sentence.cli as sentence
 
-from env import TARGET_DB, RAKUTEN_TRAVEL_DIR
+from sanakin.cli_util.db_api import sessionmaker_
 
-DATABASE = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
-      TARGET_DB['user_name'],
-      TARGET_DB['password'],
-      TARGET_DB['host_ip'],
-      TARGET_DB['db_name']
-)
-
-ENGINE = create_engine(
-    DATABASE,
-    encoding='utf-8',
-    echo=False
-)
-
-@contextmanager
-def Session(engine):
-    sanakin.init(engine)
-
-    _Session = sessionmaker(bind=engine)
-    session = _Session()
-    try:
-        yield session
-    except Exception as e:
-        session.rollback()
-        raise e
-    else:
-        session.commit()
-    finally:
-        session.close()
+from env import RAKUTEN_TRAVEL_DIR
 
 # ロガー設定
 import logging
@@ -69,6 +38,14 @@ if __name__ == '__main__':
             ''',
             formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+
+    parser.add_argument('CONFIG', help='config.yml')
+    parser.add_argument(
+        '-E', '--environment',
+        default='develop',
+        help='DB環境の指定'
+    )
+
     group = parser.add_mutually_exclusive_group()
 
     group.add_argument(
@@ -91,6 +68,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    Session = sessionmaker_(args.CONFIG, args.environment)
+
     # DELETEモード
     if args.delete:
         while True:
@@ -99,7 +78,7 @@ if __name__ == '__main__':
                 break
 
         if ans == 'Y':
-            with Session(ENGINE) as session:
+            with Session() as session:
                 corpus.delete(session, 'CPRTUR')
                 delimiter.delete(session, 'SD0001')
 
@@ -114,7 +93,7 @@ if __name__ == '__main__':
     else:
         develop_mode = not args.all
 
-        with Session(ENGINE) as session:
+        with Session() as session:
             corpus.insert(
                 session,
                 '楽天データセット::楽天トラベル::ユーザレビュー',
