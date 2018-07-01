@@ -39,6 +39,7 @@ def _bulk_insert(
     iterator,
     klass,
     logger,
+    *,
     is_develop_mode=True,
     ignore_columns=None,
 ):

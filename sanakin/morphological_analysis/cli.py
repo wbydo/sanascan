@@ -8,7 +8,7 @@ from ..cli_util.base_function import _bulk_insert
 
 LOGGER = getLogger(__name__)
 
-def insert(session, mecab, is_develop_mode):
+def insert(session, mecab, *, is_develop_mode=True):
     def _iterator():
         query = session.query(Sentence)
 

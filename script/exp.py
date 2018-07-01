@@ -27,7 +27,7 @@ def sandbox_mode(session):
 
 def insert_mode(session, *, is_develop_mode=True):
     with MeCab() as mecab:
-        manalysis.insert(session, mecab, True)
+        manalysis.insert(session, mecab, is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
     cli = SNKCLIEngine(

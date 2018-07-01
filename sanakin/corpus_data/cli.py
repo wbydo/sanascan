@@ -7,7 +7,7 @@ from ..cli_util.base_function import _bulk_insert
 
 LOGGER = getLogger(__name__)
 
-def insert(session, corpus_id, file_dir, is_develop_mode):
+def insert(session, corpus_id, file_dir, *, is_develop_mode=True):
     def _iterator():
         corpus_files = session.query(CorpusFile).filter(
             CorpusFile.corpus_id == corpus_id

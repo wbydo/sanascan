@@ -70,13 +70,13 @@ def insert_mode(session, *, is_develop_mode=True):
         session,
         c.corpus_id,
         RAKUTEN_TRAVEL_DIR,
-        is_develop_mode
+        is_develop_mode=is_develop_mode
     )
 
     sentence.insert(
         session,
         'SD0001',
-        is_develop_mode
+        is_develop_mode=is_develop_mode
     )
 
 if __name__ == '__main__':

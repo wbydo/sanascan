@@ -11,7 +11,8 @@ LOGGER = getLogger(__name__)
 def insert(
     session,
     sentence_delimiter_id,
-    is_develop_mode
+    *,
+    is_develop_mode=True
 ):
 
     def _iterator():
