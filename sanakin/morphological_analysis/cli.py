@@ -17,6 +17,11 @@ def insert(session, mecab, is_develop_mode):
             length = len(morph_dicts)
 
             for idx, morph in enumerate(morph_dicts):
+                surface = morph['surface']
+                pos = morph['pos']
+                yomi = morph['yomi']
+                LOGGER.info(f'{sentence.sentence_id}:\t{surface}\t{yomi}\t{pos}')
+
                 yield {
                     'nth': idx + 1,
                     'length': length,
