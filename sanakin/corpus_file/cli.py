@@ -32,7 +32,6 @@ def insert(session, file_path, corpus_id):
     if not exists:
         n = target_file.corpus_file_id
         session.add(target_file)
-        session.commit()
 
         LOGGER.info(f'{n}:\t格納完了!')
         LOGGER.info('')

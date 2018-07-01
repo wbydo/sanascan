@@ -29,7 +29,6 @@ def _simple_delete(klass, *column_names):
 
         m = session.query(klass).filter_by(**d)
         m.delete()
-        session.commit()
 
     return _delete
 
@@ -61,4 +60,3 @@ def _bulk_insert(
 
     if instances:
         _insert(instances)
-    session.commit()

@@ -50,6 +50,8 @@ def Session(engine):
     except Exception as e:
         session.rollback()
         raise e
+    else:
+        session.commit()
     finally:
         session.close()
 
