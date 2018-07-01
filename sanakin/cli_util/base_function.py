@@ -1,8 +1,10 @@
 import sys
 
 from sqlalchemy.exc import IntegrityError
+import sqlalchemy.dialects.mysql as mysql
 
 from ..const import INSERT_DATA_NUM, MAX_QUERY_SIZE
+from ..err import SNKException
 
 def _simple_insert(klass, logger, *column_names):
     def _insert(session, *attr):
@@ -35,13 +37,29 @@ def _simple_delete(klass, *column_names):
 def _bulk_insert(
     session,
     iterator,
-    insert_statement,
+    klass,
     logger,
-    is_develop_mode
+    is_develop_mode=True,
+    ignore_columns=None,
 ):
 
+    ic = ignore_columns if ignore_columns else []
+    columns = klass.__table__.columns.keys()
+    no_column = set(ic) - set(columns)
+    if no_column:
+        raise SNKException(','.join(no_column) + f'は{klass}のカラムにない')
+
+    ic.append('id')
+    for c in ic:
+        columns.remove(c)
+
+    insert_stmt = mysql.insert(klass)
+    insert_stmt = insert_stmt.on_duplicate_key_update(
+        **dict([(c, insert_stmt.inserted[c]) for c in columns])
+    )
+
     def _insert(instances):
-        session.execute(insert_statement, instances)
+        session.execute(insert_stmt, instances)
         logger.info(f'INSERT: {len(instances)}件挿入!!!')
 
     instances = []
