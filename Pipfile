@@ -8,6 +8,7 @@ sqlalchemy = "*"
 pymysql = "*"
 jupyter = "*"
 pyyaml = "*"
+natto-py = "*"
 
 [dev-packages]
 
