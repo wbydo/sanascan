@@ -5,5 +5,6 @@ from .mapped_classes import(
     CorpusData,
     SentenceDelimiter,
     Sentence,
-    MorphologicalAnalysis
+    MorphologicalAnalysis,
+    Morpheme
 )
