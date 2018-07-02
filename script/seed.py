@@ -32,6 +32,8 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
 class SeedEngine(SNKCLIEngine):
+    _work = 'seed'
+
     def __init__(self):
         super(__class__, self).__init__(
             description='''\
@@ -40,12 +42,8 @@ class SeedEngine(SNKCLIEngine):
             '''
         )
 
+    @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self, session):
-        self.confirm(msg='seed: 消去しますか？')(
-            self._non_wrapped_delete_mode
-        )(session)
-
-    def _non_wrapped_delete_mode(self, session):
         corpus.delete(session, 'CPRTUR')
         delimiter.delete(session, 'SD0001')
 
@@ -55,17 +53,6 @@ class SeedEngine(SNKCLIEngine):
 
     def _sandbox_mode(self, session):
         pass
-
-    # expと同じ。DRYじゃない。
-    # 気に入らないがガマン
-    def _insert_mode(self, session, *, is_develop_mode=True):
-        if is_develop_mode:
-            self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
-
-        else:
-            self.confirm(msg='seed: 時間がかかりますがいいですか？')(
-                self._non_wrapped_insert_mode
-            )(session, is_develop_mode=is_develop_mode)
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
         corpus.insert(
@@ -103,6 +90,10 @@ class SeedEngine(SNKCLIEngine):
             'SD0001',
             is_develop_mode=is_develop_mode
         )
+
+    @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
+    def _long_time_insert_mode(self, session, *, is_develop_mode=True):
+        self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
     cli = SeedEngine()

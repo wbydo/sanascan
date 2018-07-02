@@ -36,23 +36,30 @@ class SNKCLIEngine(argparse.ArgumentParser):
             help='挙動確認用'
         )
 
-    def confirm(self, msg='do it?'):
-        def decorator(f):
-            def wrapper(*args, **kwargs):
-                f(*args, **kwargs)
-            return wrapper
-
+    @classmethod
+    def _confirm(cls, self, msg):
         while True:
-            ans = input('[{}]{}[Y/n] '.format(
-                self._args.environment,
-                msg
+            ans = input('[{}]{} [Y/n] '.format(
+            self._args.environment,
+            msg
             ))
             if ans in ['Y', 'n']:
                 break
         if ans == 'Y':
-            return decorator
+            return True
         else:
-            return lambda f: lambda *args, **kwargs: None
+            return False
+
+    @classmethod
+    def confirm(cls, msg='do it?'):
+        def decorator(f):
+            def wrapper(self, *args, **kwargs):
+                if cls._confirm(self, msg):
+                    f(self, *args, **kwargs)
+                else:
+                    pass
+            return wrapper
+        return decorator
 
     def _delete_mode(self, session):
         raise NotImplementException()
@@ -60,8 +67,18 @@ class SNKCLIEngine(argparse.ArgumentParser):
     def _sandbox_mode(self, session):
         raise NotImplementException()
 
-    def _insert_mode(self, session, *, is_develop_mode=True):
+    def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
         raise NotImplementException()
+
+    def _long_time_insert_mode(self, session, *, is_develop_mode=True):
+        raise NotImplementException()
+
+    def _insert_mode(self, session, *, is_develop_mode=True):
+        if is_develop_mode:
+            self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
+
+        else:
+            self._long_time_insert_mode(session, is_develop_mode=is_develop_mode)
 
     def run(self):
         self._args = self.parse_args()

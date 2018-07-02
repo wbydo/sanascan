@@ -20,6 +20,8 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
 class ExpEngine(SNKCLIEngine):
+    _work = 'experiment'
+
     def __init__(self):
         super(__class__, self).__init__(
             description='''\
@@ -31,30 +33,18 @@ class ExpEngine(SNKCLIEngine):
             '''
         )
 
+    @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self, session):
-        self.confirm(msg='experiment: 消去しますか？')(
-            self._non_wrapped_delete_mode
-        )(session)
-
-    def _non_wrapped_delete_mode(self, session):
         manalysis.delete(session)
         q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
         for t in ['morphological_analysies']:
             session.execute(q.format(t))
 
     def _sandbox_mode(self, session):
-        pass
-
-    # seedと同じ。DRYじゃない。
-    # 気に入らないがガマン
-    def _insert_mode(self, session, *, is_develop_mode=True):
-        if is_develop_mode:
-            self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
-
-        else:
-            self.confirm(msg='seed: 時間がかかりますがいいですか？')(
-                self._non_wrapped_insert_mode
-            )(session, is_develop_mode=is_develop_mode)
+        import sanakin
+        cf = session.query(sanakin.CorpusFile).first()
+        print(cf)
+        print(cf.origin_datum)
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
         with MeCab() as mecab:
@@ -63,6 +53,10 @@ class ExpEngine(SNKCLIEngine):
                 mecab,
                 is_develop_mode=is_develop_mode
             )
+
+    @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
+    def _long_time_insert_mode(self, session, *, is_develop_mode=True):
+        self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
     cli = ExpEngine()
