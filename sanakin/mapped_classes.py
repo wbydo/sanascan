@@ -46,6 +46,8 @@ class Sentence(Base):
 class MorphologicalAnalysis(Base):
     __tablename__ = 'morphological_analysies'
 
+class Morpheme(Base):
+    __tablename__ = 'morphemes'
 #
 # class SplitMethod(Base):
 #     __tablename__ = 'split_methods'
