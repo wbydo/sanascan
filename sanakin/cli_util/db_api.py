@@ -41,3 +41,20 @@ def sessionmaker_(file_path, environment):
             session.close()
 
     return Session
+
+def limit_select(query, class_id, *, max_req=1000):
+    # 参考: https://bitbucket.org/zzzeek/sqlalchemy/wiki/UsageRecipes/WindowedRangeQuery
+
+    first_id = None
+    while True:
+        q = query
+        if first_id is not None:
+            q = query.filter(class_id > first_id)
+
+        record = None
+        for record in q.order_by(class_id).limit(max_req):
+            yield record
+
+        if record is None:
+            break
+        first_id = class_id.__get__(record, class_id) if record else None
