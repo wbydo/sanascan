@@ -131,10 +131,10 @@ create_table(
   t.index ['sentence_id'], name: 'sentence_id'
 
   t.string 'surface', limit: 50, null: false # 表層系
-  t.string 'pos', limit: 10, null: false # 品詞
-  t.string 'pos1', limit: 10 # 品詞細分類1
-  t.string 'pos2', limit: 10 # 品詞細分類2
-  t.string 'pos3', limit: 10 # 品詞細分類3
+  t.string 'pos', limit: 20, null: false # 品詞
+  t.string 'pos1', limit: 20 # 品詞細分類1
+  t.string 'pos2', limit: 20 # 品詞細分類2
+  t.string 'pos3', limit: 20 # 品詞細分類3
   t.string 'ctype', limit: 20 # 活用型
   t.string 'cform', limit: 20 # 活用形
   t.string 'base', limit: 50 # 原型
