@@ -5,6 +5,8 @@ import sqlalchemy.dialects.mysql as mysql
 
 from ..mapped_classes import SentenceDelimiter, CorpusData, Sentence
 from ..cli_util.base_function import _bulk_insert
+from ..cli_util.db_api import limit_select
+from ..const import MAX_SELECT_RECORD
 
 LOGGER = getLogger(__name__)
 
@@ -22,7 +24,7 @@ def insert(
 
         q = session.query(CorpusData)
 
-        for data in q:
+        for data in limit_select(q, CorpusData.id, max_req=MAX_SELECT_RECORD):
             for sentence in delimiter.split(data.text):
                 result = {
                     'corpus_data_id': data.corpus_data_id,
