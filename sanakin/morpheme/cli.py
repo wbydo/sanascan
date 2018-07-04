@@ -63,6 +63,10 @@ def insert(session, *, is_develop_mode=True):
 def delete(session):
     session.query(Morpheme).delete()
 
+    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+    for t in ['morphemes']:
+        session.execute(q.format(t))
+
 def _query(session, *, max_req=100):
     columns = MorphologicalAnalysis.__table__.columns.keys()
     for r in ['id', 'sentence_id', 'morphological_analysies_id', 'nth', 'length']:

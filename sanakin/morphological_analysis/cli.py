@@ -3,6 +3,7 @@ from itertools import zip_longest
 
 import sqlalchemy.dialects.mysql as mysql
 
+from .. import Morpheme
 from ..mapped_classes import Sentence, MorphologicalAnalysis
 from ..cli_util.base_function import _bulk_insert
 from ..cli_util.db_api import limit_select
@@ -47,7 +48,11 @@ def insert(session, mecab, *, is_develop_mode=True):
     )
 
 def delete(session):
-    query = session.query(MorphologicalAnalysis).delete()
+    session.query(MorphologicalAnalysis).delete()
+
+    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+    for t in ['morphological_analysies']:
+        session.execute(q.format(t))
 
 def _morphological_analysis(mecab, text):
     for mnode in mecab.parse(text, as_nodes=True):

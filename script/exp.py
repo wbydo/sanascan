@@ -38,9 +38,6 @@ class ExpEngine(SNKCLIEngine):
     def _delete_mode(self, session):
         manalysis.delete(session)
         morph.delete(session)
-        q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
-        for t in ['morphological_analysies', 'morphemes']:
-            session.execute(q.format(t))
 
     def _sandbox_mode(self, session):
         pass
