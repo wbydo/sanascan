@@ -4,6 +4,7 @@ from itertools import chain
 from sqlalchemy import and_
 from sqlalchemy import or_
 from sqlalchemy.orm import aliased
+import sqlalchemy.dialects.mysql as mysql
 
 from .. import MorphologicalAnalysis
 from .. import Morpheme
@@ -14,7 +15,12 @@ LOGGER = getLogger(__name__)
 
 def insert(session, *, is_develop_mode=True):
     def _insert(morphs):
-        session.add_all([Morpheme(**m) for m in morphs])
+        insert_stmt = mysql.insert(Morpheme)
+        insert_stmt = insert_stmt.on_duplicate_key_update(
+            id=insert_stmt.inserted.id
+        )
+
+        session.execute(insert_stmt, morphs)
         LOGGER.info(f'{len(morphs)}件挿入!!!')
 
     latest_morph_id = session.query(
@@ -49,9 +55,10 @@ def insert(session, *, is_develop_mode=True):
 
             morphs.append(r)
             idx += 1
-        _insert(morphs) #ON_DUPLICATEにしたい
+
         if record is None:
             break
+        _insert(morphs) #ON_DUPLICATEにしたい
 
 def delete(session):
     session.query(Morpheme).delete()
