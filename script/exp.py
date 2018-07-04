@@ -42,9 +42,7 @@ class ExpEngine(SNKCLIEngine):
 
     def _sandbox_mode(self, session):
         import sanakin
-        cf = session.query(sanakin.CorpusFile).first()
-        print(cf)
-        print(cf.origin_datum)
+        sanakin.Morpheme
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
         with MeCab() as mecab:

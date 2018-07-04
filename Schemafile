@@ -131,10 +131,10 @@ create_table(
   t.index ['sentence_id'], name: 'sentence_id'
 
   t.string 'surface', limit: 50, null: false # 表層系
-  t.string 'pos', limit: 10, null: false # 品詞
-  t.string 'pos1', limit: 10 # 品詞細分類1
-  t.string 'pos2', limit: 10 # 品詞細分類2
-  t.string 'pos3', limit: 10 # 品詞細分類3
+  t.string 'pos', limit: 20, null: false # 品詞
+  t.string 'pos1', limit: 20 # 品詞細分類1
+  t.string 'pos2', limit: 20 # 品詞細分類2
+  t.string 'pos3', limit: 20 # 品詞細分類3
   t.string 'ctype', limit: 20 # 活用型
   t.string 'cform', limit: 20 # 活用形
   t.string 'base', limit: 50 # 原型
@@ -146,7 +146,7 @@ create_table(
       'pos', 'pos1', 'pos2', 'pos3',
       'ctype', 'cform', 'base', 'yomi', 'pron'
     ],
-    name: 'morph'
+    name: 'morpheme'
   )
 
   t.integer 'nth', null: false
@@ -160,3 +160,33 @@ add_foreign_key(
   on_update: :cascade,
   on_delete: :cascade
 )
+
+# unique_morph
+create_table(
+  'morphemes',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'morpheme_id', limit: 150, null: false
+  t.index ['morpheme_id'], name: 'sentence_id', unique: true
+
+  t.string 'surface', limit: 50, null: false # 表層系
+  t.string 'pos', limit: 20, null: false # 品詞
+  t.string 'pos1', limit: 20 # 品詞細分類1
+  t.string 'pos2', limit: 20 # 品詞細分類2
+  t.string 'pos3', limit: 20 # 品詞細分類3
+  t.string 'ctype', limit: 20 # 活用型
+  t.string 'cform', limit: 20 # 活用形
+  t.string 'base', limit: 50 # 原型
+  t.string 'yomi', limit: 50 # 読み
+  t.string 'pron', limit: 50 # 発音
+  t.index(
+    [
+      'surface',
+      'pos', 'pos1', 'pos2', 'pos3',
+      'ctype', 'cform', 'base', 'yomi', 'pron'
+    ],
+    name: 'morpheme', unique: true
+  )
+end
