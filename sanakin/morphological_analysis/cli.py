@@ -6,6 +6,7 @@ import sqlalchemy.dialects.mysql as mysql
 from ..mapped_classes import Sentence, MorphologicalAnalysis
 from ..cli_util.base_function import _bulk_insert
 from ..cli_util.db_api import limit_select
+from ..const import MAX_SELECT_RECORD
 
 LOGGER = getLogger(__name__)
 
@@ -13,7 +14,7 @@ def insert(session, mecab, *, is_develop_mode=True):
     def _iterator():
         query = session.query(Sentence)
 
-        itr = limit_select(query, Sentence.id, max_req=5)
+        itr = limit_select(query, Sentence.id, max_req=MAX_SELECT_RECORD)
 
         for sentence in itr:
             morph_dicts = list(_morphological_analysis(mecab, sentence.text))

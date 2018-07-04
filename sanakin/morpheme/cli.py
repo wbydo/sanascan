@@ -8,6 +8,7 @@ from sqlalchemy.orm import aliased
 from .. import MorphologicalAnalysis
 from .. import Morpheme
 from ..cli_util.base_function import _bulk_insert
+from ..const import MAX_SELECT_RECORD
 
 LOGGER = getLogger(__name__)
 
@@ -26,7 +27,7 @@ def insert(session, *, is_develop_mode=True):
     idx = 1 if not lmi else int(lmi[0].replace('MO', '')) + 1
 
     while True:
-        query = _query(session, max_req=100)
+        query = _query(session, max_req=MAX_SELECT_RECORD)
 
         columns = [i['name'] for i in query.column_descriptions]
         columns.remove('morpheme_id')
@@ -100,6 +101,6 @@ def _query(session, *, max_req=100):
         candidate
     ).filter(
         candidate.c.morpheme_id == None
-    ).limit(max_req)
+    ).limit(MAX_SELECT_RECORD)
 
     return q
