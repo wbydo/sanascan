@@ -9,6 +9,7 @@ pymysql = "*"
 jupyter = "*"
 pyyaml = "*"
 natto-py = "*"
+pytablewriter = "*"
 
 [dev-packages]
 
