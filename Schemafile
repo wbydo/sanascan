@@ -117,15 +117,15 @@ add_foreign_key(
   on_delete: :cascade
 )
 
-# morphological_analysis
+# morphemes
 create_table(
-  'morphological_analysies',
+  'morphemes',
   id: :integer,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
-  t.string 'morphological_analysies_id', limit: 255, null: false
-  t.index ['morphological_analysies_id'], name: 'morphological_analysies_id', unique: true
+  t.string 'morpheme_id', limit: 255, null: false
+  t.index ['morpheme_id'], name: 'morpheme_id', unique: true
 
   t.string 'sentence_id', limit: 150, null: false
   t.index ['sentence_id'], name: 'sentence_id'
@@ -146,30 +146,30 @@ create_table(
       'pos', 'pos1', 'pos2', 'pos3',
       'ctype', 'cform', 'base', 'yomi', 'pron'
     ],
-    name: 'morpheme'
+    name: 'features'
   )
 
   t.integer 'nth', null: false
   t.integer 'length', null:false
 end
 add_foreign_key(
-  'morphological_analysies', 'sentences',
+  'morphemes', 'sentences',
   column: 'sentence_id',
   primary_key: 'sentence_id',
-  name: 'morphological_sentence_id_sentences_sentence_id',
+  name: 'morphemes_id_sentences_sentence_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
 # unique_morph
 create_table(
-  'morphemes',
+  'morpheme_dictionary',
   id: :integer,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
-  t.string 'morpheme_id', limit: 150, null: false
-  t.index ['morpheme_id'], name: 'sentence_id', unique: true
+  t.string 'morpheme_dict_id', limit: 150, null: false
+  t.index ['morpheme_dict_id'], name: 'morpheme_dict_id', unique: true
 
   t.string 'surface', limit: 50, null: false # 表層系
   t.string 'pos', limit: 20, null: false # 品詞
@@ -187,6 +187,6 @@ create_table(
       'pos', 'pos1', 'pos2', 'pos3',
       'ctype', 'cform', 'base', 'yomi', 'pron'
     ],
-    name: 'morpheme', unique: true
+    name: 'features', unique: true
   )
 end
