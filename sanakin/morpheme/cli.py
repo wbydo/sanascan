@@ -1,117 +1,67 @@
 from logging import getLogger
-from itertools import chain
+from itertools import zip_longest
 
-from sqlalchemy import and_
-from sqlalchemy import or_
-from sqlalchemy.orm import aliased
 import sqlalchemy.dialects.mysql as mysql
 
-from .. import MorphologicalAnalysis
 from .. import Morpheme
+from ..mapped_classes import Sentence, Morpheme
 from ..cli_util.base_function import _bulk_insert
+from ..cli_util.db_api import limit_select
 from ..const import MAX_SELECT_RECORD
 
 LOGGER = getLogger(__name__)
 
-def insert(session, *, is_develop_mode=True):
-    def _insert(morphs):
-        insert_stmt = mysql.insert(Morpheme)
-        insert_stmt = insert_stmt.on_duplicate_key_update(
-            id=insert_stmt.inserted.id
-        )
+def insert(session, mecab, *, is_develop_mode=True):
+    def _iterator():
+        query = session.query(Sentence)
 
-        session.execute(insert_stmt, morphs)
-        LOGGER.info(f'{len(morphs)}件挿入!!!')
+        itr = limit_select(query, Sentence.id, max_req=MAX_SELECT_RECORD)
 
-    latest_morph_id = session.query(
-        Morpheme.morpheme_id
-    ).order_by(
-        Morpheme.morpheme_id.desc()
-    ).first()
+        for sentence in itr:
+            morph_dicts = list(_morphological_analysis(mecab, sentence.text))
+            length = len(morph_dicts)
 
-    lmi = latest_morph_id
-    idx = 1 if not lmi else int(lmi[0].replace('MO', '')) + 1
+            for idx, morph in enumerate(morph_dicts):
+                surface = morph['surface']
+                pos = morph['pos']
+                yomi = morph['yomi']
+                LOGGER.info(f'{sentence.sentence_id}:\t{surface}\t{yomi}\t{pos}')
 
-    while True:
-        query = _query(session, max_req=MAX_SELECT_RECORD)
+                yield {
+                    'nth': idx + 1,
+                    'length': length,
+                    'sentence_id': sentence.sentence_id,
+                    'morphological_analysies_id': '{}_{:0>2}{:0>2}'.format(
+                        sentence.sentence_id,
+                        length,
+                        idx + 1
+                    ),
+                    **morph
+                }
 
-        columns = [i['name'] for i in query.column_descriptions]
-        columns.remove('morpheme_id')
-
-        morphs = []
-        record = None
-        for record in query:
-            r = dict([
-                ('morpheme_id', f'MO{idx:0>8}'),
-                *zip(columns,record)
-            ])
-
-            LOGGER.info(
-                '{}:\t{}'.format(
-                    r['morpheme_id'],
-                    ','.join([r[c] if r[c] else '*'  for c in columns])
-                )
-            )
-
-            morphs.append(r)
-            idx += 1
-
-        if record is None:
-            break
-        _insert(morphs) #ON_DUPLICATEにしたい
-
-def delete(session):
-    session.query(Morpheme).delete()
-
-    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
-    for t in ['morphemes']:
-        session.execute(q.format(t))
-
-def _query(session, *, max_req=100):
-    columns = MorphologicalAnalysis.__table__.columns.keys()
-    for r in ['id', 'sentence_id', 'morphological_analysies_id', 'nth', 'length']:
-        columns.remove(r)
-
-    ma_c = lambda : (getattr(MorphologicalAnalysis, c) for c in columns)
-    uma_sq = session.query(
-        *ma_c()
-    ).group_by(
-        *ma_c()
-    ).subquery('uma')
-    uma = aliased(MorphologicalAnalysis, uma_sq)
-
-    m_c = lambda : (getattr(Morpheme, c) for c in columns)
-    m_sq = session.query(
-        Morpheme.morpheme_id,
-        *m_c()
-    ).subquery('m')
-    m = aliased(Morpheme, m_sq)
-
-    uma_c = lambda : (getattr(uma, c) for c in columns)
-    con = lambda : (
-        or_(
-            getattr(uma, c) == getattr(m, c),
-            and_(
-                getattr(uma, c) == None,
-                getattr(m, c) == None
-            )
-        ) for c in columns
+    _bulk_insert(
+        session,
+        _iterator(),
+        Morpheme,
+        LOGGER,
+        is_develop_mode=is_develop_mode
     )
 
-    sq = session.query(
-        *chain(
-            uma_c(),
-            [m.morpheme_id]
-        )
-    ).outerjoin(
-        m, and_(*con())
-    ).subquery('candidate')
-    candidate = aliased(sq)
+def delete(session):
+    session.query(MorphologicalAnalysis).delete()
 
-    q = session.query(
-        candidate
-    ).filter(
-        candidate.c.morpheme_id == None
-    ).limit(MAX_SELECT_RECORD)
+    q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+    for t in ['morphological_analysies']:
+        session.execute(q.format(t))
 
-    return q
+def _morphological_analysis(mecab, text):
+    for mnode in mecab.parse(text, as_nodes=True):
+        if mnode.is_eos():
+            break
+
+        keys = ['pos', 'pos1', 'pos2', 'pos3', 'ctype', 'cform', 'base', 'yomi', 'pron']
+        features = [f if not f == '*' else None for f in mnode.feature.split(',')]
+        yield {
+            'surface': mnode.surface,
+            **dict(zip_longest(keys, features))
+        }

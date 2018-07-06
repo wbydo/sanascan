@@ -1,7 +1,10 @@
 import argparse
 
 from ..err import NotImplementException
-from .db_api import sessionmaker_
+from .db_api import create_engine
+
+from .. import Base
+from .. import SNKSession
 
 class SNKCLIEngine(argparse.ArgumentParser):
     def __init__(self, description):
@@ -64,7 +67,7 @@ class SNKCLIEngine(argparse.ArgumentParser):
     def _delete_mode(self, session):
         raise NotImplementException()
 
-    def _sandbox_mode(self, session):
+    def _sandbox_mode(self):
         raise NotImplementException()
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
@@ -82,17 +85,18 @@ class SNKCLIEngine(argparse.ArgumentParser):
 
     def run(self):
         self._args = self.parse_args()
-        Session = sessionmaker_(self._args.CONFIG, self._args.environment)
+
+        self.engine = create_engine(self._args.CONFIG, self._args.environment)
+
+        Base.prepare(self.engine, reflect=True)
+        SNKSession.configure(bind=self.engine)
 
         if self._args.delete:
-            with Session() as s:
-                self._delete_mode(s)
+            self._delete_mode('err')
 
         elif self._args.sandbox:
-            with Session() as s:
-                self._sandbox_mode(s)
+            self._sandbox_mode()
 
         else:
             is_develop_mode = not self._args.all
-            with Session() as s:
-                self._insert_mode(s, is_develop_mode=is_develop_mode)
+            self._insert_mode('err', is_develop_mode=is_develop_mode)

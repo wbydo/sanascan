@@ -96,5 +96,7 @@ class SeedEngine(SNKCLIEngine):
         self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
+    from sanakin.err import SNKException
+    raise SNKException('一時使用中止')
     cli = SeedEngine()
     cli.run()

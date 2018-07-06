@@ -1,13 +1,13 @@
 from contextlib import contextmanager
 
 import yaml
-from sqlalchemy import create_engine
+import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 
 from ..mapped_classes import Base
 from ..err import SNKException
 
-def sessionmaker_(file_path, environment):
+def create_engine(file_path, environment):
     with open(file_path) as f:
         config = yaml.load(f)
 
@@ -18,29 +18,12 @@ def sessionmaker_(file_path, environment):
         **config[environment]
     )
 
-    engine = create_engine(
+    return sqlalchemy.create_engine(
         db,
         encoding='utf-8',
         echo=False
     )
 
-    @contextmanager
-    def Session():
-        Base.prepare(engine, reflect=True)
-
-        _Session = sessionmaker(bind=engine)
-        session = _Session()
-        try:
-            yield session
-        except Exception as e:
-            session.rollback()
-            raise e
-        else:
-            session.commit()
-        finally:
-            session.close()
-
-    return Session
 
 def limit_select(query, class_id, *, max_req=1000):
     # 参考: https://bitbucket.org/zzzeek/sqlalchemy/wiki/UsageRecipes/WindowedRangeQuery

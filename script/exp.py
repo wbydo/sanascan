@@ -10,9 +10,8 @@ path_ = os.path.abspath(
 
 sys.path.insert(0, path_)
 
-import sanakin.morphological_analysis.cli as manalysis
-import sanakin.morpheme.cli as morph
 from sanakin.cli_util import SNKCLIEngine
+from sanakin import SNKSession
 
 # ロガー設定
 import logging
@@ -36,20 +35,29 @@ class ExpEngine(SNKCLIEngine):
 
     @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self, session):
-        manalysis.delete(session)
-        morph.delete(session)
+        from sanakin.err import SNKException
+        raise SNKException('一時使用中止')
 
-    def _sandbox_mode(self, session):
-        pass
+        morpheme.delete(session)
+        morph_dict.delete(session)
+
+    def _sandbox_mode(self):
+        from sanakin import Sentence
+        with SNKSession() as s:
+            s = s.query(Sentence).first()
+            print(s.text)
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
+        from sanakin.err import SNKException
+        raise SNKException('一時使用中止')
+
         with MeCab() as mecab:
-            manalysis.insert(
+            morpheme.insert(
                 session,
                 mecab,
                 is_develop_mode=is_develop_mode
             )
-        morph.insert(session, is_develop_mode=is_develop_mode)
+        morph_dict.insert(session, is_develop_mode=is_develop_mode)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, session, *, is_develop_mode=True):
