@@ -1,11 +1,10 @@
-from contextlib import contextmanager
+from contextlib import ContextDecorator
 
 import yaml
 import sqlalchemy
 from sqlalchemy.orm.session import Session as OriginalSession
 from sqlalchemy.orm import sessionmaker
 
-from ..mapped_classes import Base
 from ..err import SNKException
 
 def create_engine(file_path, environment):
@@ -25,20 +24,35 @@ def create_engine(file_path, environment):
         echo=False
     )
 
-class _SNKSession(OriginalSession):
+class _SNKSession(OriginalSession, ContextDecorator):
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type:
             self.rollback()
-        else:
-            self.commit()
-
-        # self._s.close()
+        self.close()
         return False
 
+    def commit_manager(self):
+        return _CommitManager(self)
+
 SNKSession = sessionmaker(class_=_SNKSession)
+
+class _CommitManager:
+    def __init__(self, snksession):
+        self._s = snksession
+
+    def __enter__(self):
+        return self._s
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type:
+            self._s.rollback()
+        else:
+            self._s.commit()
+
+        return False
 
 def limit_select(query, class_id, *, max_req=1000):
     # 参考: https://bitbucket.org/zzzeek/sqlalchemy/wiki/UsageRecipes/WindowedRangeQuery
