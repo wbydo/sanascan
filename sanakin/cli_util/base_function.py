@@ -35,7 +35,6 @@ def _simple_delete(klass, *column_names):
     return _delete
 
 def _bulk_insert(
-    session,
     iterator,
     klass,
     logger,
@@ -44,24 +43,31 @@ def _bulk_insert(
     ignore_columns=None,
 ):
 
-    ic = ignore_columns if ignore_columns else []
-    columns = klass.__table__.columns.keys()
-    no_column = set(ic) - set(columns)
-    if no_column:
-        raise SNKException(','.join(no_column) + f'は{klass}のカラムにない')
+    # ic = ignore_columns if ignore_columns else []
+    # columns = klass.__table__.columns.keys()
+    # no_column = set(ic) - set(columns)
+    # if no_column:
+    #     raise SNKException(','.join(no_column) + f'は{klass}のカラムにない')
+    #
+    # ic.append('id')
+    # for c in ic:
+    #     columns.remove(c)
 
-    ic.append('id')
-    for c in ic:
-        columns.remove(c)
+    # insert_stmt = mysql.insert(klass)
+    # insert_stmt = insert_stmt.on_duplicate_key_update(
+    #     **dict([(c, insert_stmt.inserted[c]) for c in columns])
+    # )
 
     insert_stmt = mysql.insert(klass)
     insert_stmt = insert_stmt.on_duplicate_key_update(
-        **dict([(c, insert_stmt.inserted[c]) for c in columns])
+        klass.id=insert_stmt.inserted.ed
     )
+
+
 
     def _insert(instances):
         session.execute(insert_stmt, instances)
-        logger.info(f'INSERT: {len(instances)}件挿入!!!')
+        logger.info(f'INSERT: [{class.__name__}]{len(instances)}件挿入!!!')
 
     instances = []
 
