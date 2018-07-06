@@ -2,6 +2,7 @@ from contextlib import contextmanager
 
 import yaml
 import sqlalchemy
+from sqlalchemy.orm.session import Session as OriginalSession
 from sqlalchemy.orm import sessionmaker
 
 from ..mapped_classes import Base
@@ -24,27 +25,20 @@ def create_engine(file_path, environment):
         echo=False
     )
 
-_Session = sessionmaker()
-
-class SNKSession():
-    @staticmethod
-    def configure(**kwargs):
-        _Session.configure(**kwargs)
-
-    def __init__(self):
-        self._s = _Session()
-
+class _SNKSession(OriginalSession):
     def __enter__(self):
-        return self._s
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type:
-            self._s.rollback()
+            self.rollback()
         else:
-            self._s.commit()
+            self.commit()
 
         # self._s.close()
         return False
+
+SNKSession = sessionmaker(class_=_SNKSession)
 
 def limit_select(query, class_id, *, max_req=1000):
     # 参考: https://bitbucket.org/zzzeek/sqlalchemy/wiki/UsageRecipes/WindowedRangeQuery
