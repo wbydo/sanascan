@@ -53,15 +53,3 @@ def delete(session):
     q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
     for t in ['morphological_analysies']:
         session.execute(q.format(t))
-
-def _morphological_analysis(mecab, text):
-    for mnode in mecab.parse(text, as_nodes=True):
-        if mnode.is_eos():
-            break
-
-        keys = ['pos', 'pos1', 'pos2', 'pos3', 'ctype', 'cform', 'base', 'yomi', 'pron']
-        features = [f if not f == '*' else None for f in mnode.feature.split(',')]
-        yield {
-            'surface': mnode.surface,
-            **dict(zip_longest(keys, features))
-        }

@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from .corpus_file import BaseCorpusFile
 from .corpus import BaseCorpus
 from .sentence_delimiter import BaseSentenceDelimiter
+from .morpheme import BaseMopheme
 
 Base = automap_base()
 
@@ -43,7 +44,7 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 class Sentence(Base):
     __tablename__ = 'sentences'
 
-class Morpheme(Base):
+class Morpheme(Base, BaseMopheme):
     __tablename__ = 'morphemes'
 
 class MorphemeDict(Base):

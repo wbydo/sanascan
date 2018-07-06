@@ -43,9 +43,16 @@ class ExpEngine(SNKCLIEngine):
 
     def _sandbox_mode(self):
         from sanakin import Sentence
-        with SNKSession() as s:
-            s = s.query(Sentence).first()
-            print(s.text)
+        from sanakin import Morpheme
+        from natto import MeCab
+
+
+        with SNKSession() as session:
+            sen = session.query(Sentence).first()
+
+        with MeCab() as me:
+            for m in Morpheme.create(sen, me):
+                print(m)
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
         from sanakin.err import SNKException

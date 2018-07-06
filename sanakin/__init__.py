@@ -30,5 +30,5 @@ class SNKSession():
         else:
             self._s.commit()
 
-        self._s.close()
+        # self._s.close()
         return False
