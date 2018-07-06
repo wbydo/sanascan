@@ -4,7 +4,7 @@ from ..err import NotImplementException
 from .db_api import create_engine
 
 from .. import Base
-from .. import SNKSession
+from .db_api import SNKSession
 
 class SNKCLIEngine(argparse.ArgumentParser):
     def __init__(self, description):

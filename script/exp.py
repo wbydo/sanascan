@@ -11,7 +11,7 @@ path_ = os.path.abspath(
 sys.path.insert(0, path_)
 
 from sanakin.cli_util import SNKCLIEngine
-from sanakin import SNKSession
+from sanakin.cli_util import SNKSession
 
 # ロガー設定
 import logging
