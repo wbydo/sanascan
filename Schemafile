@@ -42,7 +42,7 @@ add_foreign_key(
 # corpus_datum
 create_table(
   'corpus_datum',
-  id: :integer,
+  id: :bigint,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
@@ -82,7 +82,7 @@ end
 # sentences
 create_table(
   'sentences',
-  id: :integer,
+  id: :bigint,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
@@ -120,7 +120,7 @@ add_foreign_key(
 # morphemes
 create_table(
   'morphemes',
-  id: :integer,
+  id: :bigint,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
@@ -164,7 +164,7 @@ add_foreign_key(
 # unique_morph
 create_table(
   'morpheme_dictionary',
-  id: :integer,
+  id: :bigint,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
