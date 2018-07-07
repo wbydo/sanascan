@@ -1,7 +1,6 @@
 import sys
 
 from sqlalchemy.exc import IntegrityError
-import sqlalchemy.dialects.mysql as mysql
 
 from ..const import INSERT_DATA_NUM, MAX_QUERY_SIZE
 from ..err import SNKException
@@ -33,55 +32,3 @@ def _simple_delete(klass, *column_names):
         m.delete()
 
     return _delete
-
-def _bulk_insert(
-    iterator,
-    klass,
-    logger,
-    *,
-    is_develop_mode=True,
-    ignore_columns=None,
-):
-
-    # ic = ignore_columns if ignore_columns else []
-    # columns = klass.__table__.columns.keys()
-    # no_column = set(ic) - set(columns)
-    # if no_column:
-    #     raise SNKException(','.join(no_column) + f'は{klass}のカラムにない')
-    #
-    # ic.append('id')
-    # for c in ic:
-    #     columns.remove(c)
-
-    # insert_stmt = mysql.insert(klass)
-    # insert_stmt = insert_stmt.on_duplicate_key_update(
-    #     **dict([(c, insert_stmt.inserted[c]) for c in columns])
-    # )
-
-    insert_stmt = mysql.insert(klass)
-    insert_stmt = insert_stmt.on_duplicate_key_update(
-        klass.id=insert_stmt.inserted.ed
-    )
-
-
-
-    def _insert(instances):
-        session.execute(insert_stmt, instances)
-        logger.info(f'INSERT: [{class.__name__}]{len(instances)}件挿入!!!')
-
-    instances = []
-
-    n = 0
-    for i in iterator:
-        if is_develop_mode and n >= INSERT_DATA_NUM:
-            break
-
-        if sys.getsizeof(instances) < MAX_QUERY_SIZE:
-            instances.append(i)
-        else:
-            _insert(instances)
-            instances = []
-        n += 1
-
-    if instances:
-        _insert(instances)

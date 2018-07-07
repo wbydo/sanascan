@@ -1,11 +1,17 @@
 from contextlib import ContextDecorator
+import sys
+import logging
 
 import yaml
 import sqlalchemy
+import sqlalchemy.dialects.mysql as mysql
 from sqlalchemy.orm.session import Session as OriginalSession
 from sqlalchemy.orm import sessionmaker
 
 from ..err import SNKException
+from ..const import INSERT_DATA_NUM, MAX_QUERY_SIZE
+
+LOGGER = logging.getLogger(__name__)
 
 def create_engine(file_path, environment):
     with open(file_path) as f:
@@ -70,3 +76,33 @@ def limit_select(query, class_id, *, max_req=1000):
         if record is None:
             break
         first_id = class_id.__get__(record, class_id) if record else None
+
+def bulk_insert(iterator, klass, *, is_develop_mode=True):
+    def _insert(instances):
+        with SNKSession() as session:
+            with session.commit_manager() as s:
+                s.execute(insert_stmt, instances)
+                LOGGER.info(f'INSERT: [{klass.__name__}]{len(instances)}件挿入!!!')
+
+    insert_stmt = mysql.insert(klass)
+    insert_stmt = insert_stmt.on_duplicate_key_update(
+        id=insert_stmt.inserted.id
+    )
+
+    instances = []
+
+    n = 0
+    for i in iterator:
+        if is_develop_mode and n >= INSERT_DATA_NUM:
+            break
+
+        if sys.getsizeof(instances) < MAX_QUERY_SIZE:
+            instances.append(i.__dict__)
+        else:
+            _insert(instances)
+            instances = []
+        n += 1
+        print(n)
+
+    if instances:
+        _insert(instances)

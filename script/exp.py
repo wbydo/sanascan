@@ -42,15 +42,26 @@ class ExpEngine(SNKCLIEngine):
         morph_dict.delete(session)
 
     def _sandbox_mode(self):
-        from sanakin import Sentence, Morpheme
+        pass
+        from sanakin import Sentence, Morpheme, MorphemeDict
         from sanakin.cli_util.db_api import limit_select
+        from sanakin.cli_util.db_api import bulk_insert
 
-        with SNKSession() as s:
-            sen = s.query(Sentence).first()
+
+        session = SNKSession()
+
+        q = session.query(Sentence)
 
         with MeCab() as me:
-            for m in Morpheme.create(sen, me):
-                print(m.surface)
+            g = (m for sentence in limit_select(q, Sentence.id) for m in Morpheme.create(sentence, me))
+
+            bulk_insert(
+                g,
+                Morpheme,
+                logging.getLogger(__name__),
+                is_develop_mode=True
+            )
+
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
         from sanakin.err import SNKException
