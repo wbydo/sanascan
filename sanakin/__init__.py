@@ -8,5 +8,4 @@ from .mapped_classes import(
     SentenceDelimiter,
     Sentence,
     Morpheme,
-    MorphemeDict
 )

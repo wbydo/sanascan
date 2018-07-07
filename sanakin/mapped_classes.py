@@ -47,8 +47,6 @@ class Sentence(Base):
 class Morpheme(Base, BaseMopheme):
     __tablename__ = 'morphemes'
 
-class MorphemeDict(Base):
-    __tablename__ = 'morpheme_dictionary'
 #
 # class SplitMethod(Base):
 #     __tablename__ = 'split_methods'
