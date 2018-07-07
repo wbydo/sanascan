@@ -15,45 +15,45 @@ FROM(
       m.morpheme_id AS m_morpheme_id
     FROM (
       SELECT
-        morphological_analysies.surface AS surface,
-        morphological_analysies.pos AS pos,
-        morphological_analysies.pos1 AS pos1,
-        morphological_analysies.pos2 AS pos2,
-        morphological_analysies.pos3 AS pos3,
-        morphological_analysies.ctype AS ctype,
-        morphological_analysies.cform AS cform,
-        morphological_analysies.base AS base,
-        morphological_analysies.yomi AS yomi,
-        morphological_analysies.pron AS pron
+        morphemes.surface AS surface,
+        morphemes.pos AS pos,
+        morphemes.pos1 AS pos1,
+        morphemes.pos2 AS pos2,
+        morphemes.pos3 AS pos3,
+        morphemes.ctype AS ctype,
+        morphemes.cform AS cform,
+        morphemes.base AS base,
+        morphemes.yomi AS yomi,
+        morphemes.pron AS pron
       FROM
-        morphological_analysies
+        morphemes
       GROUP BY
-        morphological_analysies.surface,
-        morphological_analysies.pos,
-        morphological_analysies.pos1,
-        morphological_analysies.pos2,
-        morphological_analysies.pos3,
-        morphological_analysies.ctype,
-        morphological_analysies.cform,
-        morphological_analysies.base,
-        morphological_analysies.yomi,
-        morphological_analysies.pron
+        morphemes.surface,
+        morphemes.pos,
+        morphemes.pos1,
+        morphemes.pos2,
+        morphemes.pos3,
+        morphemes.ctype,
+        morphemes.cform,
+        morphemes.base,
+        morphemes.yomi,
+        morphemes.pron
     ) AS uma
     LEFT OUTER JOIN (
         SELECT
-          morphemes.morpheme_id AS morpheme_id,
-          morphemes.surface AS surface,
-          morphemes.pos AS pos,
-          morphemes.pos1 AS pos1,
-          morphemes.pos2 AS pos2,
-          morphemes.pos3 AS pos3,
-          morphemes.ctype AS ctype,
-          morphemes.cform AS cform,
-          morphemes.base AS base,
-          morphemes.yomi AS yomi,
-          morphemes.pron AS pron
+          morpheme_dictionary.morpheme_dict_id AS morpheme_id,
+          morpheme_dictionary.surface AS surface,
+          morpheme_dictionary.pos AS pos,
+          morpheme_dictionary.pos1 AS pos1,
+          morpheme_dictionary.pos2 AS pos2,
+          morpheme_dictionary.pos3 AS pos3,
+          morpheme_dictionary.ctype AS ctype,
+          morpheme_dictionary.cform AS cform,
+          morpheme_dictionary.base AS base,
+          morpheme_dictionary.yomi AS yomi,
+          morpheme_dictionary.pron AS pron
         FROM
-          morphemes
+          morpheme_dictionary
     )AS m
     ON  ((uma.surface = m.surface) OR (uma.surface IS NULL AND m.surface IS NULL))
     AND ((uma.pos = m.pos) OR (uma.pos IS NULL AND m.pos IS NULL))
