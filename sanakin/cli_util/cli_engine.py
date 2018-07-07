@@ -65,7 +65,7 @@ class SNKCLIEngine(argparse.ArgumentParser):
             return wrapper
         return decorator
 
-    def _delete_mode(self, session):
+    def _delete_mode(self):
         raise NotImplementException()
 
     def _sandbox_mode(self):
