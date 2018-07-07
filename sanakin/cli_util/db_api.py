@@ -102,7 +102,6 @@ def bulk_insert(iterator, klass, *, is_develop_mode=True):
             _insert(instances)
             instances = []
         n += 1
-        print(n)
 
     if instances:
         _insert(instances)
