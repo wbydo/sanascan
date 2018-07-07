@@ -1,3 +1,7 @@
+# 珍データメモ
+- corpus_data_id [CPRTUR00211017]
+  - 句点にも「、」を使う
+
 # sqlAlchemy-migrate → ridgepole 移行について - 20180614
 `COMMIT:42b231b`時点（sqlalchemy）で作ったDBスキーマと同じものをridgepoleで作ろうとしてもなぜか無理。どうせスキーマ定義刷新のつもりだったので諦める
 
