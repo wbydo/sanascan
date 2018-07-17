@@ -4,6 +4,7 @@ import sys
 from contextlib import contextmanager
 import argparse
 import fnmatch
+import pathlib
 
 path_ = os.path.abspath(
     os.path.join(
@@ -15,9 +16,12 @@ sys.path.insert(0, path_)
 #自前パッケージ
 from sanakin import Corpus
 from sanakin import SentenceDelimiter
+from sanakin import CorpusFile
 
 from sanakin.cli_util import SNKCLIEngine
 from sanakin.cli_util import SNKSession
+from sanakin.cli_util.db_api import simple_insert
+from sanakin.cli_util.db_api import bulk_insert
 
 from env import RAKUTEN_TRAVEL_DIR
 
@@ -54,7 +58,7 @@ class SeedEngine(SNKCLIEngine):
                 for t in session.get_bind().table_names():
                     session.execute(q.format(t))
 
-    def _sandbox_mode(self, session):
+    def _sandbox_mode(self):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
@@ -62,41 +66,33 @@ class SeedEngine(SNKCLIEngine):
             corpus_id='CPRTUR',
             name='楽天データセット::楽天トラベル::ユーザレビュー',
         )
+        simple_insert(corpus)
 
         delimiter = SentenceDelimiter(
             sentence_delimiter_id='SD0001',
             regex=r'[。．\.！!？\?\n]+',
         )
+        simple_insert(delimiter)
 
+        dir_ = pathlib.Path(RAKUTEN_TRAVEL_DIR)
+
+        corpus_files = []
         with SNKSession() as session:
-            with session.commit_manager() as s:
-                s.add(corpus)
-                s.add(delimiter)
+            session.add(corpus)
+            for idx, file_path in enumerate(dir_.iterdir()):
+                if is_develop_mode and idx == 1:
+                    break
 
-        # for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
-        #     if is_develop_mode and idx == 1:
-        #         break
-        #
-        #     if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
-        #         file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
-        #         corpus_file.insert(session, file_path, c.corpus_id)
-        #
-        # corpus_data.insert(
-        #     session,
-        #     c.corpus_id,
-        #     RAKUTEN_TRAVEL_DIR,
-        #     is_develop_mode=is_develop_mode
-        # )
-        #
-        # sentence.insert(
-        #     session,
-        #     'SD0001',
-        #     is_develop_mode=is_develop_mode
-        # )
+                if fnmatch.fnmatch(file_path.name, 'travel02_userReview[0-9]*'):
+                    cf = CorpusFile.create(file_path)
+                    cf.corpus_id = corpus.corpus_id
+                    corpus_files.append(cf)
+
+        bulk_insert(corpus_files, CorpusFile)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
-    def _long_time_insert_mode(self, session, *, is_develop_mode=True):
-        self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
+    def _long_time_insert_mode(self, *, is_develop_mode=True):
+        self._non_wrapped_insert_mode(is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
     cli = SeedEngine()

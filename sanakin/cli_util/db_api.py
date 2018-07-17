@@ -7,6 +7,7 @@ import sqlalchemy
 import sqlalchemy.dialects.mysql as mysql
 from sqlalchemy.orm.session import Session as OriginalSession
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 
 from ..err import SNKException
 from ..const import INSERT_DATA_NUM, MAX_QUERY_SIZE
@@ -76,6 +77,21 @@ def limit_select(query, class_id, *, max_req=1000):
         if record is None:
             break
         first_id = class_id.__get__(record, class_id) if record else None
+
+def simple_insert(instance):
+    i = instance
+
+    with SNKSession() as session:
+        try:
+            session.add(i)
+            session.commit()
+        except IntegrityError as e:
+            err_code, _ = e.orig.args
+            if err_code == 1062:
+                LOGGER.info('格納済み')
+                session.rollback()
+            else:
+                raise e
 
 def bulk_insert(iterator, klass, *, is_develop_mode=True):
     def _insert(instances):
