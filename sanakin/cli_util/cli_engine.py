@@ -3,7 +3,7 @@ import argparse
 from ..err import NotImplementException
 from .db_api import create_engine
 
-from .db_api import SNKSession
+from ..snksession import SNKSession
 from ..mapped_classes import Base
 
 

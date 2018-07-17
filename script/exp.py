@@ -11,8 +11,8 @@ path_ = os.path.abspath(
 sys.path.insert(0, path_)
 
 from sanakin import Sentence, Morpheme, MorphemeDict
+from sanakin import SNKSession
 from sanakin.cli_util import SNKCLIEngine
-from sanakin.cli_util import SNKSession
 from sanakin.cli_util.db_api import limit_select
 from sanakin.cli_util.db_api import bulk_insert
 

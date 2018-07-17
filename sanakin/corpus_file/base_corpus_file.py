@@ -22,6 +22,10 @@ class BaseCorpusFile:
         return k
 
     def _readline(self, file_path):
-        with open(file_path) as f:
+        '''
+        Args:
+            file_path[pathlib.Path]: File path
+        '''
+        with file_path.open() as f:
             for line in iter(f.readline, ''):
                 yield line.strip()

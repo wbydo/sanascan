@@ -15,9 +15,9 @@ sys.path.insert(0, path_)
 from sanakin import Corpus
 from sanakin import SentenceDelimiter
 from sanakin import CorpusFile
+from sanakin import SNKSession
 
 from sanakin.cli_util import SNKCLIEngine
-from sanakin.cli_util import SNKSession
 from sanakin.cli_util.db_api import simple_insert
 from sanakin.cli_util.db_api import bulk_insert
 

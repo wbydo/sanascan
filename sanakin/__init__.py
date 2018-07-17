@@ -1,5 +1,3 @@
-from sqlalchemy.orm import sessionmaker
-
 from .mapped_classes import(
     Base,
     Corpus,
@@ -9,3 +7,5 @@ from .mapped_classes import(
     Sentence,
     Morpheme,
 )
+
+from .snksession import SNKSession

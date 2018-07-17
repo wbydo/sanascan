@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from .corpus_file import BaseCorpusFile
 from .corpus import BaseCorpus
 from .sentence_delimiter import BaseSentenceDelimiter
+from .corpus_data import BaseCorpusData
 from .morpheme import BaseMopheme
 
 Base = automap_base()
@@ -22,11 +23,15 @@ class CorpusFile(Base, BaseCorpusFile):
     __tablename__ = 'corpus_files'
 
     def readline(self, dir_):
-        file_path_ = os.path.join(dir_, self.corpus_file_id)
+        '''
+        Args:
+            dir_[pathlib.Path]
+        '''
+        file_path_ = dir_.joinpath(self.corpus_file_id)
         for line in self._readline(file_path_):
             yield line
 
-class CorpusData(Base):
+class CorpusData(Base, BaseCorpusData):
     __tablename__ = 'corpus_datum'
     # sentences = relationship('Sentence')
 
