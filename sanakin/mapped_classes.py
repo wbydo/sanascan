@@ -20,7 +20,6 @@ class Corpus(Base, BaseCorpus):
 
 class CorpusFile(Base, BaseCorpusFile):
     __tablename__ = 'corpus_files'
-    origin_datum = relationship('CorpusData')
 
     def readline(self, dir_):
         file_path_ = os.path.join(dir_, self.corpus_file_id)

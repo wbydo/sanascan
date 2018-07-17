@@ -1,8 +1,6 @@
 #組み込みパッケージ
 import os
 import sys
-from contextlib import contextmanager
-import argparse
 import fnmatch
 import pathlib
 
