@@ -14,14 +14,10 @@ sys.path.insert(0, path_)
 
 #自前パッケージ
 from sanakin import Corpus
-
-import sanakin.corpus.cli as corpus
-import sanakin.corpus_file.cli as corpus_file
-import sanakin.corpus_data.cli as corpus_data
-import sanakin.sentence_delimiter.cli as delimiter
-import sanakin.sentence.cli as sentence
+from sanakin import SentenceDelimiter
 
 from sanakin.cli_util import SNKCLIEngine
+from sanakin.cli_util import SNKSession
 
 from env import RAKUTEN_TRAVEL_DIR
 
@@ -43,13 +39,20 @@ class SeedEngine(SNKCLIEngine):
         )
 
     @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
-    def _delete_mode(self, session):
-        corpus.delete(session, 'CPRTUR')
-        delimiter.delete(session, 'SD0001')
+    def _delete_mode(self):
+        with SNKSession() as session:
+            with session.commit_manager() as s:
+                s.query(Corpus).filter(
+                    Corpus.corpus_id == 'CPRTUR'
+                ).delete()
 
-        q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
-        for t in session.get_bind().table_names():
-            session.execute(q.format(t))
+                s.query(SentenceDelimiter).filter(
+                    SentenceDelimiter.sentence_delimiter_id == 'SD0001'
+                ).delete()
+
+                q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+                for t in session.get_bind().table_names():
+                    session.execute(q.format(t))
 
     def _sandbox_mode(self, session):
         pass
@@ -96,7 +99,5 @@ class SeedEngine(SNKCLIEngine):
         self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
-    from sanakin.err import SNKException
-    raise SNKException('一時使用中止')
     cli = SeedEngine()
     cli.run()
