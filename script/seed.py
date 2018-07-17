@@ -57,42 +57,42 @@ class SeedEngine(SNKCLIEngine):
     def _sandbox_mode(self, session):
         pass
 
-    def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
-        corpus.insert(
-            session,
-            '楽天データセット::楽天トラベル::ユーザレビュー',
-            'CPRTUR'
+    def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
+        corpus = Corpus(
+            corpus_id='CPRTUR',
+            name='楽天データセット::楽天トラベル::ユーザレビュー',
         )
 
-        delimiter.insert(
-            session,
-            # r'(?P<period>(?:。|．|\.|！|!|？|\?)+)',
-            r'[。．\.！!？\?\n]+',
-            'SD0001'
+        delimiter = SentenceDelimiter(
+            sentence_delimiter_id='SD0001',
+            regex=r'[。．\.！!？\?\n]+',
         )
 
-        c = session.query(Corpus).one()
+        with SNKSession() as session:
+            with session.commit_manager() as s:
+                s.add(corpus)
+                s.add(delimiter)
 
-        for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
-            if is_develop_mode and idx == 1:
-                break
-
-            if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
-                file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
-                corpus_file.insert(session, file_path, c.corpus_id)
-
-        corpus_data.insert(
-            session,
-            c.corpus_id,
-            RAKUTEN_TRAVEL_DIR,
-            is_develop_mode=is_develop_mode
-        )
-
-        sentence.insert(
-            session,
-            'SD0001',
-            is_develop_mode=is_develop_mode
-        )
+        # for idx, file_name in enumerate(sorted(os.listdir(RAKUTEN_TRAVEL_DIR))):
+        #     if is_develop_mode and idx == 1:
+        #         break
+        #
+        #     if fnmatch.fnmatch(file_name, 'travel02_userReview[0-9]*'):
+        #         file_path = os.path.join(RAKUTEN_TRAVEL_DIR, file_name)
+        #         corpus_file.insert(session, file_path, c.corpus_id)
+        #
+        # corpus_data.insert(
+        #     session,
+        #     c.corpus_id,
+        #     RAKUTEN_TRAVEL_DIR,
+        #     is_develop_mode=is_develop_mode
+        # )
+        #
+        # sentence.insert(
+        #     session,
+        #     'SD0001',
+        #     is_develop_mode=is_develop_mode
+        # )
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, session, *, is_develop_mode=True):
