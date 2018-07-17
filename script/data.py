@@ -29,8 +29,8 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
-class SeedEngine(SNKCLIEngine):
-    _work = 'seed'
+class DataEngine(SNKCLIEngine):
+    _work = 'data'
 
     def __init__(self):
         super(__class__, self).__init__(
@@ -41,22 +41,34 @@ class SeedEngine(SNKCLIEngine):
 
     @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self):
-        pass
+        with SNKSession() as session:
+            with session.commit_manager() as s:
+                s.query(CorpusData).delete()
+
+                q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+                for t in session.get_bind().table_names():
+                    session.execute(q.format(t))
 
     def _sandbox_mode(self):
-        with SNKSession() as session:
-            f = session.query(CorpusFile).one()
-            p = pathlib.Path(RAKUTEN_TRAVEL_DIR)
-            for data in CorpusData.create_iter(f, p):
-                print(data.text)
+        pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        pass
+        p = pathlib.Path(RAKUTEN_TRAVEL_DIR)
+
+        with SNKSession() as session:
+            files = session.query(CorpusFile).all()
+
+        def iter_():
+            for f in files:
+                for data in CorpusData.create_iter(f, p):
+                    yield data
+
+        bulk_insert(iter_(), CorpusData, is_develop_mode=is_develop_mode)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):
         self._non_wrapped_insert_mode(is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
-    cli = SeedEngine()
+    cli = DataEngine()
     cli.run()
