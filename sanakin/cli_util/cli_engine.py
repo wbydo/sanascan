@@ -71,18 +71,18 @@ class SNKCLIEngine(argparse.ArgumentParser):
     def _sandbox_mode(self):
         raise NotImplementException()
 
-    def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
+    def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
         raise NotImplementException()
 
-    def _long_time_insert_mode(self, session, *, is_develop_mode=True):
+    def _long_time_insert_mode(self, *, is_develop_mode=True):
         raise NotImplementException()
 
-    def _insert_mode(self, session, *, is_develop_mode=True):
+    def _insert_mode(self, *, is_develop_mode=True):
         if is_develop_mode:
-            self._non_wrapped_insert_mode(session, is_develop_mode=is_develop_mode)
+            self._non_wrapped_insert_mode(is_develop_mode=is_develop_mode)
 
         else:
-            self._long_time_insert_mode(session, is_develop_mode=is_develop_mode)
+            self._long_time_insert_mode(is_develop_mode=is_develop_mode)
 
     def run(self):
         self._args = self.parse_args()
@@ -93,11 +93,11 @@ class SNKCLIEngine(argparse.ArgumentParser):
         SNKSession.configure(bind=self.engine)
 
         if self._args.delete:
-            self._delete_mode('err')
+            self._delete_mode()
 
         elif self._args.sandbox:
             self._sandbox_mode()
 
         else:
             is_develop_mode = not self._args.all
-            self._insert_mode('err', is_develop_mode=is_develop_mode)
+            self._insert_mode(is_develop_mode=is_develop_mode)
