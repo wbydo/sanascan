@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from ..err import SNKException
 from ..const import INSERT_DATA_NUM, MAX_QUERY_SIZE
+from ..const import MAX_SELECT_RECORD
 from ..snksession import SNKSession
 
 LOGGER = logging.getLogger(__name__)
@@ -29,17 +30,19 @@ def create_engine(file_path, environment):
         echo=False
     )
 
-def limit_select(query, class_id, *, max_req=1000):
+def limit_select(query, class_id):
     # 参考: https://bitbucket.org/zzzeek/sqlalchemy/wiki/UsageRecipes/WindowedRangeQuery
 
     first_id = None
     while True:
-        q = query
+        with SNKSession() as session:
+            q = query.with_session(session)
+
         if first_id is not None:
             q = query.filter(class_id > first_id)
 
         record = None
-        for record in q.order_by(class_id).limit(max_req):
+        for record in q.order_by(class_id).limit(MAX_SELECT_RECORD):
             yield record
 
         if record is None:

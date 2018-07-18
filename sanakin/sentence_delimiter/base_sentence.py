@@ -5,7 +5,7 @@ class BaseSentenceDelimiter:
 
         p = re.compile(delimiter_regex)
 
-        sentences = [i for i in re.split(p, text) if i]
+        sentences = [i.strip() for i in re.split(p, text) if i.strip()]
         length = len(sentences)
 
         for idx, sentence in enumerate(sentences):
