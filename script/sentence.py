@@ -3,6 +3,9 @@ import os
 import sys
 import pathlib
 
+from sqlalchemy.orm import aliased
+from sqlalchemy import and_
+
 path_ = os.path.abspath(
     os.path.join(
         __file__,
@@ -51,10 +54,27 @@ class SentenceEngine(SNKCLIEngine):
     def _sandbox_mode(self):
         pass
 
+    def _data_query_untill_not_splited(self, sentence_delimiter):
+        with SNKSession() as s:
+            inserted_sentence_subq = s.query(Sentence.sentence_id, Sentence.corpus_data_id).filter(and_(
+                Sentence.nth == Sentence.length,
+                Sentence.sentence_delimiter_id == sentence_delimiter.sentence_delimiter_id
+            )).subquery('is')
+
+            ise = aliased(Sentence, inserted_sentence_subq)
+
+            q = s.query(CorpusData).outerjoin(
+                inserted_sentence_subq,
+                CorpusData.corpus_data_id == ise.corpus_data_id
+            ).filter(ise.sentence_id == None)
+
+        return q
+
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
         with SNKSession() as s:
             sd = s.query(SentenceDelimiter).one()
-            q = s.query(CorpusData)
+
+        q = self._data_query_untill_not_splited(sd)
 
         def iter_():
             for d in limit_select(q, CorpusData.id):
