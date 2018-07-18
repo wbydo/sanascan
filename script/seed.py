@@ -77,7 +77,7 @@ class SeedEngine(SNKCLIEngine):
         corpus_files = []
         with SNKSession() as session:
             session.add(corpus)
-            for idx, file_path in enumerate(dir_.iterdir()):
+            for idx, file_path in enumerate(sorted(dir_.iterdir())):
                 if is_develop_mode and idx == 1:
                     break
 
