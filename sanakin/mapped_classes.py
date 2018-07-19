@@ -8,7 +8,7 @@ from .corpus import BaseCorpus
 from .sentence_delimiter import BaseSentenceDelimiter
 from .corpus_data import BaseCorpusData
 from .sentence import BaseSentence
-from .morpheme import BaseMopheme
+from .tmp_morpheme import BaseTmpMorpheme
 
 Base = automap_base()
 
@@ -49,10 +49,10 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 class Sentence(Base, BaseSentence):
     __tablename__ = 'sentences'
 
-class Morpheme(Base, BaseMopheme):
+class Morpheme(Base):
     __tablename__ = 'morphemes'
 
-class TmpMorpheme(Base):
+class TmpMorpheme(Base, BaseTmpMorpheme):
     __tablename__ = 'tmp_morphemes'
 
 #

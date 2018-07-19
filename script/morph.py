@@ -14,6 +14,7 @@ path_ = os.path.abspath(
 sys.path.insert(0, path_)
 
 #自前パッケージ
+from sanakin import Sentence
 from sanakin import TmpMorpheme
 
 from sanakin import SNKMeCab
@@ -42,16 +43,31 @@ class MorphemeEngine(SNKCLIEngine):
 
     @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self):
-        pass
+        with SNKSession() as session:
+            with session.commit_manager() as s:
+                s.query(TmpMorpheme).delete()
+
+                q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
+                for t in session.get_bind().table_names():
+                    session.execute(q.format(t))
 
     def _sandbox_mode(self):
-        TmpMorpheme
+        pass
 
     def _data_query_untill_not_splited(self, sentence_delimiter):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        pass
+        with SNKSession() as session:
+            q = session.query(Sentence)
+
+        def iter_():
+            with SNKMeCab() as mecab:
+                for sen in limit_select(q, Sentence.id):
+                    for m in TmpMorpheme.create_iter(sen, mecab):
+                        yield m
+
+        bulk_insert(iter_(), TmpMorpheme, is_develop_mode=is_develop_mode)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):
