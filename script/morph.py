@@ -54,12 +54,23 @@ class MorphemeEngine(SNKCLIEngine):
     def _sandbox_mode(self):
         pass
 
-    def _data_query_untill_not_splited(self, sentence_delimiter):
-        pass
+    def _sentence_query_untill_not_splited(self):
+        with SNKSession() as s:
+            inserted_tmp_morpheme_subq = s.query(TmpMorpheme.sentence_id).filter(
+                TmpMorpheme.nth == TmpMorpheme.length,
+            ).subquery('itm')
+
+            itm = aliased(TmpMorpheme, inserted_tmp_morpheme_subq)
+
+            q = s.query(Sentence).outerjoin(
+                inserted_tmp_morpheme_subq,
+                Sentence.sentence_id == itm.sentence_id
+            ).filter(itm.sentence_id == None)
+
+        return q
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        with SNKSession() as session:
-            q = session.query(Sentence)
+        q = self._sentence_query_untill_not_splited()
 
         def iter_():
             with SNKMeCab() as mecab:
