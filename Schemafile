@@ -143,7 +143,7 @@ create_table(
       'pos', 'pos1', 'pos2', 'pos3',
       'ctype', 'cform', 'base', 'yomi', 'pron'
     ],
-    name: 'features'
+    name: 'features', unique: true
   )
 end
 
@@ -176,6 +176,50 @@ add_foreign_key(
   column: 'morpheme_id',
   primary_key: 'morpheme_id',
   name: 'splited_morpheme_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+
+# tmp_morphemes
+create_table(
+  'tmp_morphemes',
+  id: :bigint,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'sentence_id', limit: 150, null: false
+  t.index ['sentence_id'], name: 'sentence_id'
+
+  t.integer 'nth', null: false
+
+  t.index ['sentence_id', 'nth'], name: 'sentence_id_nth', unique: true
+
+  t.integer 'length', null:false
+
+  t.string 'surface', limit: 50, null: false # 表層系
+  t.string 'pos', limit: 20, null: false # 品詞
+  t.string 'pos1', limit: 20 # 品詞細分類1
+  t.string 'pos2', limit: 20 # 品詞細分類2
+  t.string 'pos3', limit: 20 # 品詞細分類3
+  t.string 'ctype', limit: 20 # 活用型
+  t.string 'cform', limit: 20 # 活用形
+  t.string 'base', limit: 50 # 原型
+  t.string 'yomi', limit: 50 # 読み
+  t.string 'pron', limit: 50 # 発音
+  t.index(
+    [
+      'surface',
+      'pos', 'pos1', 'pos2', 'pos3',
+      'ctype', 'cform', 'base', 'yomi', 'pron'
+    ],
+    name: 'features'
+  )
+end
+add_foreign_key(
+  'tmp_morphemes', 'sentences',
+  column: 'sentence_id',
+  primary_key: 'sentence_id',
+  name: 'tmp_morphemes_sentence_id',
   on_update: :cascade,
   on_delete: :cascade
 )
