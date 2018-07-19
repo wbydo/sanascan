@@ -52,6 +52,9 @@ class Sentence(Base, BaseSentence):
 class Morpheme(Base, BaseMopheme):
     __tablename__ = 'morphemes'
 
+class TmpMorpheme(Base):
+    __tablename__ = 'tmp_morphemes'
+
 #
 # class SplitMethod(Base):
 #     __tablename__ = 'split_methods'
