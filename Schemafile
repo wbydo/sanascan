@@ -191,6 +191,9 @@ create_table(
   t.index ['sentence_id'], name: 'sentence_id'
 
   t.integer 'nth', null: false
+
+  t.index ['sentence_id', 'nth'], name: 'sentence_id_nth', unique: true
+
   t.integer 'length', null:false
 
   t.string 'surface', limit: 50, null: false # 表層系
