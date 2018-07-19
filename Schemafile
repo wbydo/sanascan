@@ -143,7 +143,7 @@ create_table(
       'pos', 'pos1', 'pos2', 'pos3',
       'ctype', 'cform', 'base', 'yomi', 'pron'
     ],
-    name: 'features'
+    name: 'features', unique: true
   )
 end
 
@@ -188,7 +188,7 @@ create_table(
   force: :cascade
 ) do |t|
   t.string 'sentence_id', limit: 150, null: false
-  t.index ['sentence_id'], name: 'sentence_id', unique: true
+  t.index ['sentence_id'], name: 'sentence_id'
 
   t.integer 'nth', null: false
   t.integer 'length', null:false
