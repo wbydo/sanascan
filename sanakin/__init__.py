@@ -9,3 +9,4 @@ from .mapped_classes import(
 )
 
 from .snksession import SNKSession
+from .snkmecab import SNKMeCab
