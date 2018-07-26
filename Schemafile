@@ -32,7 +32,7 @@ create_table(
 end
 add_foreign_key(
   'corpus_files', 'corpora',
-  column: 'corpus_id',
+  column: 'corpus_id',        # なぜか入れないとdiffが出る
   primary_key: 'corpus_id',
   name: 'corpus_files_corpus_id_corpora_corpus_id',
   on_update: :cascade,
@@ -52,13 +52,13 @@ create_table(
   t.string 'corpus_file_id', limit: 50, null: false
   t.index ['corpus_file_id'], name: 'corpus_file_id'
 
-  t.integer 'id_in_corpus', index: true
+  t.integer 'id_in_corpus'
 
   t.text 'text', null: false
 end
 add_foreign_key(
   'corpus_datum', 'corpus_files',
-  column: 'corpus_file_id',
+  # column: 'corpus_file_id',
   primary_key: 'corpus_file_id',
   name: 'corpus_datum_corpus_file_id_corpus_files_id',
   on_update: :cascade,
@@ -110,7 +110,7 @@ add_foreign_key(
 )
 add_foreign_key(
   'sentences', 'sentence_delimiters',
-  column: 'sentence_delimiter_id',
+  # column: 'sentence_delimiter_id',
   primary_key: 'sentence_delimiter_id',
   name: 'sentences_delimiter_id_delimiters_sentence_delimiter_id',
   on_update: :cascade,
@@ -165,7 +165,7 @@ create_table(
 end
 add_foreign_key(
   'splited_sentence', 'sentences',
-  column: 'sentence_id',
+  # column: 'sentence_id',
   primary_key: 'sentence_id',
   name: 'splited_sentence_id',
   on_update: :cascade,
@@ -173,7 +173,7 @@ add_foreign_key(
 )
 add_foreign_key(
   'splited_sentence', 'morphemes',
-  column: 'morpheme_id',
+  # column: 'morpheme_id',
   primary_key: 'morpheme_id',
   name: 'splited_morpheme_id',
   on_update: :cascade,
@@ -217,7 +217,7 @@ create_table(
 end
 add_foreign_key(
   'tmp_morphemes', 'sentences',
-  column: 'sentence_id',
+  # column: 'sentence_id',
   primary_key: 'sentence_id',
   name: 'tmp_morphemes_sentence_id',
   on_update: :cascade,
