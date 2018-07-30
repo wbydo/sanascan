@@ -53,6 +53,8 @@ class UniqueMorphemeEngine(SNKCLIEngine):
         with SNKSession() as session:
             with session.commit_manager() as s:
                 s.query(Morpheme).delete()
+                s.query(TmpMorpheme).delete()
+                s.query(SplitedSentence).delete()
 
                 q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
                 for t in session.get_bind().table_names():
@@ -61,7 +63,7 @@ class UniqueMorphemeEngine(SNKCLIEngine):
     def _sandbox_mode(self):
         pass
 
-    def _query(self):
+    def _query_tmp_morpheme(self):
         def _cond(klass1, klass2, f):
             return or_(
                 getattr(klass1, f) == getattr(klass2, f),
@@ -91,7 +93,25 @@ class UniqueMorphemeEngine(SNKCLIEngine):
 
         return query
 
+    def _query_sentence_untill_not_processed(self):
+        with SNKSession() as s:
+            sq = s.query(SplitedSentence).filter(
+                SplitedSentence.nth == SplitedSentence.length
+            ).subquery('sps')
+
+            sps = aliased(SplitedSentence, sq)
+
+            query = s.query(Sentence).outerjoin(
+                sps,
+                Sentence.sentence_id == sps.sentence_id
+            ).filter(
+                sps.id == None
+            ).limit(MAX_SELECT_RECORD)
+
+        return query
+
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
+        # Morphemeにつけるidを計算
         with SNKSession() as s:
             last_morpheme_id = s.query(Morpheme.morpheme_id).order_by(
                 Morpheme.morpheme_id.desc()
@@ -103,9 +123,21 @@ class UniqueMorphemeEngine(SNKCLIEngine):
             last_morpheme_id = int(last_morpheme_id.replace('MO', '')) + 1
 
         while True:
+            # 形態素解析が終わっていないSentenceを検索
+            with SNKSession() as session:
+                query = self._query_sentence_untill_not_processed().with_session(session)
+
+                def iter_(mecab):
+                    for sentence in query:
+                        for m in TmpMorpheme.create_iter(sentence, mecab):
+                            yield m
+
+                with SNKMeCab() as mecab:
+                    bulk_insert(iter_(mecab), TmpMorpheme)
+
             morphemes = []
             with SNKSession() as session:
-                query = self._query().with_session(session)
+                query = self._query_tmp_morpheme().with_session(session)
 
                 result = None
                 for result in query:
@@ -119,7 +151,6 @@ class UniqueMorphemeEngine(SNKCLIEngine):
 
                 with session.commit_manager() as s:
                     s.add_all(morphemes)
-
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):
