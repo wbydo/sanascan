@@ -4,7 +4,6 @@ from logging import getLogger
 LOGGER = getLogger(__name__)
 
 class BaseTmpMorpheme:
-    pass
     FEATURES = ['pos', 'pos1', 'pos2', 'pos3', 'ctype', 'cform', 'base', 'yomi', 'pron']
 
     @classmethod
