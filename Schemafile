@@ -164,6 +164,31 @@ create_table(
   t.integer 'length', null:false
 end
 
+pertition_inner = (1..1000).map do |i|
+  "\tPARTITION p#{i} VALUES LESS THAN (#{i * 10_000_000}) ENGINE=InnoDB,"
+end.join("\n")
+
+pertition_sql = <<-"SQL"
+  ALTER TABLE
+    splited_sentence
+  PARTITION BY RANGE (id) (
+    #{pertition_inner}
+    PARTITION pmax VALUES LESS THAN MAXVALUE ENGINE=InnoDB
+  )
+SQL
+
+execute(pertition_sql) do |c|
+  c.raw_connection.query(<<-"CHECK_SQL").all?
+    SELECT
+      PARTITION_NAME
+    FROM
+      INFORMATION_SCHEMA.PARTITIONS
+    WHERE
+      TABLE_SCHEMA = \'#{c.current_database()}\'
+      AND TABLE_NAME = \'splited_sentence\';
+  CHECK_SQL
+end
+
 # tmp_morphemes
 create_table(
   'tmp_morphemes',
