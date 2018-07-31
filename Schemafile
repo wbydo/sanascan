@@ -163,22 +163,6 @@ create_table(
   t.integer 'nth', null: false
   t.integer 'length', null:false
 end
-add_foreign_key(
-  'splited_sentence', 'sentences',
-  # column: 'sentence_id',
-  primary_key: 'sentence_id',
-  name: 'splited_sentence_id',
-  on_update: :cascade,
-  on_delete: :cascade
-)
-add_foreign_key(
-  'splited_sentence', 'morphemes',
-  # column: 'morpheme_id',
-  primary_key: 'morpheme_id',
-  name: 'splited_morpheme_id',
-  on_update: :cascade,
-  on_delete: :cascade
-)
 
 # tmp_morphemes
 create_table(
