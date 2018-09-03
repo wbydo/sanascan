@@ -6,7 +6,8 @@ from .mapped_classes import(
     SentenceDelimiter,
     Sentence,
     Morpheme,
-    TmpMorpheme
+    TmpMorpheme,
+    SplitedSentence
 )
 
 from .snksession import SNKSession

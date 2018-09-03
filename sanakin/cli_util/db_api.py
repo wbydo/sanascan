@@ -27,7 +27,9 @@ def create_engine(file_path, environment):
     return sqlalchemy.create_engine(
         db,
         encoding='utf-8',
-        echo=False
+        echo=False,
+        pool_size=20,
+        max_overflow=10
     )
 
 def limit_select(query, class_id):
@@ -65,9 +67,10 @@ def simple_insert(instance):
                 raise e
 
 def bulk_insert(iterator, klass, *, is_develop_mode=True):
-    def _insert(instances):
+    def _insert(insert_stmt, instances):
         with SNKSession() as session:
             with session.commit_manager() as s:
+                LOGGER.debug(s.bind.pool.status())
                 s.execute(insert_stmt, instances)
                 LOGGER.info(f'INSERT: [{klass.__name__}]{len(instances)}件挿入!!!')
 
@@ -86,9 +89,11 @@ def bulk_insert(iterator, klass, *, is_develop_mode=True):
         if sys.getsizeof(instances) < MAX_QUERY_SIZE:
             instances.append(i.__dict__)
         else:
-            _insert(instances)
+            LOGGER.debug('log-1')
+            _insert(insert_stmt, instances)
             instances = []
         n += 1
 
     if instances:
-        _insert(instances)
+        LOGGER.debug('log-2:')
+        _insert(insert_stmt, instances)

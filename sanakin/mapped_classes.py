@@ -1,7 +1,7 @@
 import os
 
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relation
 
 from .corpus_file import BaseCorpusFile
 from .corpus import BaseCorpus
@@ -14,7 +14,7 @@ Base = automap_base()
 
 class Corpus(Base, BaseCorpus):
     __tablename__ = 'corpora'
-    corpus_files = relationship('CorpusFile')
+    corpus_files = relation('CorpusFile')
 
     def extract_data(self, line):
         func = self._extract_function(self.corpus_id)
@@ -34,7 +34,6 @@ class CorpusFile(Base, BaseCorpusFile):
 
 class CorpusData(Base, BaseCorpusData):
     __tablename__ = 'corpus_datum'
-    # sentences = relationship('Sentence')
 
 class SentenceDelimiter(Base, BaseSentenceDelimiter):
     __tablename__ = 'sentence_delimiters'
@@ -48,12 +47,18 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 
 class Sentence(Base, BaseSentence):
     __tablename__ = 'sentences'
+    # splits = relation('SplitedSentence')
 
 class Morpheme(Base):
     __tablename__ = 'morphemes'
 
 class TmpMorpheme(Base, BaseTmpMorpheme):
     __tablename__ = 'tmp_morphemes'
+
+class SplitedSentence(Base):
+    __tablename__ = 'splited_sentence'
+    # sentence = relation('Sentence')
+    # morphemes = relation('Morpheme')
 
 #
 # class SplitMethod(Base):
