@@ -47,7 +47,7 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 
 class Sentence(Base, BaseSentence):
     __tablename__ = 'sentences'
-    splits = relation('SplitedSentence')
+    # splits = relation('SplitedSentence')
 
 class Morpheme(Base):
     __tablename__ = 'morphemes'
@@ -57,8 +57,8 @@ class TmpMorpheme(Base, BaseTmpMorpheme):
 
 class SplitedSentence(Base):
     __tablename__ = 'splited_sentence'
-    sentence = relation('Sentence')
-    morphemes = relation('Morpheme')
+    # sentence = relation('Sentence')
+    # morphemes = relation('Morpheme')
 
 #
 # class SplitMethod(Base):
