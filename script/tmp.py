@@ -50,13 +50,12 @@ class SeedEngine(SNKCLIEngine):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        from sanakin.cleaner import Cleaner
+        from sanakin.lang_model.base_lang_model import BaseLangModel
         with SNKMeCab() as mecab:
             with SNKSession() as s:
                 q = s.query(Sentence).limit(300)
                 iter_ = map(lambda s1: s1.text, q)
-                c = Cleaner()
-                for s2 in c.clean(iter_, mecab):
+                for s2 in BaseLangModel.create(iter_, mecab):
                     print([str(i) for i in s2])
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')

@@ -1,19 +1,20 @@
-from enum import Enum
+from logging import getLogger
+
+LOGGER = getLogger(__name__)
+
 import re
-
 import jaconv
+from ..word import Word
 
-from .word import Word
-
-class Cleaner:
-    stop_symbol = re.compile(r'(?P<period>(?:。|．|\.|！|!|？|\?)+)')
-
-    def clean(self, sentences, mecab):
+class BaseLangModel:
+    @classmethod
+    def create(klass, sentences, mecab):
         for sentence in sentences:
             normalized = jaconv.normalize(sentence)
-            yield self._process_sentence(sentence, mecab)
+            yield klass._process_sentence(sentence, mecab)
 
-    def _process_sentence(self, sentence, mecab):
+    @classmethod
+    def _process_sentence(klass, sentence, mecab):
         for mec_node in mecab.parse(sentence, as_nodes=True):
             if mec_node.is_eos():
                 break
@@ -22,6 +23,7 @@ class Cleaner:
             if res.is_symbol():
                 continue
             yield Word(surface=res.surface(), yomi=res.yomi())
+
 
 class SymbolError(Exception):
     pass
