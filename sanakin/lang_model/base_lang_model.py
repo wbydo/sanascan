@@ -5,29 +5,23 @@ LOGGER = getLogger(__name__)
 import re
 import jaconv
 from ..word import Word
+from ..srilm import srilm
 
 class BaseLangModel:
     @classmethod
     def create(klass, sentences, mecab):
-        outer =  klass._process_multi_sentences(sentences, mecab)
-
         wakati =  '\n'.join(
-            map(
-                (lambda sentence:
-                    ' '.join(
-                        map(str, sentence)
-                    )
-                ),
-                outer
-            )
+            klass._process_multi_sentences(sentences, mecab)
         )
-
-        return wakati
+        return srilm(wakati, 3).decode('utf-8')
 
     @classmethod
     def _process_multi_sentences(klass, multi_sentence, mecab):
         for sentence in multi_sentence:
-            yield klass._process_single_sentence(sentence, mecab)
+
+            # iterのまま返す必要が出てくるかもしれないのでこう書いておく
+            iter_ = klass._process_single_sentence(sentence, mecab)
+            yield ' '.join(iter_)
 
     @classmethod
     def _process_single_sentence(klass, single_sentence, mecab):
@@ -39,7 +33,10 @@ class BaseLangModel:
             res = _AnalyzeMorp(mec_node)
             if res.is_symbol():
                 continue
-            yield Word(surface=res.surface(), yomi=res.yomi())
+
+            # Word型で返す必要が出てくるかもしれないのでこう書いておく
+            w = Word(surface=res.surface(), yomi=res.yomi())
+            yield str(w)
 
 
 class SymbolError(Exception):
