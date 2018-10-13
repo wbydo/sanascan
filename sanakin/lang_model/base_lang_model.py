@@ -9,13 +9,17 @@ from ..word import Word
 class BaseLangModel:
     @classmethod
     def create(klass, sentences, mecab):
-        for sentence in sentences:
-            normalized = jaconv.normalize(sentence)
-            yield klass._process_sentence(sentence, mecab)
+        return klass._process_multi_sentences(sentences, mecab)
 
     @classmethod
-    def _process_sentence(klass, sentence, mecab):
-        for mec_node in mecab.parse(sentence, as_nodes=True):
+    def _process_multi_sentences(klass, multi_sentence, mecab):
+        for sentence in multi_sentence:
+            yield klass._process_single_sentence(sentence, mecab)
+
+    @classmethod
+    def _process_single_sentence(klass, single_sentence, mecab):
+        normalized = jaconv.normalize(single_sentence)
+        for mec_node in mecab.parse(normalized, as_nodes=True):
             if mec_node.is_eos():
                 break
 
