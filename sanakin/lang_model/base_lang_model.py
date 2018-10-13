@@ -9,7 +9,20 @@ from ..word import Word
 class BaseLangModel:
     @classmethod
     def create(klass, sentences, mecab):
-        return klass._process_multi_sentences(sentences, mecab)
+        outer =  klass._process_multi_sentences(sentences, mecab)
+
+        wakati =  '\n'.join(
+            map(
+                (lambda sentence:
+                    ' '.join(
+                        map(str, sentence)
+                    )
+                ),
+                outer
+            )
+        )
+
+        return wakati
 
     @classmethod
     def _process_multi_sentences(klass, multi_sentence, mecab):
