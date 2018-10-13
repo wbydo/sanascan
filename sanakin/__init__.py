@@ -5,9 +5,6 @@ from .mapped_classes import(
     CorpusData,
     SentenceDelimiter,
     Sentence,
-    Morpheme,
-    TmpMorpheme,
-    SplitedSentence
 )
 
 from .snksession import SNKSession

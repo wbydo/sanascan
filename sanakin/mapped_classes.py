@@ -8,7 +8,6 @@ from .corpus import BaseCorpus
 from .sentence_delimiter import BaseSentenceDelimiter
 from .corpus_data import BaseCorpusData
 from .sentence import BaseSentence
-from .tmp_morpheme import BaseTmpMorpheme
 
 Base = automap_base()
 
@@ -48,19 +47,3 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 class Sentence(Base, BaseSentence):
     __tablename__ = 'sentences'
     # splits = relation('SplitedSentence')
-
-class Morpheme(Base):
-    __tablename__ = 'morphemes'
-
-class TmpMorpheme(Base, BaseTmpMorpheme):
-    __tablename__ = 'tmp_morphemes'
-
-class SplitedSentence(Base):
-    __tablename__ = 'splited_sentence'
-    # sentence = relation('Sentence')
-    # morphemes = relation('Morpheme')
-
-#
-# class SplitMethod(Base):
-#     __tablename__ = 'split_methods'
-#     sentences = relationship('Sentence')
