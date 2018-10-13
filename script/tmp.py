@@ -16,6 +16,7 @@ from sanakin import Corpus
 from sanakin import SentenceDelimiter
 from sanakin import CorpusFile
 from sanakin import SNKSession
+from sanakin.snkmecab import SNKMeCab
 from sanakin import Sentence
 
 from sanakin.cli_util import SNKCLIEngine
@@ -49,10 +50,14 @@ class SeedEngine(SNKCLIEngine):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        with SNKSession() as s:
-            q = s.query(Sentence).limit(300)
-            for i in q:
-                print(i.text)
+        from sanakin.cleaner import Cleaner
+        with SNKMeCab() as mecab:
+            with SNKSession() as s:
+                q = s.query(Sentence).limit(300)
+                iter_ = map(lambda s1: s1.text, q)
+                c = Cleaner()
+                for s2 in c.clean(iter_, mecab):
+                    print([str(i) for i in s2])
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):

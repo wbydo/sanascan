@@ -3,14 +3,14 @@ import re
 
 import jaconv
 
-from anakin.util.word import Word
+from .word import Word
 
 class Cleaner:
     stop_symbol = re.compile(r'(?P<period>(?:。|．|\.|！|!|？|\?)+)')
 
-    def clean(self, data, mecab):
-        normalized = jaconv.normalize(data)
-        for sentence in re.sub(Cleaner.stop_symbol, '\n', normalized).split():
+    def clean(self, sentences, mecab):
+        for sentence in sentences:
+            normalized = jaconv.normalize(sentence)
             yield self._process_sentence(sentence, mecab)
 
     def _process_sentence(self, sentence, mecab):
@@ -18,7 +18,7 @@ class Cleaner:
             if mec_node.is_eos():
                 break
 
-            res = AnalyzeMorp(mec_node)
+            res = _AnalyzeMorp(mec_node)
             if res.is_symbol():
                 continue
             yield Word(surface=res.surface(), yomi=res.yomi())
@@ -29,7 +29,7 @@ class SymbolError(Exception):
 class MarkError(Exception):
     pass
 
-class AnalyzeMorp:
+class _AnalyzeMorp:
     symbol = re.compile(r'^(?:\W|_|・)+$')
 
     hira = re.compile(r'^[ぁ-ゔ]+$')
@@ -53,9 +53,9 @@ class AnalyzeMorp:
     def is_symbol(self):
         if self.hinshi == '記号':
             return True
-        if AnalyzeMorp.symbol.match(self._surface):
+        if _AnalyzeMorp.symbol.match(self._surface):
             return True
-        if self._has_yomi and AnalyzeMorp.symbol.match(self._yomi):
+        if self._has_yomi and _AnalyzeMorp.symbol.match(self._yomi):
             return True
         return False
 
@@ -65,14 +65,14 @@ class AnalyzeMorp:
 
         if self._has_yomi:
             return self._surface
-        if AnalyzeMorp.hira.match(self._surface):
+        if _AnalyzeMorp.hira.match(self._surface):
             return self._surface
-        if AnalyzeMorp.kata.match(self._surface):
+        if _AnalyzeMorp.kata.match(self._surface):
             return self._surface
 
-        if AnalyzeMorp.eng.match(self._surface):
+        if _AnalyzeMorp.eng.match(self._surface):
             return Word.MARK['eng']
-        if AnalyzeMorp.num.match(self._surface):
+        if _AnalyzeMorp.num.match(self._surface):
             return Word.MARK['num']
 
         return Word.MARK['unk']
@@ -85,9 +85,9 @@ class AnalyzeMorp:
             return self._conv_kata(self._yomi)
 
         surface = self.surface()
-        if AnalyzeMorp.hira.match(surface):
+        if _AnalyzeMorp.hira.match(surface):
             return self._conv_kata(surface)
-        if AnalyzeMorp.kata.match(surface):
+        if _AnalyzeMorp.kata.match(surface):
             return self._conv_kata(surface)
 
         if not surface in Word.MARK.values():
@@ -95,5 +95,5 @@ class AnalyzeMorp:
         return surface
 
     def _conv_kata(self, str_):
-        tbl = AnalyzeMorp.old_kana_table
+        tbl = _AnalyzeMorp.old_kana_table
         return jaconv.hira2kata(str_).translate(tbl).replace('・', '')
