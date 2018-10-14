@@ -8,6 +8,7 @@ from .corpus import BaseCorpus
 from .sentence_delimiter import BaseSentenceDelimiter
 from .corpus_data import BaseCorpusData
 from .sentence import BaseSentence
+from .lang_model import BaseLangModel
 
 Base = automap_base()
 
@@ -47,3 +48,6 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
 class Sentence(Base, BaseSentence):
     __tablename__ = 'sentences'
     # splits = relation('SplitedSentence')
+
+class LangModel(Base, BaseLangModel):
+    __tablename__ = 'lang_model'

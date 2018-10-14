@@ -6,14 +6,16 @@ import re
 import jaconv
 from ..word import Word
 from ..srilm import srilm
+from ..next_id import NextIdSearchable
 
-class BaseLangModel:
+class BaseLangModel(NextIdSearchable):
     @classmethod
     def create(klass, sentences, mecab):
-        wakati =  '\n'.join(
-            klass._process_multi_sentences(sentences, mecab)
-        )
-        return srilm(wakati, 3).decode('utf-8')
+        # wakati =  '\n'.join(
+        #     klass._process_multi_sentences(sentences, mecab)
+        # )
+        # return srilm(wakati, 3).decode('utf-8')
+        return klass.next_id('lang_model_id', 'LM', 4)
 
     @classmethod
     def _process_multi_sentences(klass, multi_sentence, mecab):
