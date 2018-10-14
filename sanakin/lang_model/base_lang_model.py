@@ -4,18 +4,30 @@ LOGGER = getLogger(__name__)
 
 import re
 import jaconv
+from hashlib import sha1
+from pathlib import Path
+
 from ..word import Word
 from ..srilm import srilm
 from ..next_id import NextIdSearchable
 
 class BaseLangModel(NextIdSearchable):
     @classmethod
-    def create(klass, sentences, mecab):
-        # wakati =  '\n'.join(
-        #     klass._process_multi_sentences(sentences, mecab)
-        # )
-        # return srilm(wakati, 3).decode('utf-8')
-        return klass.next_id('lang_model_id', 'LM', 4)
+    def create(klass, sentences, mecab, lang_model_file_dir):
+        wakati =  '\n'.join(
+            klass._process_multi_sentences(sentences, mecab)
+        )
+
+        arpa_string =  srilm(wakati, 3)
+        checksum = sha1(arpa_string).digest()
+        lang_model_id = klass.next_id('lang_model_id', 'LM', 4)
+
+        path = Path(lang_model_file_dir) / (lang_model_id + '.txt')
+
+        with path.open('w') as f:
+            f.write(arpa_string.decode('utf-8'))
+
+        return klass(lang_model_id=lang_model_id, checksum=checksum)
 
     @classmethod
     def _process_multi_sentences(klass, multi_sentence, mecab):
