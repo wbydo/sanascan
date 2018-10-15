@@ -13,6 +13,6 @@ class NextIdSearchable:
         if not latest:
             return '{}{}'.format(prefix, '1'.zfill(size))
 
-        latest_no = int(latest.sub(prefix, ''))
+        latest_no = int(latest[0].replace(prefix, ''))
 
         return '{}{}'.format(prefix, str(latest_no + 1).zfill(size))

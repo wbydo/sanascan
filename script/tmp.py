@@ -52,12 +52,24 @@ class SeedEngine(SNKCLIEngine):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
+        from sanakin import CreatedLangModel
+        from itertools import tee
+
         with SNKMeCab() as mecab:
             with SNKSession() as s:
-                q = s.query(Sentence).limit(300)
-                iter_ = map(lambda s1: s1.text, q)
-                lm = LangModel.create(iter_, mecab, LANG_MODEL_FILE_DIR)
-                print(lm.checksum)
+                with s.commit_manager() as c:
+                    q = s.query(Sentence).limit(3000)
+                    text_iter = map(lambda s1: s1.text, q)
+                    id_iter = map(lambda s: s.sentence_id, q)
+
+                    lm = LangModel.create(text_iter, mecab, LANG_MODEL_FILE_DIR)
+                    c.add(lm)
+
+                    for i in id_iter:
+                        clm = CreatedLangModel(sentence_id=i, lang_model_id=lm.lang_model_id)
+                        c.add(clm)
+
+                    print(lm.checksum)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):

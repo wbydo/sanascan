@@ -5,7 +5,8 @@ from .mapped_classes import(
     CorpusData,
     SentenceDelimiter,
     Sentence,
-    LangModel
+    LangModel,
+    CreatedLangModel
 )
 
 from .snksession import SNKSession

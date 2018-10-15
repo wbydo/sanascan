@@ -50,4 +50,7 @@ class Sentence(Base, BaseSentence):
     # splits = relation('SplitedSentence')
 
 class LangModel(Base, BaseLangModel):
-    __tablename__ = 'lang_model'
+    __tablename__ = 'lang_models'
+
+class CreatedLangModel(Base):
+    __tablename__ = 'created_lang_model'

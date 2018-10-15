@@ -119,7 +119,7 @@ add_foreign_key(
 
 # lang_model
 create_table(
-  'lang_model',
+  'lang_models',
   id: :integer,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
@@ -130,3 +130,33 @@ create_table(
   t.string 'checksum', limit: 64, null:false
   t.index ['checksum'], name: 'idx_lm_checksum', unique: true
 end
+
+# created_lang_model
+create_table(
+  'created_lang_model',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'lang_model_id', limit: 100, null: false
+  t.index ['lang_model_id'], name: 'idx_created_lm_lang_model_id'
+
+  t.string 'sentence_id', limit: 150, null: false
+  t.index ['sentence_id'], name: 'idx_created_lm_sentence_id'
+end
+add_foreign_key(
+  'created_lang_model', 'lang_models',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'lang_model_id',
+  name: 'rel_created_lang_model_lang_model_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+add_foreign_key(
+  'created_lang_model', 'sentences',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'sentence_id',
+  name: 'rel_created_lang_sentences_sentence_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
