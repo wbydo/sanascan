@@ -56,7 +56,8 @@ class SeedEngine(SNKCLIEngine):
             with SNKSession() as s:
                 q = s.query(Sentence).limit(300)
                 iter_ = map(lambda s1: s1.text, q)
-                wakati = LangModel.create(iter_, mecab, LANG_MODEL_FILE_DIR)
+                lm = LangModel.create(iter_, mecab, LANG_MODEL_FILE_DIR)
+                print(lm.checksum)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):

@@ -19,7 +19,7 @@ class BaseLangModel(NextIdSearchable):
         )
 
         arpa_string =  srilm(wakati, 3)
-        checksum = sha1(arpa_string).digest()
+        checksum = sha1(arpa_string).hexdigest()
         lang_model_id = klass.next_id('lang_model_id', 'LM', 4)
 
         path = Path(lang_model_file_dir) / (lang_model_id + '.txt')
