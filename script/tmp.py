@@ -58,9 +58,12 @@ class SeedEngine(SNKCLIEngine):
         with SNKMeCab() as mecab:
             with SNKSession() as s:
                 with s.commit_manager() as c:
-                    q = s.query(Sentence).limit(3000)
-                    text_iter = map(lambda s1: s1.text, q)
-                    id_iter = map(lambda s: s.sentence_id, q)
+                    query = s.query(Sentence)\
+                        .order_by(Sentence.sentence_id)\
+                        .limit(3)
+
+                    text_iter = map(lambda s1: s1.text, query)
+                    id_iter = map(lambda s: s.sentence_id, query)
 
                     lm = LangModel.create(text_iter, mecab, LANG_MODEL_FILE_DIR)
                     c.add(lm)
@@ -68,8 +71,6 @@ class SeedEngine(SNKCLIEngine):
                     for i in id_iter:
                         clm = CreatedLangModel(sentence_id=i, lang_model_id=lm.lang_model_id)
                         c.add(clm)
-
-                    print(lm.checksum)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):
