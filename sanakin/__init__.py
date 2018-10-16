@@ -5,6 +5,9 @@ from .mapped_classes import(
     CorpusData,
     SentenceDelimiter,
     Sentence,
-    MorphologicalAnalysis,
-    Morpheme
+    LangModel,
+    CreatedLangModel
 )
+
+from .snksession import SNKSession
+from .snkmecab import SNKMeCab

@@ -16,12 +16,16 @@ from sanakin import Corpus
 from sanakin import SentenceDelimiter
 from sanakin import CorpusFile
 from sanakin import SNKSession
+from sanakin.snkmecab import SNKMeCab
+from sanakin import Sentence
+from sanakin import LangModel
 
 from sanakin.cli_util import SNKCLIEngine
 from sanakin.cli_util.db_api import simple_insert
 from sanakin.cli_util.db_api import bulk_insert
 
 from env import RAKUTEN_TRAVEL_DIR
+from env import LANG_MODEL_FILE_DIR
 
 # ロガー設定
 import logging
@@ -42,51 +46,30 @@ class SeedEngine(SNKCLIEngine):
 
     @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self):
-        with SNKSession() as session:
-            with session.commit_manager() as s:
-                s.query(Corpus).filter(
-                    Corpus.corpus_id == 'CPRTUR'
-                ).delete()
-
-                s.query(SentenceDelimiter).filter(
-                    SentenceDelimiter.sentence_delimiter_id == 'SD0001'
-                ).delete()
-
-                q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
-                for t in session.get_bind().table_names():
-                    session.execute(q.format(t))
+        pass
 
     def _sandbox_mode(self):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        corpus = Corpus(
-            corpus_id='CPRTUR',
-            name='楽天データセット::楽天トラベル::ユーザレビュー',
-        )
-        simple_insert(corpus)
+        from sanakin import CreatedLangModel
+        from itertools import tee
 
-        delimiter = SentenceDelimiter(
-            sentence_delimiter_id='SD0001',
-            regex=r'[。．\.！!？\?\n]+',
-        )
-        simple_insert(delimiter)
+        with SNKMeCab() as mecab:
+            with SNKSession() as s:
+                with s.commit_manager() as c:
+                    q = s.query(Sentence).limit(3000)
+                    text_iter = map(lambda s1: s1.text, q)
+                    id_iter = map(lambda s: s.sentence_id, q)
 
-        dir_ = pathlib.Path(RAKUTEN_TRAVEL_DIR)
+                    lm = LangModel.create(text_iter, mecab, LANG_MODEL_FILE_DIR)
+                    c.add(lm)
 
-        corpus_files = []
-        with SNKSession() as session:
-            session.add(corpus)
-            for idx, file_path in enumerate(sorted(dir_.iterdir())):
-                if is_develop_mode and idx == 1:
-                    break
+                    for i in id_iter:
+                        clm = CreatedLangModel(sentence_id=i, lang_model_id=lm.lang_model_id)
+                        c.add(clm)
 
-                if fnmatch.fnmatch(file_path.name, 'travel02_userReview[0-9]*'):
-                    cf = CorpusFile.create(file_path)
-                    cf.corpus_id = corpus.corpus_id
-                    corpus_files.append(cf)
-
-        bulk_insert(corpus_files, CorpusFile)
+                    print(lm.checksum)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):

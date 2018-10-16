@@ -32,7 +32,7 @@ create_table(
 end
 add_foreign_key(
   'corpus_files', 'corpora',
-  column: 'corpus_id',
+  column: 'corpus_id',        # なぜか入れないとdiffが出る
   primary_key: 'corpus_id',
   name: 'corpus_files_corpus_id_corpora_corpus_id',
   on_update: :cascade,
@@ -42,7 +42,7 @@ add_foreign_key(
 # corpus_datum
 create_table(
   'corpus_datum',
-  id: :integer,
+  id: :bigint,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
@@ -52,13 +52,13 @@ create_table(
   t.string 'corpus_file_id', limit: 50, null: false
   t.index ['corpus_file_id'], name: 'corpus_file_id'
 
-  t.integer 'id_in_corpus', index: true
+  t.integer 'id_in_corpus'
 
   t.text 'text', null: false
 end
 add_foreign_key(
   'corpus_datum', 'corpus_files',
-  column: 'corpus_file_id',
+  # column: 'corpus_file_id',
   primary_key: 'corpus_file_id',
   name: 'corpus_datum_corpus_file_id_corpus_files_id',
   on_update: :cascade,
@@ -82,7 +82,7 @@ end
 # sentences
 create_table(
   'sentences',
-  id: :integer,
+  id: :bigint,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
@@ -110,83 +110,53 @@ add_foreign_key(
 )
 add_foreign_key(
   'sentences', 'sentence_delimiters',
-  column: 'sentence_delimiter_id',
+  # column: 'sentence_delimiter_id',
   primary_key: 'sentence_delimiter_id',
   name: 'sentences_delimiter_id_delimiters_sentence_delimiter_id',
   on_update: :cascade,
   on_delete: :cascade
 )
 
-# morphological_analysis
+# lang_model
 create_table(
-  'morphological_analysies',
+  'lang_models',
   id: :integer,
   options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
   force: :cascade
 ) do |t|
-  t.string 'morphological_analysies_id', limit: 255, null: false
-  t.index ['morphological_analysies_id'], name: 'morphological_analysies_id', unique: true
+  t.string 'lang_model_id', limit: 100, null: false
+  t.index ['lang_model_id'], name: 'idx_lang_model_id', unique: true
+
+  t.string 'checksum', limit: 64, null:false
+  t.index ['checksum'], name: 'idx_lm_checksum', unique: true
+end
+
+# created_lang_model
+create_table(
+  'created_lang_model',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'lang_model_id', limit: 100, null: false
+  t.index ['lang_model_id'], name: 'idx_created_lm_lang_model_id'
 
   t.string 'sentence_id', limit: 150, null: false
-  t.index ['sentence_id'], name: 'sentence_id'
-
-  t.string 'surface', limit: 50, null: false # 表層系
-  t.string 'pos', limit: 20, null: false # 品詞
-  t.string 'pos1', limit: 20 # 品詞細分類1
-  t.string 'pos2', limit: 20 # 品詞細分類2
-  t.string 'pos3', limit: 20 # 品詞細分類3
-  t.string 'ctype', limit: 20 # 活用型
-  t.string 'cform', limit: 20 # 活用形
-  t.string 'base', limit: 50 # 原型
-  t.string 'yomi', limit: 50 # 読み
-  t.string 'pron', limit: 50 # 発音
-  t.index(
-    [
-      'surface',
-      'pos', 'pos1', 'pos2', 'pos3',
-      'ctype', 'cform', 'base', 'yomi', 'pron'
-    ],
-    name: 'morpheme'
-  )
-
-  t.integer 'nth', null: false
-  t.integer 'length', null:false
+  t.index ['sentence_id'], name: 'idx_created_lm_sentence_id'
 end
 add_foreign_key(
-  'morphological_analysies', 'sentences',
-  column: 'sentence_id',
-  primary_key: 'sentence_id',
-  name: 'morphological_sentence_id_sentences_sentence_id',
+  'created_lang_model', 'lang_models',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'lang_model_id',
+  name: 'rel_created_lang_model_lang_model_id',
   on_update: :cascade,
   on_delete: :cascade
 )
-
-# unique_morph
-create_table(
-  'morphemes',
-  id: :integer,
-  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
-  force: :cascade
-) do |t|
-  t.string 'morpheme_id', limit: 150, null: false
-  t.index ['morpheme_id'], name: 'sentence_id', unique: true
-
-  t.string 'surface', limit: 50, null: false # 表層系
-  t.string 'pos', limit: 20, null: false # 品詞
-  t.string 'pos1', limit: 20 # 品詞細分類1
-  t.string 'pos2', limit: 20 # 品詞細分類2
-  t.string 'pos3', limit: 20 # 品詞細分類3
-  t.string 'ctype', limit: 20 # 活用型
-  t.string 'cform', limit: 20 # 活用形
-  t.string 'base', limit: 50 # 原型
-  t.string 'yomi', limit: 50 # 読み
-  t.string 'pron', limit: 50 # 発音
-  t.index(
-    [
-      'surface',
-      'pos', 'pos1', 'pos2', 'pos3',
-      'ctype', 'cform', 'base', 'yomi', 'pron'
-    ],
-    name: 'morpheme', unique: true
-  )
-end
+add_foreign_key(
+  'created_lang_model', 'sentences',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'sentence_id',
+  name: 'rel_created_lang_sentences_sentence_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)

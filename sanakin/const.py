@@ -1,3 +1,4 @@
-INSERT_DATA_NUM = 100 # develop_modeでinsertする数
+INSERT_DATA_NUM = 1000 # develop_modeでinsertする数
 MAX_QUERY_SIZE = 500_000 # 500KB
 MAX_SELECT_RECORD = 500
+MAX_MECAB_PARSE_NUM = 500 # 500回

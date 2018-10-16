@@ -10,9 +10,11 @@ path_ = os.path.abspath(
 
 sys.path.insert(0, path_)
 
-import sanakin.morphological_analysis.cli as manalysis
-import sanakin.morpheme.cli as morph
+from sanakin import Sentence, Morpheme, MorphemeDict
+from sanakin import SNKSession
 from sanakin.cli_util import SNKCLIEngine
+from sanakin.cli_util.db_api import limit_select
+from sanakin.cli_util.db_api import bulk_insert
 
 # ロガー設定
 import logging
@@ -36,20 +38,28 @@ class ExpEngine(SNKCLIEngine):
 
     @SNKCLIEngine.confirm(msg=f'{_work}:消去しますか？')
     def _delete_mode(self, session):
-        manalysis.delete(session)
-        morph.delete(session)
+        q = f'TRUNCATE TABLE {Morpheme.__tablename__};'
 
-    def _sandbox_mode(self, session):
+        with SNKSession() as s:
+            s.execute(q)
+
+    def _sandbox_mode(self):
         pass
 
     def _non_wrapped_insert_mode(self, session, *, is_develop_mode=True):
-        with MeCab() as mecab:
-            manalysis.insert(
-                session,
-                mecab,
+        def _iterator(query, mecab):
+            for sentence in limit_select(query, Sentence.id):
+                for morph in Morpheme.create(sentence, mecab):
+                    yield morph
+
+        with SNKSession() as session, MeCab() as mecab:
+            q = session.query(Sentence)
+
+            bulk_insert(
+                _iterator(q, mecab),
+                Morpheme,
                 is_develop_mode=is_develop_mode
             )
-        morph.insert(session, is_develop_mode=is_develop_mode)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, session, *, is_develop_mode=True):

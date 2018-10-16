@@ -1,17 +1,20 @@
 import os
 
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relation
 
 from .corpus_file import BaseCorpusFile
 from .corpus import BaseCorpus
 from .sentence_delimiter import BaseSentenceDelimiter
+from .corpus_data import BaseCorpusData
+from .sentence import BaseSentence
+from .lang_model import BaseLangModel
 
 Base = automap_base()
 
 class Corpus(Base, BaseCorpus):
     __tablename__ = 'corpora'
-    corpus_files = relationship('CorpusFile')
+    corpus_files = relation('CorpusFile')
 
     def extract_data(self, line):
         func = self._extract_function(self.corpus_id)
@@ -19,16 +22,18 @@ class Corpus(Base, BaseCorpus):
 
 class CorpusFile(Base, BaseCorpusFile):
     __tablename__ = 'corpus_files'
-    origin_datum = relationship('CorpusData')
 
     def readline(self, dir_):
-        file_path_ = os.path.join(dir_, self.corpus_file_id)
+        '''
+        Args:
+            dir_[pathlib.Path]
+        '''
+        file_path_ = dir_.joinpath(self.corpus_file_id)
         for line in self._readline(file_path_):
             yield line
 
-class CorpusData(Base):
+class CorpusData(Base, BaseCorpusData):
     __tablename__ = 'corpus_datum'
-    # sentences = relationship('Sentence')
 
 class SentenceDelimiter(Base, BaseSentenceDelimiter):
     __tablename__ = 'sentence_delimiters'
@@ -40,15 +45,12 @@ class SentenceDelimiter(Base, BaseSentenceDelimiter):
                 **sentence,
             }
 
-class Sentence(Base):
+class Sentence(Base, BaseSentence):
     __tablename__ = 'sentences'
+    # splits = relation('SplitedSentence')
 
-class MorphologicalAnalysis(Base):
-    __tablename__ = 'morphological_analysies'
+class LangModel(Base, BaseLangModel):
+    __tablename__ = 'lang_models'
 
-class Morpheme(Base):
-    __tablename__ = 'morphemes'
-#
-# class SplitMethod(Base):
-#     __tablename__ = 'split_methods'
-#     sentences = relationship('Sentence')
+class CreatedLangModel(Base):
+    __tablename__ = 'created_lang_model'

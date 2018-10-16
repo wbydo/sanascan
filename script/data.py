@@ -1,7 +1,6 @@
 #組み込みパッケージ
 import os
 import sys
-import fnmatch
 import pathlib
 
 path_ = os.path.abspath(
@@ -15,8 +14,9 @@ sys.path.insert(0, path_)
 from sanakin import Corpus
 from sanakin import SentenceDelimiter
 from sanakin import CorpusFile
-from sanakin import SNKSession
+from sanakin import CorpusData
 
+from sanakin import SNKSession
 from sanakin.cli_util import SNKCLIEngine
 from sanakin.cli_util.db_api import simple_insert
 from sanakin.cli_util.db_api import bulk_insert
@@ -29,14 +29,13 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
-class SeedEngine(SNKCLIEngine):
-    _work = 'seed'
+class DataEngine(SNKCLIEngine):
+    _work = 'data'
 
     def __init__(self):
         super(__class__, self).__init__(
             description='''\
-                DBに初期データを投入するためのCLI。
-                引数なしで実行した場合、開発モードとしてRTURのサブセットをinsert。\
+                楽天コーパスからデータを抽出するためのCLI。\
             '''
         )
 
@@ -44,13 +43,7 @@ class SeedEngine(SNKCLIEngine):
     def _delete_mode(self):
         with SNKSession() as session:
             with session.commit_manager() as s:
-                s.query(Corpus).filter(
-                    Corpus.corpus_id == 'CPRTUR'
-                ).delete()
-
-                s.query(SentenceDelimiter).filter(
-                    SentenceDelimiter.sentence_delimiter_id == 'SD0001'
-                ).delete()
+                s.query(CorpusData).delete()
 
                 q = 'ALTER TABLE {} AUTO_INCREMENT = 1;'
                 for t in session.get_bind().table_names():
@@ -60,38 +53,22 @@ class SeedEngine(SNKCLIEngine):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        corpus = Corpus(
-            corpus_id='CPRTUR',
-            name='楽天データセット::楽天トラベル::ユーザレビュー',
-        )
-        simple_insert(corpus)
+        p = pathlib.Path(RAKUTEN_TRAVEL_DIR)
 
-        delimiter = SentenceDelimiter(
-            sentence_delimiter_id='SD0001',
-            regex=r'[。．\.！!？\?\n]+',
-        )
-        simple_insert(delimiter)
-
-        dir_ = pathlib.Path(RAKUTEN_TRAVEL_DIR)
-
-        corpus_files = []
         with SNKSession() as session:
-            session.add(corpus)
-            for idx, file_path in enumerate(sorted(dir_.iterdir())):
-                if is_develop_mode and idx == 1:
-                    break
+            files = session.query(CorpusFile).all()
 
-                if fnmatch.fnmatch(file_path.name, 'travel02_userReview[0-9]*'):
-                    cf = CorpusFile.create(file_path)
-                    cf.corpus_id = corpus.corpus_id
-                    corpus_files.append(cf)
+        def iter_():
+            for f in files:
+                for data in CorpusData.create_iter(f, p):
+                    yield data
 
-        bulk_insert(corpus_files, CorpusFile)
+        bulk_insert(iter_(), CorpusData, is_develop_mode=is_develop_mode)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):
         self._non_wrapped_insert_mode(is_develop_mode=is_develop_mode)
 
 if __name__ == '__main__':
-    cli = SeedEngine()
+    cli = DataEngine()
     cli.run()
