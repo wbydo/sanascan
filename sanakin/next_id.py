@@ -8,7 +8,7 @@ class NextIdSearchable:
                 getattr(klass, id_column_name)
             ).order_by(
                 getattr(klass, id_column_name).desc()
-            ).one_or_none()
+            ).limit(1).one_or_none()
 
         if not latest:
             return '{}{}'.format(prefix, '1'.zfill(size))
