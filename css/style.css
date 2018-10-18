@@ -2,8 +2,15 @@ h1 {
   color: #67c5ff;
 }
 
+body {
+  position: relative;
+  font-family: Arial;
+}
+
 #frame {
-  margin-left: 400px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #caluculator {
@@ -22,7 +29,7 @@ h1 {
   right: 5px;
 
   font-size: 20pt;
-  color: #164b6b;
+  color: #06283c;
 }
 
 #keys {
