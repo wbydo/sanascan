@@ -1,18 +1,57 @@
 h1 {
-  color: blue;
+  color: #67c5ff;
 }
 
 #frame {
   margin-left: 400px;
 }
 
-#container {
+#caluculator {
+  width: 300px;
+}
+
+#output {
+  position: relative;
+  border: solid 1px #67c5ff;
+  height: 80px;
+}
+
+#output-num {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+
+  font-size: 20pt;
+  color: #164b6b;
+}
+
+#keys {
+  margin-top: 12px;
   display: grid;
-  grid-template-columns: 100px 100px 100px;
+  grid-template-columns: 32% 32% 32%;
   grid-template-rows: 100px 100px 100px 100px;
-  grid-template-areas:
-    "key-7 key-8   key-9"
-    "key-4 key-5   key-6"
-    "key-1 key-2   key-3"
-    "key-0 key-dot key-equal";
+
+  grid-row-gap: 6px;
+  justify-content: space-between;
+}
+
+.square_btn {
+  position: relative;
+
+  font-size: 14pt;
+  color: #67c5ff;
+  border: solid 1px #67c5ff;
+  border-radius: 3px;
+  transition: .2s;
+}
+
+.square_btn:hover {
+    background: #67c5ff;
+    color: white;
+}
+
+.num {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
