@@ -1,6 +1,8 @@
+@value primary from '../Colors.css';
+
 .area {
   position: relative;
-  border: solid 1px #67c5ff;
+  border: solid 1px primary;
   height: 80px;
 }
 

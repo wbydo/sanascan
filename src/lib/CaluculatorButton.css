@@ -1,15 +1,17 @@
+@value primary from '../Colors.css';
+
 .button {
   position: relative;
 
   font-size: 14pt;
-  color: #67c5ff;
-  border: solid 1px #67c5ff;
+  color: primary;
+  border: solid 1px primary;
   border-radius: 3px;
   transition: .2s;
 }
 
 .button:hover {
-    background: #67c5ff;
+    background: primary;
     color: white;
 }
 
