@@ -4,7 +4,7 @@ interface KeyProps {
   label: string;
 }
 
-export default class Key extends React.Component<KeyProps, {}> {
+export default class CaluculatorButton extends React.Component<KeyProps, {}> {
   public render() {
     return(
       <div className="square_btn">

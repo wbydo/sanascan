@@ -32,7 +32,7 @@ body {
   color: #06283c;
 }
 
-#keys {
+#buttons {
   margin-top: 12px;
   display: grid;
   grid-template-columns: 32% 32% 32%;
