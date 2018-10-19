@@ -1,0 +1,20 @@
+.button {
+  position: relative;
+
+  font-size: 14pt;
+  color: #67c5ff;
+  border: solid 1px #67c5ff;
+  border-radius: 3px;
+  transition: .2s;
+}
+
+.button:hover {
+    background: #67c5ff;
+    color: white;
+}
+
+.label {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}

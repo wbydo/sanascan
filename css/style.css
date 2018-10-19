@@ -41,24 +41,3 @@ body {
   grid-row-gap: 6px;
   justify-content: space-between;
 }
-
-.square_btn {
-  position: relative;
-
-  font-size: 14pt;
-  color: #67c5ff;
-  border: solid 1px #67c5ff;
-  border-radius: 3px;
-  transition: .2s;
-}
-
-.square_btn:hover {
-    background: #67c5ff;
-    color: white;
-}
-
-.num {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-}

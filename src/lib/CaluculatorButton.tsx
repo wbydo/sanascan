@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import * as styles from './CaluculatorButton.css';
+
 interface KeyProps {
   label: string;
 }
@@ -7,8 +9,8 @@ interface KeyProps {
 export default class CaluculatorButton extends React.Component<KeyProps, {}> {
   public render() {
     return(
-      <div className="square_btn">
-        <div className="num">{this.props.label}</div>
+      <div className={styles.button}>
+        <div className={styles.label}>{this.props.label}</div>
       </div>
     );
   }

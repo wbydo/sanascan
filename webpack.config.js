@@ -30,6 +30,9 @@ module.exports = {
               configFile: './tslint.json',
               typeCheck: true,
           },
+      }, {
+          test: /\.css$/,
+          loaders: ['style-loader', 'css-loader?modules'],
       }],
   },
 
