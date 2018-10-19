@@ -1,0 +1,14 @@
+.area {
+  position: relative;
+  border: solid 1px #67c5ff;
+  height: 80px;
+}
+
+.label {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+
+  font-size: 20pt;
+  color: #06283c;
+}

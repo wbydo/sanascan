@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import OutputArea from './lib/OutputArea'
 import Buttons from './lib/Buttons'
 
 ReactDOM.render(
@@ -8,9 +9,7 @@ ReactDOM.render(
     <h1>Caluculator</h1>
 
     <div id="caluculator">
-      <div id="output">
-        <div id="output-num">1,000</div>
-      </div>
+      <OutputArea />
       <Buttons />
     </div>
   </div>,
