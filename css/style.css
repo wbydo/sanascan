@@ -31,13 +31,3 @@ body {
   font-size: 20pt;
   color: #06283c;
 }
-
-#buttons {
-  margin-top: 12px;
-  display: grid;
-  grid-template-columns: 32% 32% 32%;
-  grid-template-rows: 100px 100px 100px 100px;
-
-  grid-row-gap: 6px;
-  justify-content: space-between;
-}

@@ -1,14 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import CaluculatorButton from './lib/CaluculatorButton'
-
-const labels: string[] = [
-  "7", "8", "9",
-  "4", "5", "6",
-  "1", "2", "3",
-  "0", ".", "="
-];
+import Buttons from './lib/Buttons'
 
 ReactDOM.render(
   <div id="frame">
@@ -18,9 +11,7 @@ ReactDOM.render(
       <div id="output">
         <div id="output-num">1,000</div>
       </div>
-      <div id="buttons">
-        {labels.map((l) => <CaluculatorButton label={l} />)}
-      </div>
+      <Buttons />
     </div>
   </div>,
   document.getElementById('root')
