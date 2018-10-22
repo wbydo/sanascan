@@ -1,18 +1,11 @@
-h1 {
-  color: #67c5ff;
-}
-
-body {
+.frame {
   position: relative;
   font-family: Arial;
 }
 
-#frame {
+.inner {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-}
-
-#caluculator {
   width: 300px;
 }
