@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import * as styles from './CaluculatorButton.css';
+import * as styles from './Cell.css';
 
 interface KeyProps {
   label: string;
 }
 
-export default class CaluculatorButton extends React.Component<KeyProps, {}> {
+export default class Cell extends React.Component<KeyProps, {}> {
   public render() {
     return(
       <div className={styles.button}>

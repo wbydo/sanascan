@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import CaluculatorButton from './CaluculatorButton'
+import Cell from './Cell'
 import * as styles from './Buttons.css';
 
 
@@ -15,7 +15,7 @@ export default class Buttons extends React.Component<{}, {}> {
   public render() {
     return(
       <div className={styles.buttons}>
-        {labels.map((l) => <CaluculatorButton label={l} />)}
+        {labels.map((l) => <Cell label={l} />)}
       </div>
     );
   }
