@@ -16,7 +16,9 @@ export default class App extends React.Component<{}, {}> {
     return(
       <div className={styles.frame}>
         <div className={styles.inner}>
-          {labels.map((l) => <Cell label={l} />)}
+          <Cell label={"100,000"} output={true}/>
+          <Cell label={"C"} output={false}/>
+          {labels.map((l) => <Cell label={l} output={false}/>)}
         </div>
       </div>
     );
