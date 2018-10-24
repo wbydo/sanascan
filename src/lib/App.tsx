@@ -10,7 +10,7 @@ export default class App extends React.Component<{}, {}> {
     return(
       <div className={styles.frame}>
         <div className={styles.inner}>
-          <OutputArea />
+          {/* <OutputArea /> */}
           <Buttons />
         </div>
       </div>
