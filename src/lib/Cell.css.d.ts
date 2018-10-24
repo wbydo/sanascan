@@ -1,3 +1,3 @@
 export const primary: string;
-export const button: string;
+export const frame: string;
 export const label: string;

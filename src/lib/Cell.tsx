@@ -9,7 +9,7 @@ interface KeyProps {
 export default class Cell extends React.Component<KeyProps, {}> {
   public render() {
     return(
-      <div className={styles.button}>
+      <div className={styles.frame}>
         <div className={styles.label}>{this.props.label}</div>
       </div>
     );
