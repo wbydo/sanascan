@@ -19,7 +19,7 @@ const main = {
   entry: path.join(__dirname, 'src','index'),
 
   output: {
-    filename: 'index.js',
+    filename: 'main.js',
     path: path.resolve(__dirname, 'dist')
   },
 

@@ -1,7 +1,7 @@
 {
   "name": "caluculator",
   "private": true,
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
     "build": "webpack",
