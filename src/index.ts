@@ -1,11 +1,9 @@
-import {app, BrowserWindow, App} from 'electron'
+import {app, BrowserWindow, App} from "electron";
 
-console.log(`file://${__dirname}/index.html`);
-
-app.on('ready', function() {
+app.on("ready", () => {
   let mainWindow: BrowserWindow | null = new BrowserWindow({width: 360, height: 650});
   mainWindow.loadURL(`file://${__dirname}/index.html`);
-  mainWindow.on('closed', () => {
-  mainWindow = null
-  })
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
 });

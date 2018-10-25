@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import * as styles from './Cell.css';
+import * as styles from "./Cell.css";
 
 interface KeyProps {
   label: string;
@@ -9,7 +9,7 @@ interface KeyProps {
 
 export default class Cell extends React.Component<KeyProps, {}> {
   public render() {
-    const className:string  = this.props.output ? styles.outputFrame : styles.frame;
+    const className: string = this.props.output ? styles.outputFrame : styles.frame;
 
     return(
       <div className={className}>
