@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import App from "./lib/App";
+import App from "./caluculator/App";
 
 ReactDOM.render(
   <App />,
