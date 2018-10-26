@@ -27,7 +27,7 @@ class App extends React.Component<Props, {}> {
         <div className={styles.inner}>
           <Cell label={this.props.value.toString()} output={true}/>
           <Cell label={"C"} output={false}/>
-          {labels.map((l) => <Cell label={l} output={false}/>)}
+          {labels.map((l) => <Cell label={l} output={false} input={this.props.actions.input} />)}
         </div>
       </div>
     );
