@@ -16,7 +16,7 @@ const path = require('path');
 const main = {
   mode: 'development',
   target: 'electron-main',
-  entry: path.join(__dirname, 'src','index'),
+  entry: path.join(__dirname, 'src','main'),
 
   output: {
     filename: 'main.js',
