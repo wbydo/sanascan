@@ -13,9 +13,13 @@ export const input: (value: number) => CaluculatorAction = (value) => {
 };
 
 export class ActionDispatcher {
-  constructor(private dispatch: (action: CaluculatorAction) => void) {}
+  private dispatch: (action: CaluculatorAction) => void;
 
-  public input(value: number) {
+  constructor(dispatch: (action: CaluculatorAction) => void) {
+    this.dispatch = dispatch;
+  }
+
+  public input: (value: number) => void = (value) => {
     this.dispatch(input(value));
   }
 }
