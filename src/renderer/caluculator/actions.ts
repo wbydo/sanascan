@@ -1,3 +1,5 @@
+import {Dispatch} from "redux";
+
 import * as types from "./types";
 
 export interface CaluculatorAction {
@@ -13,9 +15,9 @@ export const input: (value: number) => CaluculatorAction = (value) => {
 };
 
 export class ActionDispatcher {
-  private dispatch: (action: CaluculatorAction) => void;
+  private dispatch: Dispatch<CaluculatorAction>;
 
-  constructor(dispatch: (action: CaluculatorAction) => void) {
+  constructor(dispatch: Dispatch<CaluculatorAction>) {
     this.dispatch = dispatch;
   }
 
