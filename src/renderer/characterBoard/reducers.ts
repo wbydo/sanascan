@@ -1,8 +1,10 @@
 import {Action} from "./actions";
 import CharacterBoard from "./CharacterBoard";
+import {MAX_COLUMN_INDEX} from "./CharacterBoard";
 import * as types from "./types";
+import SanaScanError from "../error";
 
-interface State {
+export interface State {
   activeColumn: number;
 }
 
@@ -15,11 +17,11 @@ type NonNullableReducer = (state: State, action: Action) => State;
 
 const increment: NonNullableReducer = (state, action) => {
   if (action.type !== types.INCREMENT) {
-    throw new Error();
+    throw new SanaScanError();
   }
 
-  if (state.activeColumn === CharacterBoard.MAX_COLUMN_INDEX) {
-    return {activeColumn: 0};
+  if (state.activeColumn === MAX_COLUMN_INDEX) {
+    return initialState;
   }
   return {activeColumn: state.activeColumn + 1};
 };
@@ -29,10 +31,10 @@ const reducer: Reducer = (state, action) => {
     return initialState;
   }
 
-  if (action.type !== types.INCREMENT) {
-    increment(state, action);
+  if (action.type === types.INCREMENT) {
+    return increment(state, action);
   }
-  throw new Error();
+  throw new SanaScanError();
 };
 
 export default reducer;

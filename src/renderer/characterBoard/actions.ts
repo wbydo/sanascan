@@ -6,6 +6,6 @@ export interface Action {
 
 export const increment: () => Action = () => {
   return {
-    type: types.INCREMENT
+    type: types.INCREMENT,
   };
-}
+};

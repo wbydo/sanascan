@@ -1,6 +1,8 @@
 import * as React from "react";
+import {connect} from "react-redux";
 
 import ColumnStatus from "./ColumnStatus";
+import {State} from "./reducers";
 
 const chars: string[][] = [
   ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"],
@@ -10,15 +12,17 @@ const chars: string[][] = [
   ["お", "こ", "そ", "と", "の", "ほ", "も", "よ", "を", "ん"],
 ];
 
-export default class CharacterBoard extends React.Component<{}, {}> {
-  public static readonly MAX_COLUMN_INDEX: number = chars[0].length - 1;
+export const MAX_COLUMN_INDEX: number = chars[0].length - 1;
 
+type Props = State;
+
+class CharacterBoard extends React.Component<Props, {}> {
   public render() {
     return(
       <table>
         <caption></caption>
           {chars[0].map((row, idx) => {
-            return <ColumnStatus isActive={idx === 1}/>;
+            return <ColumnStatus isActive={idx === this.props.activeColumn}/>;
           })}
         <tbody>
           {chars.map((row) => {
@@ -29,3 +33,8 @@ export default class CharacterBoard extends React.Component<{}, {}> {
     );
   }
 }
+
+export default connect(
+  (state: State) => state as Props,
+  null,
+)(CharacterBoard);
