@@ -4,7 +4,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 
 import App from "./App";
-import {default as characterBoardReducer} from "./character_board/index";
+import {default as characterBoardReducer} from "./characterBoard/index";
 
 const store = createStore(characterBoardReducer);
 
