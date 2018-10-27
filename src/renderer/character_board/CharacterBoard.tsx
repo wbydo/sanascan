@@ -11,6 +11,8 @@ const chars: string[][] = [
 ];
 
 export default class CharacterBoard extends React.Component<{}, {}> {
+  public static readonly MAX_COLUMN_INDEX: number = chars[0].length - 1;
+
   public render() {
     return(
       <table>
