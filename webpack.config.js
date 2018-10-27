@@ -1,5 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 /*
 * SplitChunksPlugin is enabled by default and replaced
@@ -28,7 +30,9 @@ const main = {
     __filename: false
   },
 
-  plugins: [],
+  plugins: [
+    new CleanWebpackPlugin(['dist'])
+  ],
 
   module: {
     rules: [{
@@ -76,10 +80,15 @@ const renderer = {
 
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, 'dist', 'scripts')
+    path: path.resolve(__dirname, 'dist', 'renderer')
   },
 
-  plugins: [],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/renderer/index.html",
+      filename: "index.html"
+    })
+  ],
 
   module: {
     rules: [{
@@ -106,6 +115,9 @@ const renderer = {
         },
         'postcss-loader'
       ]
+    }, {
+      test: /\.html$/,
+      use: 'html-loader'
     }],
   },
 
