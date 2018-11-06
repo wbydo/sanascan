@@ -53,24 +53,25 @@ class SeedEngine(SNKCLIEngine):
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
         from sanakin import CreatedLangModel
-        from itertools import tee
+        from contextlib import ExitStack
 
-        with SNKMeCab() as mecab:
-            with SNKSession() as s:
-                with s.commit_manager() as c:
-                    query = s.query(Sentence)\
-                        .order_by(Sentence.sentence_id)\
-                        .limit(3)
+        with ExitStack() as stack:
+            e = stack.enter_context
+            mecab = e(SNKMeCab())
+            session = e(SNKSession())
+            c = e(session.commit_manager())
 
-                    text_iter = map(lambda s1: s1.text, query)
-                    id_iter = map(lambda s: s.sentence_id, query)
+            query = session.query(Sentence)\
 
-                    lm = LangModel.create(text_iter, mecab, LANG_MODEL_FILE_DIR)
-                    c.add(lm)
+            text_iter = map(lambda s1: s1.text, query)
+            id_iter = map(lambda s: s.sentence_id, query)
 
-                    for i in id_iter:
-                        clm = CreatedLangModel(sentence_id=i, lang_model_id=lm.lang_model_id)
-                        c.add(clm)
+            lm = LangModel.create(text_iter, mecab, LANG_MODEL_FILE_DIR)
+            c.add(lm)
+
+            for i in id_iter:
+                clm = CreatedLangModel(sentence_id=i, lang_model_id=lm.lang_model_id)
+                c.add(clm)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):

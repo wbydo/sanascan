@@ -11,6 +11,7 @@ pyyaml = "*"
 natto-py = "*"
 pytablewriter = "*"
 jaconv = "*"
+pandas = "*"
 
 [dev-packages]
 
