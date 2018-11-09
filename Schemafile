@@ -1,0 +1,162 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# corpora
+create_table(
+  'corpora',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade,
+) do |t|
+  t.string 'corpus_id', limit: 16, null: false
+  t.index ['corpus_id'], name: 'corpus_id', unique: true
+
+  t.string 'name', null: false
+end
+
+# corpus_files
+create_table(
+  'corpus_files',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_file_id', limit: 50, null: false
+  t.index ['corpus_file_id'], name: 'corpus_file_id', unique: true
+
+  t.string 'corpus_id', limit: 16, null: false
+  t.index ['corpus_id'], name: 'corpus_id'
+
+  t.string 'checksum', limit: 64, null:false
+  t.index ['checksum'], name: 'checksum', unique: true
+end
+add_foreign_key(
+  'corpus_files', 'corpora',
+  column: 'corpus_id',        # なぜか入れないとdiffが出る
+  primary_key: 'corpus_id',
+  name: 'corpus_files_corpus_id_corpora_corpus_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+
+# corpus_datum
+create_table(
+  'corpus_datum',
+  id: :bigint,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_data_id', limit: 100, null: false
+  t.index ['corpus_data_id'], name: 'data_id', unique: true
+
+  t.string 'corpus_file_id', limit: 50, null: false
+  t.index ['corpus_file_id'], name: 'corpus_file_id'
+
+  t.integer 'id_in_corpus'
+
+  t.text 'text', null: false
+end
+add_foreign_key(
+  'corpus_datum', 'corpus_files',
+  # column: 'corpus_file_id',
+  primary_key: 'corpus_file_id',
+  name: 'corpus_datum_corpus_file_id_corpus_files_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+
+# sentence_delimiters
+create_table(
+  'sentence_delimiters',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'sentence_delimiter_id', limit: 30, null: false
+  t.index ['sentence_delimiter_id'], name: 'sentence_delimiter_id', unique: true
+
+  t.string 'regex', null:false
+  t.index ['regex'], name: 'regex', unique: true
+end
+
+# sentences
+create_table(
+  'sentences',
+  id: :bigint,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'corpus_data_id', limit: 100, null: false
+  t.index ['corpus_data_id'], name: 'corpus_data_id'
+
+  t.string 'sentence_delimiter_id', limit: 30, null: false
+  t.index ['sentence_delimiter_id'], name: 'sentence_delimiter_id'
+
+  t.string 'sentence_id', limit: 150, null: false
+  t.index ['sentence_id'], name: 'sentence_id', unique: true
+
+  t.text 'text', null: false
+
+  t.integer 'nth', null: false
+  t.integer 'length', null:false
+end
+add_foreign_key(
+  'sentences', 'corpus_datum',
+  column: 'corpus_data_id',
+  primary_key: 'corpus_data_id',
+  name: 'sentences_corpus_data_id_corpus_datum_corpus_data_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+add_foreign_key(
+  'sentences', 'sentence_delimiters',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'sentence_delimiter_id',
+  name: 'sentences_delimiter_id_delimiters_sentence_delimiter_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+
+# lang_model
+create_table(
+  'lang_models',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'lang_model_id', limit: 100, null: false
+  t.index ['lang_model_id'], name: 'idx_lang_model_id', unique: true
+
+  t.string 'checksum', limit: 64, null:false
+  t.index ['checksum'], name: 'idx_lm_checksum', unique: true
+end
+
+# created_lang_model
+create_table(
+  'created_lang_model',
+  id: :integer,
+  options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8',
+  force: :cascade
+) do |t|
+  t.string 'lang_model_id', limit: 100, null: false
+  t.index ['lang_model_id'], name: 'idx_created_lm_lang_model_id'
+
+  t.string 'sentence_id', limit: 150, null: false
+  t.index ['sentence_id'], name: 'idx_created_lm_sentence_id'
+end
+add_foreign_key(
+  'created_lang_model', 'lang_models',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'lang_model_id',
+  name: 'rel_created_lang_model_lang_model_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
+add_foreign_key(
+  'created_lang_model', 'sentences',
+  # column: 'sentence_delimiter_id',
+  primary_key: 'sentence_id',
+  name: 'rel_created_lang_sentences_sentence_id',
+  on_update: :cascade,
+  on_delete: :cascade
+)
