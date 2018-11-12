@@ -6,11 +6,14 @@ name = "pypi"
 [packages]
 setuptools = "*"
 "e1839a8" = {path = ".", editable = true}
+natto-py = "*"
+numpy = "*"
 
 [dev-packages]
 sphinx = "*"
 sphinx-rtd-theme = "*"
 twine = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.6"
