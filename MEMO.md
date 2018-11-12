@@ -1,3 +1,12 @@
+# 言語モデル作成
+- 1,000,000件の場合（add_all使用）
+```
+pipenv run python script/tmp.py -E deploy config.yml  1242.60s user 243.07s system 53% cpu 46:28.69 total
+```
+- 10,000,000件の場合（add_all使用）→arpa作成は出来たが、RDB記録で落ちた
+```
+pipenv run python script/tmp.py -E deploy config.yml  5719.16s user 1127.07s system 41% cpu 4:37:47.88 total
+```
 # sentenceテーブルに挿入の際の等価SQL
 ```sql
 SELECT
