@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+setuptools = "*"
+
+[dev-packages]
+sphinx = "*"
+sphinx-rtd-theme = "*"
+twine = "*"
+
+[requires]
+python_version = "3.6"
+
+[scripts]
+apidoc = "sphinx-apidoc -f -o ./source ./hoge"
+build = "sphinx-build -a ./source ./docs"
