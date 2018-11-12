@@ -21,3 +21,4 @@ python_version = "3.6"
 [scripts]
 apidoc = "sphinx-apidoc -f -o ./source ./hoge"
 build = "sphinx-build -a ./source ./docs"
+test = "python -m unittest discover -s ./test -v"
