@@ -10,7 +10,6 @@ class Node:
     score: Optional[float]
     parent: 'Optional[Node]'
     sentence: Optional[str]
-    sentence_clean: Optional[str]
 
     def __init__(self, word: Word) -> None:
         self._word = word
@@ -21,18 +20,9 @@ class Node:
     def _set_parent(self, parent: 'Node') -> None:
         if parent.sentence is None:
             raise ValueError('parent.sentence is None')
-        if parent.sentence_clean is None:
-            raise ValueError('parent.sentence_clean is None')
 
         self._parent = parent
         self.sentence = parent.sentence + ' ' + str(self._word)
-
-        last: str
-        if isinstance(self._word, str):
-            last = self._word
-        else:
-            last = self._word.surface
-        self.sentence_clean = parent.sentence_clean + ' ' + last
 
     def search_parent(
             self,
@@ -83,7 +73,6 @@ class RootNode(Node):
     def __init__(self) -> None:
         self._word = Word(surface='<s>', yomi='<s>')
         self.sentence = '<s>'
-        self.sentence_clean = '<s>'
         self.score = 0.0
 
 
