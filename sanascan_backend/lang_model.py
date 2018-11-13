@@ -5,6 +5,8 @@ from typing import Match, Pattern, ClassVar, KeysView
 from enum import Enum
 from enum import auto
 
+from .word import Word
+
 class ArpaArea(Enum):
         DATA = auto()
         NGRAM = auto()
@@ -55,42 +57,23 @@ class LangModel:
         self._order = ngram
         return result
 
-    # def _split(self, words: str) -> List[str]:
-    #     return words.split(' ')
-    #
-    # def _join(self, words: str) -> str:
-    #     return ' '.join(words)
-    #
-    # def _remove_head(self, words: str) -> str:
-    #     m: Optional[Match[str]] = LangModel.remove_head.search(words)
-    #     if m:
-    #         return m['target']
-    #     else:
-    #         raise ParseError()
-    #
-    # def _remove_tail(self, words: str) -> str:
-    #     m: Optional[Match[str]] = LangModel.remove_tail.search(words)
-    #     if m:
-    #         return m['target']
-    #     else:
-    #         raise ParseError()
-
-    def score(self, words_arg: str) -> float:
-        words = self._split(words_arg)
+    def score(self, words: List[Word]) -> float:
         l = len(words)
         if l > self._order:
-            raise NgramError(words_arg)
+            raise NgramError(Word.to_str(words))
 
-        if words_arg in self._keys:
-            return self._dic[words_arg].prob
+        if l == 1 and (not str(words[0]) in self._keys):
+            raise NgramError(str(words[0]) + 'は使用言語モデルの語彙にない')
+
+        if Word.to_str(words) in self._keys:
+            return self._dic[Word.to_str(words)].prob
         else:
-            preceed = self._remove_tail(words_arg)
-            reduced = self._remove_head(words_arg)
-            p = self.score(reduced)
+            context = Word.to_str(words[:-1])
+            p = self.score(words[1:])
 
             #and以下のもの付けたけどいいんかこれ
-            backoff: Optional[float] = self._dic[preceed].backoff
-            if preceed in self._keys and (backoff is not None):
+            backoff: Optional[float] = self._dic[context].backoff
+            if context in self._keys and (backoff is not None):
                 return backoff + p
             else:
                 return p

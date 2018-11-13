@@ -11,7 +11,7 @@ class TestLangModel(unittest.TestCase):
                 self.lm = LangModel(f.read())
 
     def test_score(self, msg: str='lm.scoreが何らかの値を返すかテスト') -> None:
-        words = [Word(surface='歩下', yomi='ホゲ')]
+        words = [Word(surface='ホテル', yomi='ホテル')]
         self.lm.score(words)
 
 if __name__ == '__main__':
