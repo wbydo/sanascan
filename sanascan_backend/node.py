@@ -73,9 +73,16 @@ class Node:
         return score
 
 
-class RootNode(Node):
+class ConstantNode(Node):
+    def _set_parent(self, parent: 'Node') -> None:
+        raise NodeException()
+
+
+class RootNode(ConstantNode):
     def __init__(self) -> None:
-        self._word = Word(surface='<s>', yomi='<s>')
+        word = Word(surface='<s>', yomi='<s>')
+        super(self.__class__, self).__init__(word)
+
         self.sentence = '<s>'
         self.score = 0.0
 
