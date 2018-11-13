@@ -25,22 +25,6 @@ class Node:
         self._parent = parent
         self.sentence = parent.sentence + [self._word]
 
-    def search_parent(
-            self,
-            candidates: 'List[Node]',
-            lang_model: LangModel,
-            order: int
-            ) -> None:
-
-        f = self._calc_score
-        scores = [f(can, lang_model, order) for can in candidates]
-
-        max_score = max(scores)
-        self._set_score(max_score)
-
-        parent = candidates[scores.index(max_score)]
-        self._set_parent(parent)
-
     def _pick_up_by_order(self, words: List[Word], order: int) -> List[Word]:
         if len(words) <= order:
             return words
@@ -62,6 +46,22 @@ class Node:
         score = other.score + lang_model.score(sentence)
 
         return score
+
+    def search_parent(
+            self,
+            candidates: 'List[Node]',
+            lang_model: LangModel,
+            order: int
+            ) -> None:
+
+        f = self._calc_score
+        scores = [f(can, lang_model, order) for can in candidates]
+
+        max_score = max(scores)
+        self._set_score(max_score)
+
+        parent = candidates[scores.index(max_score)]
+        self._set_parent(parent)
 
 
 class ConstantNode(Node):
