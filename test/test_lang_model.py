@@ -9,6 +9,7 @@ class TestLangModel(unittest.TestCase):
         with (Path.home() / 'arpa/LM0006.txt').open() as f:
             self.lm = LangModel(f.read())
 
+    @unittest.skip("一時skip")
     def test_getvocab(self):
         self.lm.get_vocab()
 

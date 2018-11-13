@@ -14,6 +14,7 @@ sphinx = "*"
 sphinx-rtd-theme = "*"
 twine = "*"
 mypy = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.6"
@@ -23,3 +24,4 @@ apidoc = "sphinx-apidoc -f -o ./source ./hoge"
 build = "sphinx-build -a ./source ./docs"
 test = "python -m unittest discover -s ./test -v"
 type = "mypy sanascan_backend"
+lint = "flake8 sanascan_backend"
