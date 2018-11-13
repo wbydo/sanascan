@@ -6,6 +6,7 @@ from sanascan_backend.lang_model import LangModel
 from sanascan_backend.word import Word
 
 
+@unittest.skip("一時スキップ")
 class TestLangModel(unittest.TestCase):
     def setUp(self) -> None:
         with (Path.home() / 'arpa/LM0006.txt').open() as f:
