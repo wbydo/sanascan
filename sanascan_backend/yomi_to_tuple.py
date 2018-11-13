@@ -1,11 +1,14 @@
+from typing import NamedTuple, Iterable
+from typing import Dict, List, Tuple
+
 from enum import Enum
 from enum import auto
 
 from collections import namedtuple
 from collections import defaultdict
 
-from anakin.util.word import Word
-from anakin.util.key import Key
+from .word import Word, MARK
+from .key import Key
 
 katakana_table = [
     'アイウエオヴァィゥェォ',
@@ -22,14 +25,19 @@ katakana_table = [
 
 num_table = {c:idx for idx, col in enumerate(katakana_table) for c in col}
 
-ResultOfGetByKey = namedtuple('ResultOfGetByKey', ['word', 'key'])
+class ResultOfGetByKey(NamedTuple):
+    word: Word
+    key: Key
 
 class SearchFlag(Enum):
     PROCEED = auto()
     STOP = auto()
 
 class KeyToWord():
-    def __init__(self, words):
+    _datum: Dict[Key, List[Word]]
+    _search_map: Dict[Key, SearchFlag]
+
+    def __init__(self, words: List[Word]) -> None:
         self._datum = {}
         self._search_map = defaultdict(
             lambda:SearchFlag.STOP)
@@ -39,7 +47,7 @@ class KeyToWord():
 
             self._add_data(key, word)
 
-    def _add_data(self, key, word):
+    def _add_data(self, key: Key, word: Word) -> None:
         if not (key in self._datum.keys()):
             self._datum[key] = []
         self._datum[key].append(word)
@@ -47,7 +55,7 @@ class KeyToWord():
         for subkey in key.subsequence(0):
             self._search_map[subkey] = SearchFlag.PROCEED
 
-    def get_by_key(self, key, start):
+    def get_by_key(self, key: Key, start: int) -> Iterable[ResultOfGetByKey]:
         if not isinstance(key, Key):
             raise TypeError
 
@@ -58,7 +66,7 @@ class KeyToWord():
                 for word in self._datum[subkey]:
                     yield ResultOfGetByKey(word=word, key=subkey)
 
-def yomi2tuple(yomi):
-    if yomi in Word.MARK.values():
-        return (yomi,)
+def yomi2tuple(yomi: str) -> Tuple[int, ...]:
+    if yomi in MARK.values():
+        raise ValueError()
     return tuple([num_table[i] for i in yomi])
