@@ -4,6 +4,10 @@ from .lang_model import LangModel
 from .word import Word
 
 
+class NodeException(Exception):
+    pass
+
+
 class Node:
     _word: Word
 

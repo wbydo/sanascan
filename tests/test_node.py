@@ -1,6 +1,6 @@
 import unittest
 
-from sanascan_backend.node import Node, RootNode, EOSNode
+from sanascan_backend.node import Node, RootNode, EOSNode, NodeException
 from sanascan_backend.word import Word
 
 
@@ -22,6 +22,14 @@ class TestNode(unittest.TestCase):
         with self.subTest():
             w = Word(surface='</s>', yomi='</s>')
             self.assertEqual(self.eos._word, w)
+
+    def test_raise_error_when_set_parent(
+            self,
+            msg: str = 'RootNode#._set_parentでエラーが起きる'
+            ) -> None:
+
+        with self.assertRaises(NodeException):
+            self.root._set_parent(self.node)
 
 
 if __name__ == '__main__':
