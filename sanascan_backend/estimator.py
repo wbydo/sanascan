@@ -5,7 +5,7 @@ from .lang_model import LangModel
 from .yomi_to_tuple import KeyToWord
 from .yomi_to_tuple import yomi2tuple
 from .key import Key
-from .node import Node
+from .node import Node, RootNode
 
 
 def estimate(
@@ -18,7 +18,7 @@ def estimate(
     t = sum((yomi2tuple(w.yomi) for w in words), ())
     key = Key(*t)
 
-    root_node = Node('', root=True)
+    root_node = RootNode()
 
     len_ = len(key)
     wait_child: List[List[Node]] = [[] for i in range(len_+1)]

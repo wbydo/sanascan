@@ -1,6 +1,6 @@
 import unittest
 
-from sanascan_backend.node import Node
+from sanascan_backend.node import Node, RootNode
 from sanascan_backend.word import Word
 
 

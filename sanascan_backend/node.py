@@ -6,15 +6,11 @@ from .word import Word
 
 class Node:
     _word: Union[Word, str]
+
     score: float
 
-    def __init__(self, word: Union[Word, str], root: bool = False) -> None:
+    def __init__(self, word: Union[Word, str]) -> None:
         self._word = word
-        if root:
-            self._word = '<s>'
-            self.sentence = '<s>'
-            self.sentence_clean = '<s>'
-            self.score = 0.0
 
     def _set_score(self, score: float) -> None:
         self.score = score
@@ -68,3 +64,11 @@ class Node:
         score = other.score + lang_model.score(words)
 
         return score
+
+
+class RootNode(Node):
+    def __init__(self) -> None:
+        self._word = Word(surface='<s>', yomi='<s>')
+        self.sentence = '<s>'
+        self.sentence_clean = '<s>'
+        self.score = 0.0
