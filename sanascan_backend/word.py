@@ -1,8 +1,8 @@
 from typing import NamedTuple, Dict, List
-from typing import overload
 
 DELIMITER: str = '/'
-MARK: Dict[str, str] = {'unk':'<unk>', 'eng':'<eng>', 'num':'<num>'}
+MARK: Dict[str, str] = {'unk': '<unk>', 'eng': '<eng>', 'num': '<num>'}
+
 
 class Word(NamedTuple):
     surface: str
