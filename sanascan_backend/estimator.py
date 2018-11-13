@@ -5,7 +5,7 @@ from .lang_model import LangModel
 from .yomi_to_tuple import KeyToWord
 from .yomi_to_tuple import yomi2tuple
 from .key import Key
-from .node import Node, RootNode
+from .node import Node, RootNode, EOSNode
 
 
 def estimate(
@@ -36,7 +36,7 @@ def estimate(
             j = len(subkey) + i
             wait_child[j].append(node)
 
-    eos_node = Node('</s>')
+    eos_node = EOSNode()
     eos_node.search_parent(wait_child[len_], lang_model, order)
 
     if eos_node.sentence is None:

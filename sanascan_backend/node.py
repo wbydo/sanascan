@@ -1,18 +1,18 @@
-from typing import Union, List, Optional
+from typing import List, Optional
 
 from .lang_model import LangModel
 from .word import Word
 
 
 class Node:
-    _word: Union[Word, str]
+    _word: Word
 
     score: Optional[float]
     parent: 'Optional[Node]'
     sentence: Optional[str]
     sentence_clean: Optional[str]
 
-    def __init__(self, word: Union[Word, str]) -> None:
+    def __init__(self, word: Word) -> None:
         self._word = word
 
     def _set_score(self, score: float) -> None:
@@ -85,3 +85,8 @@ class RootNode(Node):
         self.sentence = '<s>'
         self.sentence_clean = '<s>'
         self.score = 0.0
+
+
+class EOSNode(Node):
+    def __init__(self) -> None:
+        self._word = Word(surface='</s>', yomi='</s>')
