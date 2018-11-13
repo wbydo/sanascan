@@ -20,7 +20,7 @@ class ParseError(Exception):
 class LangModel:
     class Data(NamedTuple):
         prob: float
-        backoff: Optional[float]
+        backoff: float
 
     remove_head: ClassVar[Pattern] = re.compile(r'^(?:.*?) (?P<target>.*)$')
     remove_tail: ClassVar[Pattern] = re.compile(r'^(?P<target>.*) (?:.*?)$')
@@ -52,7 +52,7 @@ class LangModel:
             data_line = line.split('\t')
             prob = float(data_line[0])
             word = data_line[1]
-            backoff = float(data_line[2]) if len(data_line) == 3 else None
+            backoff = float(data_line[2]) if len(data_line) == 3 else 0
             result[word] = LangModel.Data(prob=prob, backoff=backoff)
         self._order = ngram
         return result
@@ -71,9 +71,8 @@ class LangModel:
             context = Word.to_str(words[:-1])
             p = self.score(words[1:])
 
-            #and以下のもの付けたけどいいんかこれ
-            backoff: Optional[float] = self._dic[context].backoff
-            if context in self._keys and (backoff is not None):
+            if context in self._keys:
+                backoff = self._dic[context].backoff
                 return backoff + p
             else:
                 return p
