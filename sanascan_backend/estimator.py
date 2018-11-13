@@ -38,6 +38,10 @@ def estimate(
 
     eos_node = Node('</s>')
     eos_node.search_parent(wait_child[len_], lang_model, order)
+
+    if eos_node.sentence is None:
+        raise Exception('eos_node.sentence is None')
+
     # return eos_node
     est_sentence = ' '.join(eos_node.sentence.split(' ')[1:-1])
     return Word.from_str_of_multiword(est_sentence)
