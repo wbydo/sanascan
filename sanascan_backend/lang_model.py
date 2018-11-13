@@ -55,25 +55,25 @@ class LangModel:
         self._order = ngram
         return result
 
-    def _split(self, words: str) -> List[str]:
-        return words.split(' ')
-
-    def _join(self, words: str) -> str:
-        return ' '.join(words)
-
-    def _remove_head(self, words: str) -> str:
-        m: Optional[Match[str]] = LangModel.remove_head.search(words)
-        if m:
-            return m['target']
-        else:
-            raise ParseError()
-
-    def _remove_tail(self, words: str) -> str:
-        m: Optional[Match[str]] = LangModel.remove_tail.search(words)
-        if m:
-            return m['target']
-        else:
-            raise ParseError()
+    # def _split(self, words: str) -> List[str]:
+    #     return words.split(' ')
+    #
+    # def _join(self, words: str) -> str:
+    #     return ' '.join(words)
+    #
+    # def _remove_head(self, words: str) -> str:
+    #     m: Optional[Match[str]] = LangModel.remove_head.search(words)
+    #     if m:
+    #         return m['target']
+    #     else:
+    #         raise ParseError()
+    #
+    # def _remove_tail(self, words: str) -> str:
+    #     m: Optional[Match[str]] = LangModel.remove_tail.search(words)
+    #     if m:
+    #         return m['target']
+    #     else:
+    #         raise ParseError()
 
     def score(self, words_arg: str) -> float:
         words = self._split(words_arg)

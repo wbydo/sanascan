@@ -7,11 +7,10 @@ from sanascan_backend.lang_model import LangModel
 class TestLangModel(unittest.TestCase):
     def setUp(self):
         with (Path.home() / 'arpa/LM0006.txt').open() as f:
-            self.lm = LangModel(f.read())
+                self.lm = LangModel(f.read())
 
-    @unittest.skip("一時skip")
-    def test_getvocab(self):
-        self.lm.get_vocab()
+    def test_score(self, msg='lm.scoreが何らかの値を返すかテスト'):
+        self.lm.score('歩下/ホゲ')
 
 if __name__ == '__main__':
     unittest.main()
