@@ -1,76 +1,11 @@
-from typing import Union, List, Iterable
+from typing import List, Iterable
 
 from .word import Word
 from .lang_model import LangModel
 from .yomi_to_tuple import KeyToWord
 from .yomi_to_tuple import yomi2tuple
 from .key import Key
-
-
-class Node:
-    _word: Union[Word, str]
-    score: float
-
-    def __init__(self, word: Union[Word, str], root: bool = False) -> None:
-        self._word = word
-        if root:
-            self._word = '<s>'
-            self.sentence = '<s>'
-            self.sentence_clean = '<s>'
-            self.score = 0.0
-
-    def _set_score(self, score: float) -> None:
-        self.score = score
-
-    def _set_parent(self, parent: 'Node') -> None:
-        self._parent = parent
-        self.sentence = parent.sentence + ' ' + str(self._word)
-
-        last: str
-        if isinstance(self._word, str):
-            last = self._word
-        else:
-            last = self._word.surface
-        self.sentence_clean = parent.sentence_clean + ' ' + last
-
-    def search_parent(
-            self,
-            candidates: 'List[Node]',
-            lang_model: LangModel,
-            order: int
-            ) -> None:
-
-        f = self._calc_score
-        scores = [f(can, lang_model, order) for can in candidates]
-
-        max_score = max(scores)
-        self._set_score(max_score)
-
-        parent = candidates[scores.index(max_score)]
-        self._set_parent(parent)
-
-    def _pick_up_by_order(self, words: str, order: int) -> str:
-        words_list = words.split(' ')
-        if len(words_list) <= order:
-            return words
-
-        else:
-            return ' '.join(words_list[-order:])
-
-    def _calc_score(
-            self,
-            other: 'Node',
-            lang_model: LangModel,
-            order: int
-            ) -> float:
-
-        sentence = other.sentence + ' ' + str(self._word)
-        words = Word.from_str_of_multiword(
-            self._pick_up_by_order(sentence, order)
-        )
-        score = other.score + lang_model.score(words)
-
-        return score
+from .node import Node, RootNode
 
 
 def estimate(
@@ -83,7 +18,7 @@ def estimate(
     t = sum((yomi2tuple(w.yomi) for w in words), ())
     key = Key(*t)
 
-    root_node = Node('', root=True)
+    root_node = RootNode()
 
     len_ = len(key)
     wait_child: List[List[Node]] = [[] for i in range(len_+1)]
