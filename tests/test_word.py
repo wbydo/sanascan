@@ -3,7 +3,7 @@ import unittest
 from sanascan_backend.word import Word
 
 class TestWord(unittest.TestCase):
-    def test_from_str_of_singleword(self, msg='Word#from_str_of_singleword'):
+    def test_from_str_of_singleword(self, msg: str ='Word#from_str_of_singleword') -> None:
         with self.subTest(msg='<unk>'):
             a = Word.from_str_of_singleword('<unk>')
             b = Word(surface='<unk>', yomi='<unk>')
@@ -14,12 +14,12 @@ class TestWord(unittest.TestCase):
             b = Word(surface='歩下', yomi='ホゲ')
             self.assertEqual(a, b)
 
-    def test_str(self, msg='str(Word)'):
+    def test_str(self, msg: str ='str(Word)') -> None:
         word = Word(surface='歩下', yomi='ホゲ')
         str_ = str(word)
         self.assertEqual(str_, '歩下/ホゲ')
 
-    def test_static_to_str(self, msg='Word.to_str(words)'):
+    def test_static_to_str(self, msg: str='Word.to_str(words)') -> None:
         words = [
             Word(surface='歩下', yomi='ホゲ'),
             Word(surface='普が', yomi='フガ'),
