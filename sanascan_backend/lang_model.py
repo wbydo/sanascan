@@ -1,21 +1,24 @@
 import re
-from collections import namedtuple
-from typing import NamedTuple, Dict, Optional, List
-from typing import Match, Pattern, ClassVar, KeysView
+from typing import NamedTuple, Dict, List
+from typing import Pattern, ClassVar, KeysView
 from enum import Enum
 from enum import auto
 
 from .word import Word
 
+
 class ArpaArea(Enum):
         DATA = auto()
         NGRAM = auto()
 
+
 class NgramError(Exception):
     pass
 
+
 class ParseError(Exception):
     pass
+
 
 class LangModel:
     class Data(NamedTuple):
@@ -35,7 +38,6 @@ class LangModel:
     def _process_arpa_file(self, arpa_text: str) -> Dict[str, Data]:
         title = re.compile(r'^\\(\d)-grams:$')
         area = ArpaArea.DATA
-        n_gram = None
 
         result = {}
         for unstriped_line in arpa_text.split('\n'):
@@ -58,11 +60,11 @@ class LangModel:
         return result
 
     def score(self, words: List[Word]) -> float:
-        l = len(words)
-        if l > self._order:
+        len_ = len(words)
+        if len_ > self._order:
             raise NgramError(Word.to_str(words))
 
-        if l == 1 and (not str(words[0]) in self._keys):
+        if len_ == 1 and (not str(words[0]) in self._keys):
             raise NgramError(str(words[0]) + 'は使用言語モデルの語彙にない')
 
         if Word.to_str(words) in self._keys:
