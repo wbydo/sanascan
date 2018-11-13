@@ -1,9 +1,16 @@
-from anakin.util.key import Key
-from anakin.util.key_to_word import yomi2tuple
-from anakin.util.word import Word
+from typing import Union, List, Iterable
+
+from .word import Word
+from .lang_model import LangModel
+from .yomi_to_tuple import KeyToWord
+from .yomi_to_tuple import yomi2tuple
+from .key import Key
 
 class Node:
-    def __init__(self, word, root=False):
+    _word: Union[Word, str]
+    score: float
+
+    def __init__(self, word: Union[Word, str], root: bool=False) -> None:
         self._word = word
         if root:
             self._word = '<s>'
@@ -11,17 +18,21 @@ class Node:
             self.sentence_clean = '<s>'
             self.score = 0.0
 
-    def _set_score(self, score):
+    def _set_score(self, score: float) -> None:
         self.score = score
 
-    def _set_parent(self, parent):
+    def _set_parent(self, parent: Node) -> None:
         self._parent = parent
         self.sentence = parent.sentence + ' ' + str(self._word)
 
-        last = self._word.surface if not self._word == '</s>' else self._word
+        last: str
+        if isinstance(self._word, str):
+            last = self._word
+        else:
+            last = self._word.surface
         self.sentence_clean = parent.sentence_clean + ' ' + last
 
-    def search_parent(self, candidates, lang_model, order):
+    def search_parent(self, candidates: List[Node], lang_model: LangModel, order: int) -> None:
         scores = [self._calc_score(can, lang_model, order) for can in candidates]
 
         max_score = max(scores)
@@ -30,7 +41,7 @@ class Node:
         parent = candidates[scores.index(max_score)]
         self._set_parent(parent)
 
-    def _pick_up_by_order(self, words, order):
+    def _pick_up_by_order(self, words: str, order: int) -> str:
         words_list = words.split(' ')
         if len(words_list) <= order:
             return words
@@ -38,21 +49,23 @@ class Node:
         else:
             return ' '.join(words_list[-order:])
 
-    def _calc_score(self, other, lang_model, order):
+    def _calc_score(self, other: Node, lang_model: LangModel, order: int) -> float:
         sentence = other.sentence + ' ' + str(self._word)
-        words = self._pick_up_by_order(sentence, order)
+        words = Word.from_str_of_multiword(
+            self._pick_up_by_order(sentence, order)
+        )
         score = other.score + lang_model.score(words)
 
         return score
 
-def estimate(words, key_to_word, lang_model, order):
+def estimate(words: Iterable[Word], key_to_word: KeyToWord, lang_model: LangModel, order: int) -> List[Word]:
     t = sum((yomi2tuple(w.yomi) for w in words),())
     key = Key(*t)
 
     root_node = Node('', root=True)
 
     l = len(key)
-    wait_child = [[] for i in range(l+1)]
+    wait_child: List[List[Node]] = [[] for i in range(l+1)]
     wait_child[0].append(root_node)
 
     for i in range(l):
@@ -71,4 +84,4 @@ def estimate(words, key_to_word, lang_model, order):
     eos_node.search_parent(wait_child[l], lang_model, order)
     # return eos_node
     est_sentence = ' '.join(eos_node.sentence.split(' ')[1:-1])
-    return Word.from_sentence(est_sentence)
+    return Word.from_str_of_multiword(est_sentence)
