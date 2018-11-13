@@ -85,3 +85,8 @@ class RootNode(Node):
         self.sentence = '<s>'
         self.sentence_clean = '<s>'
         self.score = 0.0
+
+
+class EOSNode(Node):
+    def __init__(self) -> None:
+        self._word = Word(surface='</s>', yomi='</s>')
