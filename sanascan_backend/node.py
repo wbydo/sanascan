@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 
 from .lang_model import LangModel
 from .word import Word
@@ -7,7 +7,10 @@ from .word import Word
 class Node:
     _word: Union[Word, str]
 
-    score: float
+    score: Optional[float]
+    parent: 'Optional[Node]'
+    sentence: Optional[str]
+    sentence_clean: Optional[str]
 
     def __init__(self, word: Union[Word, str]) -> None:
         self._word = word
@@ -16,6 +19,11 @@ class Node:
         self.score = score
 
     def _set_parent(self, parent: 'Node') -> None:
+        if parent.sentence is None:
+            raise ValueError('parent.sentence is None')
+        if parent.sentence_clean is None:
+            raise ValueError('parent.sentence_clean is None')
+
         self._parent = parent
         self.sentence = parent.sentence + ' ' + str(self._word)
 
@@ -56,6 +64,11 @@ class Node:
             lang_model: LangModel,
             order: int
             ) -> float:
+
+        if other.sentence is None:
+            raise ValueError('other.sentence is None')
+        if other.score is None:
+            raise ValueError('other.score is None')
 
         sentence = other.sentence + ' ' + str(self._word)
         words = Word.from_str_of_multiword(
