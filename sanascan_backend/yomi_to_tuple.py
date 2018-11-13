@@ -4,7 +4,6 @@ from typing import Dict, List, Tuple
 from enum import Enum
 from enum import auto
 
-from collections import namedtuple
 from collections import defaultdict
 
 from .word import Word, MARK
@@ -23,15 +22,18 @@ katakana_table = [
     'ワヲンー'
 ]
 
-num_table = {c:idx for idx, col in enumerate(katakana_table) for c in col}
+num_table = {c: idx for idx, col in enumerate(katakana_table) for c in col}
+
 
 class ResultOfGetByKey(NamedTuple):
     word: Word
     key: Key
 
+
 class SearchFlag(Enum):
     PROCEED = auto()
     STOP = auto()
+
 
 class KeyToWord():
     _datum: Dict[Key, List[Word]]
@@ -40,7 +42,7 @@ class KeyToWord():
     def __init__(self, words: List[Word]) -> None:
         self._datum = {}
         self._search_map = defaultdict(
-            lambda:SearchFlag.STOP)
+            lambda: SearchFlag.STOP)
 
         for word in words:
             key = Key(*yomi2tuple(word.yomi))
@@ -65,6 +67,7 @@ class KeyToWord():
             if subkey in self._datum.keys():
                 for word in self._datum[subkey]:
                     yield ResultOfGetByKey(word=word, key=subkey)
+
 
 def yomi2tuple(yomi: str) -> Tuple[int, ...]:
     if yomi in MARK.values():
