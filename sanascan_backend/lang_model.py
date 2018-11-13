@@ -1,8 +1,9 @@
 import re
-from typing import NamedTuple, Dict, List
+from typing import NamedTuple, Dict, List, Set
 from typing import Pattern, ClassVar, KeysView
 from enum import Enum
 from enum import auto
+from itertools import chain
 
 from .word import Word
 
@@ -78,3 +79,8 @@ class LangModel:
                 return backoff + p
             else:
                 return p
+
+    def get_vocab(self) -> Set[Word]:
+        return set(chain.from_iterable(
+            [Word.from_str_of_multiword(k) for k in self._dic.keys()]
+        ))

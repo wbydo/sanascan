@@ -1,7 +1,12 @@
 from typing import NamedTuple, Dict, List
 
 DELIMITER: str = '/'
-MARK: Dict[str, str] = {'unk': '<unk>', 'eng': '<eng>', 'num': '<num>'}
+MARK: Dict[str, str] = {
+    'unk': '<unk>',
+    'eng': '<eng>',
+    'num': '<num>',
+    '<s>': '<s>',  # 要検討
+}
 
 
 class Word(NamedTuple):
@@ -21,7 +26,13 @@ class Word(NamedTuple):
         if len(list_) >= 3:
             raise ValueError
 
-        return Word(surface=list_[0], yomi=list_[1])
+        # return Word(surface=list_[0], yomi=list_[1])
+
+        # デバッグ用
+        try:
+            return Word(surface=list_[0], yomi=list_[1])
+        except IndexError as e:
+            raise e.__class__(str(list_))
 
     @staticmethod
     def to_str(words: 'List[Word]') -> str:
