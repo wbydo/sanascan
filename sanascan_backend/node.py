@@ -13,7 +13,7 @@ class Node:
 
     score: Optional[float]
     parent: 'Optional[Node]'
-    sentence: List[Word]
+    sentence: Optional[List[Word]]
 
     def __init__(self, word: Word) -> None:
         self._word = word
@@ -23,6 +23,9 @@ class Node:
 
     def _set_parent(self, parent: 'Node') -> None:
         self._parent = parent
+
+        if parent.sentence is None:
+            raise ValueError('parent.sentence is None')
         self.sentence = parent.sentence + [self._word]
 
     def _pick_up_by_order(self, words: List[Word], order: int) -> List[Word]:
@@ -41,6 +44,8 @@ class Node:
 
         if other.score is None:
             raise ValueError('other.score is None')
+        if other.sentence is None:
+            raise ValueError('other.sentence is None')
 
         sentence = other.sentence + [self._word]
         score = other.score + lang_model.score(sentence)
