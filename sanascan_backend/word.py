@@ -26,13 +26,7 @@ class Word(NamedTuple):
         if len(list_) >= 3:
             raise ValueError
 
-        # return Word(surface=list_[0], yomi=list_[1])
-
-        # デバッグ用
-        try:
-            return Word(surface=list_[0], yomi=list_[1])
-        except IndexError as e:
-            raise e.__class__(str(list_))
+        return Word(surface=list_[0], yomi=list_[1])
 
     @staticmethod
     def to_str(words: 'List[Word]') -> str:
