@@ -1,5 +1,5 @@
 from typing import NamedTuple, Iterable
-from typing import Dict, List
+from typing import Dict, List, Set
 
 from enum import Enum
 from enum import auto
@@ -25,7 +25,7 @@ class KeyToWordMap():
     _datum: Dict[Key, List[Word]]
     _search_map: Dict[Key, SearchFlag]
 
-    def __init__(self, words: List[Word]) -> None:
+    def __init__(self, words: Set[Word]) -> None:
         self._datum = {}
         self._search_map = defaultdict(
             lambda: SearchFlag.STOP)
