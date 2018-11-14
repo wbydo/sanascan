@@ -1,6 +1,5 @@
 import re
 from typing import NamedTuple, Dict, List, Set
-from typing import Pattern, ClassVar
 from enum import Enum
 from enum import auto
 from itertools import chain
@@ -25,9 +24,6 @@ class LangModel:
     class Data(NamedTuple):
         prob: float
         backoff: float
-
-    remove_head: ClassVar[Pattern] = re.compile(r'^(?:.*?) (?P<target>.*)$')
-    remove_tail: ClassVar[Pattern] = re.compile(r'^(?P<target>.*) (?:.*?)$')
 
     _dic: Dict[str, Data]
 
