@@ -1,6 +1,6 @@
 import re
 from typing import NamedTuple, Dict, List, ClassVar, Pattern, Optional
-from typing import Iterable
+from typing import Iterable, cast
 
 from natto import MeCab, MeCabNode
 import jaconv
@@ -150,4 +150,4 @@ class AnalyzeMorp:
 
     def _conv_kata(self, str_: str) -> str:
         tbl = AnalyzeMorp.old_kana_table
-        return jaconv.hira2kata(str_).translate(tbl).replace('・', '')
+        return cast(str, jaconv.hira2kata(str_)).translate(tbl).replace('・', '')
