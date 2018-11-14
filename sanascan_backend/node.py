@@ -79,7 +79,7 @@ class Node:
 
 
 class ConstantNode(Node):
-    def _set_parent(self, parent: 'Node') -> None:
+    def _set_parent(self, parent: 'Node', order: int) -> None:
         raise NodeException()
 
 

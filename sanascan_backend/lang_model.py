@@ -1,6 +1,6 @@
 import re
 from typing import NamedTuple, Dict, List, Set
-from typing import Pattern, ClassVar, KeysView
+from typing import Pattern, ClassVar
 from enum import Enum
 from enum import auto
 from itertools import chain
