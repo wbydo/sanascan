@@ -34,7 +34,7 @@ class TestWord(unittest.TestCase):
 
         self.assertEqual(Word.to_str(words), '歩下/ホゲ 普が/フガ 日余/ピヨ')
 
-    def test_from_sentence(self):
+    def test_from_sentence(self) -> None:
         r1 = list(Word.from_sentence(
             'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高',
             MeCab()
