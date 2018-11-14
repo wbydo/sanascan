@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from .lang_model import LangModel
-from .word import Word
+from .word import Word, TagWord
 
 
 class NodeException(Exception):
@@ -76,7 +76,7 @@ class ConstantNode(Node):
 
 class RootNode(ConstantNode):
     def __init__(self) -> None:
-        word = Word(surface='<s>', yomi='<s>')
+        word = TagWord('<s>')
         super(self.__class__, self).__init__(word)
 
         self.sentence = [word]
@@ -85,4 +85,5 @@ class RootNode(ConstantNode):
 
 class EOSNode(Node):
     def __init__(self) -> None:
-        self._word = Word(surface='</s>', yomi='</s>')
+        word = TagWord('</s>')
+        super(self.__class__, self).__init__(word)

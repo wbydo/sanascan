@@ -1,7 +1,7 @@
 import unittest
 from natto import MeCab
 
-from sanascan_backend.word import Word
+from sanascan_backend.word import Word, TagWord
 
 
 class TestWord(unittest.TestCase):
@@ -13,6 +13,9 @@ class TestWord(unittest.TestCase):
         with self.subTest(msg='<unk>'):
             a = Word.from_str_of_singleword('<unk>')
             b = Word(surface='<unk>', yomi='<unk>')
+            self.assertNotEqual(a, b)
+
+            b = TagWord('<unk>')
             self.assertEqual(a, b)
 
         with self.subTest(msg='general case'):
@@ -34,6 +37,12 @@ class TestWord(unittest.TestCase):
 
         self.assertEqual(Word.to_str(words), '歩下/ホゲ 普が/フガ 日余/ピヨ')
 
+    def test_eq(self) -> None:
+        self.assertNotEqual(
+            Word(surface='<unk>', yomi='<unk>'),
+            TagWord('<unk>')
+        )
+
     def test_from_sentence(self) -> None:
         r1 = list(Word.from_sentence(
             'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高',
@@ -52,8 +61,8 @@ class TestWord(unittest.TestCase):
             Word('て', 'テ'),
             Word('おり', 'オリ'),
             Word('特に', 'トクニ'),
-            Word('<num>', '<num>'),
-            Word('<eng>', '<eng>'),
+            TagWord('<num>'),
+            TagWord('<eng>'),
             Word('の', 'ノ'),
             Word('バー', 'バー'),
             Word('は', 'ハ'),
@@ -67,6 +76,11 @@ class TestWord(unittest.TestCase):
             Word('最高', 'サイコウ')
         ]
         self.assertEqual(r1, r2)
+
+    def test_tag_word(self) -> None:
+        TagWord('<unk>')
+        with self.assertRaises(ValueError):
+            TagWord('hoge')
 
 
 if __name__ == '__main__':
