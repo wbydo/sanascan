@@ -82,5 +82,5 @@ class LangModel:
 
     def get_vocab(self) -> Set[Word]:
         return set(chain.from_iterable(
-            [Word.from_str_of_multiword(k) for k in self._dic.keys()]
+            [Word.from_wakachigaki(k) for k in self._dic.keys()]
         ))
