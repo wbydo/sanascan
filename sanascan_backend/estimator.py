@@ -11,7 +11,6 @@ def estimate(
         words: Iterable[Word],
         key_to_word: KeyToWordMap,
         lang_model: LangModel,
-        order: int
         ) -> List[Word]:
 
     key = Key.from_words(list(words))
