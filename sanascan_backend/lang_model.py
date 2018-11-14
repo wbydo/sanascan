@@ -29,13 +29,6 @@ class LangModel:
     order: int
 
     def __init__(self, arpa_text: str) -> None:
-        self._dic = self._process_arpa_file(arpa_text)
-
-    def _process_arpa_file(
-            self,
-            arpa_text: str
-            ) -> Dict[Tuple[Word, ...], Data]:
-
         title = re.compile(r'^\\(\d)-grams:$')
         area = ArpaArea.DATA
 
@@ -56,8 +49,9 @@ class LangModel:
             word = tuple(Word.from_wakachigaki(data_line[1]))
             backoff = float(data_line[2]) if len(data_line) == 3 else 0
             result[word] = LangModel.Data(prob=prob, backoff=backoff)
+
         self.order = ngram
-        return result
+        self._dic = result
 
     def score(self, words: Iterable[Word]) -> float:
         words = tuple(words)
