@@ -30,11 +30,9 @@ class LangModel:
     remove_tail: ClassVar[Pattern] = re.compile(r'^(?P<target>.*) (?:.*?)$')
 
     _dic: Dict[str, Data]
-    _keys: KeysView[str]
 
     def __init__(self, arpa_text: str) -> None:
         self._dic = self._process_arpa_file(arpa_text)
-        self._keys = self._dic.keys()
 
     def _process_arpa_file(self, arpa_text: str) -> Dict[str, Data]:
         title = re.compile(r'^\\(\d)-grams:$')
@@ -65,16 +63,16 @@ class LangModel:
         if len_ > self._order:
             raise NgramError(Word.to_str(words))
 
-        if len_ == 1 and (not str(words[0]) in self._keys):
+        if len_ == 1 and (not str(words[0]) in self._dic.keys()):
             raise NgramError(str(words[0]) + 'は使用言語モデルの語彙にない')
 
-        if Word.to_str(words) in self._keys:
+        if Word.to_str(words) in self._dic.keys():
             return self._dic[Word.to_str(words)].prob
         else:
             context = Word.to_str(words[:-1])
             p = self.score(words[1:])
 
-            if context in self._keys:
+            if context in self._dic.keys():
                 backoff = self._dic[context].backoff
                 return backoff + p
             else:
