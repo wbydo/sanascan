@@ -1,7 +1,7 @@
 import unittest
 from natto import MeCab
 
-from sanascan_backend.word import Word
+from sanascan_backend.word import Word, TagWord
 
 
 class TestWord(unittest.TestCase):
@@ -67,6 +67,11 @@ class TestWord(unittest.TestCase):
             Word('最高', 'サイコウ')
         ]
         self.assertEqual(r1, r2)
+
+    def test_tag_word(self) -> None:
+        TagWord('<unk>')
+        with self.assertRaises(ValueError):
+            TagWord('hoge')
 
 
 if __name__ == '__main__':
