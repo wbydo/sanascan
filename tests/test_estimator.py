@@ -23,7 +23,7 @@ class TestEstimator(unittest.TestCase):
             words,
             KeyToWordMap(self.lm.get_vocab()),
             self.lm,
-            self.lm._order
+            self.lm.order
         )
 
         correct = '特に/トクニ <num>/<num> <eng>/<eng> の/ノ バー/バー は/ハ 最高/サイコウ'

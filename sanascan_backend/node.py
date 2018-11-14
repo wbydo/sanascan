@@ -40,7 +40,7 @@ class Node:
         if other.sentence is None:
             raise ValueError('other.sentence is None')
 
-        ngram = other.sentence[-(lm._order - 1):] + [self._word]
+        ngram = other.sentence[-(lm.order - 1):] + [self._word]
         return other.score + lm.score(ngram)
 
     def search_parent(
