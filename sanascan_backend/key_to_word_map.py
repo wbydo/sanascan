@@ -21,7 +21,7 @@ class SearchFlag(Enum):
     STOP = auto()
 
 
-class KeyToWord():
+class KeyToWordMap():
     _datum: Dict[Key, List[Word]]
     _search_map: Dict[Key, SearchFlag]
 
