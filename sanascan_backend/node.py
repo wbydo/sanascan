@@ -21,7 +21,7 @@ class Node:
     def _set_score(self, score: float) -> None:
         self.score = score
 
-    def _set_parent(self, parent: 'Node', order: int) -> None:
+    def _set_parent(self, parent: 'Node') -> None:
         self._parent = parent
 
         if parent.sentence is None:
@@ -32,8 +32,7 @@ class Node:
     def _calc_score(
             self,
             other: 'Node',
-            lang_model: LangModel,
-            order: int
+            lm: LangModel,
             ) -> float:
 
         if other.score is None:
@@ -41,28 +40,27 @@ class Node:
         if other.sentence is None:
             raise ValueError('other.sentence is None')
 
-        ngram = other.sentence[-(order - 1):] + [self._word]
-        return other.score + lang_model.score(ngram)
+        ngram = other.sentence[-(lm._order - 1):] + [self._word]
+        return other.score + lm.score(ngram)
 
     def search_parent(
             self,
             candidates: 'List[Node]',
             lang_model: LangModel,
-            order: int
             ) -> None:
 
         f = self._calc_score
-        scores = [f(can, lang_model, order) for can in candidates]
+        scores = [f(can, lang_model) for can in candidates]
 
         max_score = max(scores)
         self._set_score(max_score)
 
         parent = candidates[scores.index(max_score)]
-        self._set_parent(parent, order)
+        self._set_parent(parent)
 
 
 class ConstantNode(Node):
-    def _set_parent(self, parent: 'Node', order: int) -> None:
+    def _set_parent(self, parent: 'Node') -> None:
         raise NodeException()
 
 
