@@ -1,15 +1,20 @@
 import unittest
+from pathlib import Path
 
-from sanascan_backend.node import Node, RootNode, EOSNode, NodeException
+from sanascan_backend.node import Node, RootNode, EOSNode
 from sanascan_backend.word import Word, TagWord
+from sanascan_backend.lang_model import LangModel
 
 
 class TestNode(unittest.TestCase):
     def setUp(self) -> None:
-        self.hoge_word = Word(surface='歩下', yomi='ホゲ')
-        self.node = Node(self.hoge_word)
+        with (Path.home() / 'arpa/LM0006.txt').open() as f:
+            self.lm = LangModel(f.read())
+
+        self.hoge_word = Word(surface='特に', yomi='トクニ')
         self.root = RootNode()
-        self.eos = EOSNode()
+        self.node = Node(self.hoge_word, [self.root], self.lm)
+        self.eos = EOSNode([self.node], self.lm)
 
     def test_init(self) -> None:
         with self.subTest():
@@ -22,14 +27,6 @@ class TestNode(unittest.TestCase):
         with self.subTest():
             w = TagWord('</s>')
             self.assertEqual(self.eos._word, w)
-
-    def test_raise_error_when_set_parent(
-            self,
-            msg: str = 'RootNode#._set_parentでエラーが起きる'
-            ) -> None:
-
-        with self.assertRaises(NodeException):
-            self.root._set_parent(self.node, 5)
 
 
 if __name__ == '__main__':
