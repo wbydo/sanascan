@@ -1,17 +1,17 @@
 import re
-from typing import NamedTuple, Dict, List, ClassVar, Pattern, Optional
+from typing import Dict, List, ClassVar, Pattern, Optional, Tuple
 from typing import Iterable, cast
 
 from natto import MeCab, MeCabNode
 import jaconv
 
 DELIMITER: str = '/'
-MARK: Dict[str, str] = {
-    'unk': '<unk>',
-    'eng': '<eng>',
-    'num': '<num>',
-    '<s>': '<s>',  # 要検討
-}
+# MARK: Dict[str, str] = {
+#     'unk': '<unk>',
+#     'eng': '<eng>',
+#     'num': '<num>',
+#     '<s>': '<s>',  # 要検討
+# }
 
 
 class SymbolError(Exception):
@@ -22,7 +22,7 @@ class MarkError(Exception):
     pass
 
 
-class Word(NamedTuple):
+class Word:
     surface: str
     yomi: str
 
@@ -41,12 +41,15 @@ class Word(NamedTuple):
             if res.is_symbol():
                 continue
 
-            yield Word(surface=res.surface(), yomi=res.yomi())
+            if TagWord.is_include(res.surface()):
+                yield TagWord(res.surface())
+            else:
+                yield Word(surface=res.surface(), yomi=res.yomi())
 
     @staticmethod
     def from_str_of_singleword(arg: str) -> 'Word':
-        if arg in MARK.values():
-            return Word(surface=arg, yomi=arg)
+        if TagWord.is_include(arg):
+            return TagWord(arg)
 
         list_ = arg.split(DELIMITER)
         if len(list_) >= 3:
@@ -58,13 +61,43 @@ class Word(NamedTuple):
     def to_str(words: 'List[Word]') -> str:
         return ' '.join([str(w) for w in words])
 
+    def __init__(self, surface: str, yomi: str) -> None:
+        self.surface = surface
+        self.yomi = yomi
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Word):
+            return NotImplemented
+
+        klass = self.__class__
+        if not isinstance(other, klass):
+            return False
+        return self.__tuple__() == other.__tuple__()
+
+    def __hash__(self) -> int:
+        return hash(self.__tuple__())
+
+    def __tuple__(self) -> Tuple[str, str]:
+        return (self.surface, self.yomi)
+
     def __str__(self) -> str:
-        if self.surface in MARK.values():
-            return self.surface
         return f'{self.surface}{DELIMITER}{self.yomi}'
 
     def __repr__(self) -> str:
         return f'Word(\'{self.surface}\',\'{self.yomi}\')'
+
+
+class TagWord(Word):
+    _tags: ClassVar[List[str]] = ['<unk>', '<eng>', '<num>', '<s>', '</s>']
+
+    @classmethod
+    def is_include(klass, arg: str) -> bool:
+        return arg in klass._tags
+
+    def __init__(self, arg: str) -> None:
+        if arg not in self._tags:
+            raise ValueError(arg)
+        super(self.__class__, self).__init__(surface=arg, yomi=arg)
 
 
 class AnalyzeMorp:
@@ -116,11 +149,11 @@ class AnalyzeMorp:
             return self._surface
 
         if AnalyzeMorp.eng.match(self._surface):
-            return MARK['eng']
+            return TagWord('<eng>').surface
         if AnalyzeMorp.num.match(self._surface):
-            return MARK['num']
+            return TagWord('<num>').surface
 
-        return MARK['unk']
+        return TagWord('<unk>').surface
 
     def yomi(self) -> str:
         if self.is_symbol():
@@ -144,7 +177,8 @@ class AnalyzeMorp:
         if AnalyzeMorp.kata.match(surface):
             return self._conv_kata(surface)
 
-        if not (surface in MARK.values()):
+        # if not (surface in MARK.values()):
+        if not TagWord.is_include(surface):
             raise MarkError()
         return surface
 
