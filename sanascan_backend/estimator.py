@@ -27,14 +27,12 @@ def estimate(
 
         candidates = wait_child[i]
         for word, subkey in key_to_word.get_by_key(key, i):
-            node = Node(word)
-            node.search_parent(candidates, lang_model)
+            node = Node(word, candidates, lang_model)
 
             j = len(subkey) + i
             wait_child[j].append(node)
 
-    eos_node = EOSNode()
-    eos_node.search_parent(wait_child[len_], lang_model)
+    eos_node = EOSNode(wait_child[len_], lang_model)
 
     if eos_node.sentence is None:
         raise Exception('eos_node.sentence is None')

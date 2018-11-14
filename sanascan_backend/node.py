@@ -4,10 +4,6 @@ from .lang_model import LangModel
 from .word import Word, TagWord
 
 
-class NodeException(Exception):
-    pass
-
-
 class Node:
     _word: Word
 
@@ -15,8 +11,23 @@ class Node:
     parent: 'Optional[Node]'
     sentence: Optional[List[Word]]
 
-    def __init__(self, word: Word) -> None:
+    def __init__(
+            self,
+            word: Word,
+            candidates: 'List[Node]',
+            lang_model: LangModel,
+            ) -> None:
+
         self._word = word
+
+        f = self._calc_score
+        scores = [f(can, lang_model) for can in candidates]
+
+        max_score = max(scores)
+        self._set_score(max_score)
+
+        parent = candidates[scores.index(max_score)]
+        self._set_parent(parent)
 
     def _set_score(self, score: float) -> None:
         self.score = score
@@ -43,37 +54,25 @@ class Node:
         ngram = other.sentence[-(lm.order - 1):] + [self._word]
         return other.score + lm.score(ngram)
 
-    def search_parent(
-            self,
-            candidates: 'List[Node]',
-            lang_model: LangModel,
-            ) -> None:
 
-        f = self._calc_score
-        scores = [f(can, lang_model) for can in candidates]
-
-        max_score = max(scores)
-        self._set_score(max_score)
-
-        parent = candidates[scores.index(max_score)]
-        self._set_parent(parent)
-
-
-class ConstantNode(Node):
-    def _set_parent(self, parent: 'Node') -> None:
-        raise NodeException()
-
-
-class RootNode(ConstantNode):
+class RootNode(Node):
     def __init__(self) -> None:
         word = TagWord('<s>')
-        super(self.__class__, self).__init__(word)
 
+        self._word = word
         self.sentence = [word]
         self.score = 0.0
 
 
 class EOSNode(Node):
-    def __init__(self) -> None:
-        word = TagWord('</s>')
-        super(self.__class__, self).__init__(word)
+    def __init__(
+            self,
+            candidates: 'List[Node]',
+            lang_model: LangModel,
+            ) -> None:
+
+        super(self.__class__, self).__init__(
+            TagWord('</s>'),
+            candidates,
+            lang_model
+        )
