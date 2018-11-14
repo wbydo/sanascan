@@ -8,6 +8,7 @@ setuptools = "*"
 "e1839a8" = {path = ".", editable = true}
 natto-py = "*"
 numpy = "*"
+jaconv = "*"
 
 [dev-packages]
 sphinx = "*"
