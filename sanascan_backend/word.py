@@ -150,4 +150,5 @@ class AnalyzeMorp:
 
     def _conv_kata(self, str_: str) -> str:
         tbl = AnalyzeMorp.old_kana_table
-        return cast(str, jaconv.hira2kata(str_)).translate(tbl).replace('・', '')
+        katakana = cast(str, jaconv.hira2kata(str_))
+        return katakana.translate(tbl).replace('・', '')
