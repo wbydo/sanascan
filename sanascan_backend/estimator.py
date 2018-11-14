@@ -9,7 +9,6 @@ from .node import Node, RootNode, EOSNode
 
 def estimate(
         words: Iterable[Word],
-        key_to_word: KeyToWordMap,
         lang_model: LangModel,
         ) -> List[Word]:
 
@@ -20,6 +19,8 @@ def estimate(
     len_ = len(key)
     wait_child: List[List[Node]] = [[] for i in range(len_+1)]
     wait_child[0].append(root_node)
+
+    key_to_word = KeyToWordMap(lang_model.get_vocab())
 
     for i in range(len_):
         if len(wait_child[i]) == 0:

@@ -5,7 +5,6 @@ from natto import MeCab
 
 from sanascan_backend.estimator import estimate
 from sanascan_backend.lang_model import LangModel
-from sanascan_backend.key_to_word_map import KeyToWordMap
 from sanascan_backend.word import Word
 
 
@@ -21,7 +20,6 @@ class TestEstimator(unittest.TestCase):
         words = Word.from_sentence(sentence, MeCab())
         result = estimate(
             words,
-            KeyToWordMap(self.lm.get_vocab()),
             self.lm,
         )
 
