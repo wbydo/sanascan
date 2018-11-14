@@ -1,7 +1,7 @@
 import unittest
 
 from sanascan_backend.node import Node, RootNode, EOSNode, NodeException
-from sanascan_backend.word import Word
+from sanascan_backend.word import Word, TagWord
 
 
 class TestNode(unittest.TestCase):
@@ -16,11 +16,11 @@ class TestNode(unittest.TestCase):
             self.assertEqual(self.node._word, self.hoge_word)
 
         with self.subTest():
-            w = Word(surface='<s>', yomi='<s>')
+            w = TagWord('<s>')
             self.assertEqual(self.root._word, w)
 
         with self.subTest():
-            w = Word(surface='</s>', yomi='</s>')
+            w = TagWord('</s>')
             self.assertEqual(self.eos._word, w)
 
     def test_raise_error_when_set_parent(
