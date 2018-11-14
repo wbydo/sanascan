@@ -52,13 +52,14 @@ class Word:
             return TagWord(arg)
 
         list_ = arg.split(DELIMITER)
+
         if len(list_) >= 3:
-            raise ValueError
+            raise ValueError()
 
         return Word(surface=list_[0], yomi=list_[1])
 
     @staticmethod
-    def to_str(words: 'List[Word]') -> str:
+    def to_str(words: 'Iterable[Word]') -> str:
         return ' '.join([str(w) for w in words])
 
     def __init__(self, surface: str, yomi: str) -> None:
