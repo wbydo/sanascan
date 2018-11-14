@@ -14,8 +14,8 @@ class Word(NamedTuple):
     yomi: str
 
     @staticmethod
-    def from_str_of_multiword(sentence: str) -> 'List[Word]':
-        return [Word.from_str_of_singleword(w) for w in sentence.split(' ')]
+    def from_wakachigaki(wakachigaki: str) -> 'List[Word]':
+        return [Word.from_str_of_singleword(w) for w in wakachigaki.split(' ')]
 
     @staticmethod
     def from_str_of_singleword(arg: str) -> 'Word':
