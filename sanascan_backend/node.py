@@ -21,12 +21,17 @@ class Node:
     def _set_score(self, score: float) -> None:
         self.score = score
 
-    def _set_parent(self, parent: 'Node') -> None:
+    def _set_parent(self, parent: 'Node', order: int) -> None:
         self._parent = parent
 
         if parent.sentence is None:
             raise ValueError('parent.sentence is None')
         self.sentence = parent.sentence + [self._word]
+
+        if len(parent.sentence) < order:
+            self.sentence = parent.sentence + [self._word]
+        else:
+            self.sentence = parent.sentence[1:] + [self._word]
 
     def _pick_up_by_order(self, words: List[Word], order: int) -> List[Word]:
         if len(words) <= order:
@@ -47,10 +52,14 @@ class Node:
         if other.sentence is None:
             raise ValueError('other.sentence is None')
 
-        sentence = other.sentence + [self._word]
-        score = other.score + lang_model.score(sentence)
+        if len(other.sentence) < order:
+            ngram = other.sentence + [self._word]
+        else:
+            ngram = other.sentence[1:] + [self._word]
 
-        return score
+        # TODO: loggerにするor消すを検討
+        print(ngram)
+        return other.score + lang_model.score(ngram)
 
     def search_parent(
             self,
@@ -66,7 +75,7 @@ class Node:
         self._set_score(max_score)
 
         parent = candidates[scores.index(max_score)]
-        self._set_parent(parent)
+        self._set_parent(parent, order)
 
 
 class ConstantNode(Node):
