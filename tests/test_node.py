@@ -29,7 +29,7 @@ class TestNode(unittest.TestCase):
             ) -> None:
 
         with self.assertRaises(NodeException):
-            self.root._set_parent(self.node, 5)
+            self.root._set_parent(self.node)
 
 
 if __name__ == '__main__':

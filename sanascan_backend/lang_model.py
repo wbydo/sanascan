@@ -26,6 +26,7 @@ class LangModel:
         backoff: float
 
     _dic: Dict[Tuple[Word, ...], Data]
+    order: int
 
     def __init__(self, arpa_text: str) -> None:
         self._dic = self._process_arpa_file(arpa_text)
@@ -55,13 +56,13 @@ class LangModel:
             word = tuple(Word.from_wakachigaki(data_line[1]))
             backoff = float(data_line[2]) if len(data_line) == 3 else 0
             result[word] = LangModel.Data(prob=prob, backoff=backoff)
-        self._order = ngram
+        self.order = ngram
         return result
 
     def score(self, words: Iterable[Word]) -> float:
         words = tuple(words)
         len_ = len(words)
-        if len_ > self._order:
+        if len_ > self.order:
             raise NgramError(Word.to_str(words))
 
         if len_ == 1 and (words not in self._dic.keys()):
