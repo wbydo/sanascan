@@ -29,13 +29,6 @@ class Node:
 
         self.sentence = parent.sentence + [self._word]
 
-    def _pick_up_by_order(self, words: List[Word], order: int) -> List[Word]:
-        if len(words) <= order:
-            return words
-
-        else:
-            return words[-order:]
-
     def _calc_score(
             self,
             other: 'Node',
