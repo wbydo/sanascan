@@ -15,7 +15,9 @@ class TestEstimator(unittest.TestCase):
             self.lm = LangModel(f.read())
 
     def test_hoge(self) -> None:
-        sentence = 'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高'
+        # sentence = 'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高'
+        sentence = '特に１Ｆのバーは最高'
+
         words = Word.from_sentence(sentence, MeCab())
 
         result = estimate(
