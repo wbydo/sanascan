@@ -1,8 +1,31 @@
-from typing import Tuple, Iterable
+from typing import Tuple, Iterable, List
+from itertools import chain
+
+from .word import Word
+
+katakana_table = [
+    'アイウエオヴァィゥェォ',
+    'カキクケコガギグゲゴ',
+    'サシスセソザジズゼゾ',
+    'タチツテトッダヂヅデド',
+    'ナニヌネノ',
+    'ハヒフヘホバビブベボパピプペポ',
+    'マミムメモ',
+    'ヤユヨャュョ',
+    'ラリルレロ',
+    'ワヲンー'
+]
+
+NUM_TABLE = {c: idx for idx, col in enumerate(katakana_table) for c in col}
 
 
 class Key():
     _tpl: Tuple[int, ...]
+
+    @staticmethod
+    def from_words(words: List[Word]) -> 'Key':
+        kana_iter = chain.from_iterable([w.yomi for w in words])
+        return Key(*[NUM_TABLE[i] for i in kana_iter])
 
     def __init__(self, *args: int) -> None:
         if not all([isinstance(i, int) for i in args]):

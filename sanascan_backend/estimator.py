@@ -2,21 +2,19 @@ from typing import List, Iterable
 
 from .word import Word
 from .lang_model import LangModel
-from .yomi_to_tuple import KeyToWord
-from .yomi_to_tuple import yomi2tuple
+from .key_to_word_map import KeyToWordMap
 from .key import Key
 from .node import Node, RootNode, EOSNode
 
 
 def estimate(
         words: Iterable[Word],
-        key_to_word: KeyToWord,
+        key_to_word: KeyToWordMap,
         lang_model: LangModel,
         order: int
         ) -> List[Word]:
 
-    t = sum((yomi2tuple(w.yomi) for w in words), ())
-    key = Key(*t)
+    key = Key.from_words(list(words))
 
     root_node = RootNode()
 

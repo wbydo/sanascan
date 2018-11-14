@@ -1,31 +1,17 @@
 from typing import NamedTuple, Iterable
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from enum import Enum
 from enum import auto
 
 from collections import defaultdict
 
-from .word import Word, MARK
+from .word import Word
 from .key import Key
-
-katakana_table = [
-    'アイウエオヴァィゥェォ',
-    'カキクケコガギグゲゴ',
-    'サシスセソザジズゼゾ',
-    'タチツテトッダヂヅデド',
-    'ナニヌネノ',
-    'ハヒフヘホバビブベボパピプペポ',
-    'マミムメモ',
-    'ヤユヨャュョ',
-    'ラリルレロ',
-    'ワヲンー'
-]
-
-num_table = {c: idx for idx, col in enumerate(katakana_table) for c in col}
 
 
 class ResultOfGetByKey(NamedTuple):
+
     word: Word
     key: Key
 
@@ -35,7 +21,7 @@ class SearchFlag(Enum):
     STOP = auto()
 
 
-class KeyToWord():
+class KeyToWordMap():
     _datum: Dict[Key, List[Word]]
     _search_map: Dict[Key, SearchFlag]
 
@@ -45,7 +31,7 @@ class KeyToWord():
             lambda: SearchFlag.STOP)
 
         for word in words:
-            key = Key(*yomi2tuple(word.yomi))
+            key = Key.from_words([word])
 
             self._add_data(key, word)
 
@@ -67,9 +53,3 @@ class KeyToWord():
             if subkey in self._datum.keys():
                 for word in self._datum[subkey]:
                     yield ResultOfGetByKey(word=word, key=subkey)
-
-
-def yomi2tuple(yomi: str) -> Tuple[int, ...]:
-    if yomi in MARK.values():
-        raise ValueError()
-    return tuple([num_table[i] for i in yomi])
