@@ -1,7 +1,6 @@
-from typing import Tuple, Iterable, List
-from itertools import chain
+from typing import Tuple, Iterable, List, Union
 
-from .word import Word
+from .word import Word, TagWord
 
 katakana_table = [
     'アイウエオヴァィゥェォ',
@@ -20,16 +19,22 @@ NUM_TABLE = {c: idx for idx, col in enumerate(katakana_table) for c in col}
 
 
 class Key():
-    _tpl: Tuple[int, ...]
+    _tpl: Tuple[Union[TagWord, int], ...]
+
+    @classmethod
+    def from_words(klass, words: List[Word]) -> 'Key':
+        return Key(klass._process_words(words))
 
     @staticmethod
-    def from_words(words: List[Word]) -> 'Key':
-        kana_iter = chain.from_iterable([w.yomi for w in words])
-        return Key(*[NUM_TABLE[i] for i in kana_iter])
+    def _process_words(words: List[Word]) -> Iterable[Union[TagWord, int]]:
+        for w in words:
+            if isinstance(w, TagWord):
+                yield w
+            else:
+                for c in w.yomi:
+                    yield NUM_TABLE[c]
 
-    def __init__(self, *args: int) -> None:
-        if not all([isinstance(i, int) for i in args]):
-            raise TypeError
+    def __init__(self, args: Iterable[Union[TagWord, int]]) -> None:
 
         self._tpl = tuple(args)
 
@@ -51,7 +56,7 @@ class Key():
         len_ = len(self._tpl)
         for i in range(start+1, len_+1):
             subtpl = self._tpl[start:i]
-            yield Key(*subtpl)
+            yield Key(subtpl)
 
     def __len__(self) -> int:
         return len(self._tpl)

@@ -41,7 +41,10 @@ class Word:
             if res.is_symbol():
                 continue
 
-            yield Word(surface=res.surface(), yomi=res.yomi())
+            if TagWord.is_include(res.surface()):
+                yield TagWord(res.surface())
+            else:
+                yield Word(surface=res.surface(), yomi=res.yomi())
 
     @staticmethod
     def from_str_of_singleword(arg: str) -> 'Word':
@@ -65,6 +68,10 @@ class Word:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Word):
             return NotImplemented
+
+        klass = self.__class__
+        if not isinstance(other, klass):
+            return False
         return self.__tuple__() == other.__tuple__()
 
     def __hash__(self) -> int:

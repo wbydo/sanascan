@@ -12,12 +12,12 @@ class TestKey(unittest.TestCase):
     def test_from_words(self) -> None:
         with self.subTest():
             k1 = Key.from_words([self.hoge])
-            k2 = Key(5, 1)
+            k2 = Key([5, 1])
             self.assertEqual(k1, k2)
 
         with self.subTest():
             k1 = Key.from_words([self.hoge, self.fuga])
-            k2 = Key(5, 1, 5, 1)
+            k2 = Key([5, 1, 5, 1])
             self.assertEqual(k1, k2)
 
 
