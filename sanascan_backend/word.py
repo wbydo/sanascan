@@ -1,5 +1,5 @@
 import re
-from typing import NamedTuple, Dict, List, ClassVar, Pattern, Optional
+from typing import Dict, List, ClassVar, Pattern, Optional, Tuple
 from typing import Iterable, cast
 
 from natto import MeCab, MeCabNode
@@ -22,7 +22,7 @@ class MarkError(Exception):
     pass
 
 
-class Word(NamedTuple):
+class Word:
     surface: str
     yomi: str
 
@@ -58,6 +58,21 @@ class Word(NamedTuple):
     def to_str(words: 'List[Word]') -> str:
         return ' '.join([str(w) for w in words])
 
+    def __init__(self, surface: str, yomi: str) -> None:
+        self.surface = surface
+        self.yomi = yomi
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Word):
+            return NotImplemented
+        return self.__tuple__() == other.__tuple__()
+
+    def __hash__(self) -> int:
+        return hash(self.__tuple__())
+
+    def __tuple__(self) -> Tuple[str, str]:
+        return (self.surface, self.yomi)
+
     def __str__(self) -> str:
         return f'{self.surface}{DELIMITER}{self.yomi}'
 
@@ -72,12 +87,10 @@ class TagWord(Word):
     def is_include(klass, arg: str) -> bool:
         return arg in klass._tags
 
-    # ここの書き方あまりわかってない。
-    # あとでEffective Python&mypy.NamedTuple読む
-    def __new__(klass, arg: str) -> None:
-        if arg not in klass._tags:
+    def __init__(self, arg: str) -> None:
+        if arg not in self._tags:
             raise ValueError(arg)
-        return super().__new__(klass, surface=arg, yomi=arg)
+        super(self.__class__, self).__init__(surface=arg, yomi=arg)
 
 
 class AnalyzeMorp:
