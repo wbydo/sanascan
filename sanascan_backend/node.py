@@ -26,12 +26,8 @@ class Node:
 
         if parent.sentence is None:
             raise ValueError('parent.sentence is None')
-        self.sentence = parent.sentence + [self._word]
 
-        if len(parent.sentence) < order:
-            self.sentence = parent.sentence + [self._word]
-        else:
-            self.sentence = parent.sentence[1:] + [self._word]
+        self.sentence = parent.sentence + [self._word]
 
     def _pick_up_by_order(self, words: List[Word], order: int) -> List[Word]:
         if len(words) <= order:
@@ -52,13 +48,7 @@ class Node:
         if other.sentence is None:
             raise ValueError('other.sentence is None')
 
-        if len(other.sentence) < order:
-            ngram = other.sentence + [self._word]
-        else:
-            ngram = other.sentence[1:] + [self._word]
-
-        # TODO: loggerにするor消すを検討
-        print(ngram)
+        ngram = other.sentence[-(order - 1):] + [self._word]
         return other.score + lang_model.score(ngram)
 
     def search_parent(
