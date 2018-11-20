@@ -49,13 +49,13 @@ class Key():
     def __repr__(self) -> str:
         return '<Key {}>'.format(repr(self._tpl))
 
-    def subsequence(self, start: int) -> 'Iterable[Key]':
-        if start >= len(self._tpl):
-            raise ValueError
-
+    def subsequence(self, end: int) -> 'Iterable[Key]':
         len_ = len(self._tpl)
-        for i in range(start+1, len_+1):
-            subtpl = self._tpl[start:i]
+        if end > len_ - 1 or end < 0:
+            raise ValueError()
+
+        for i in range(end+1):
+            subtpl = self._tpl[i:end+1]
             yield Key(subtpl)
 
     def __len__(self) -> int:

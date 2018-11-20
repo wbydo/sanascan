@@ -9,6 +9,8 @@ class TestKey(unittest.TestCase):
         self.hoge = Word(surface='歩下', yomi='ホゲ')
         self.fuga = Word(surface='不臥', yomi='フガ')
 
+        self.key = Key([0, 1, 2, 3])
+
     def test_from_words(self) -> None:
         with self.subTest():
             k1 = Key.from_words([self.hoge])
@@ -19,6 +21,25 @@ class TestKey(unittest.TestCase):
             k1 = Key.from_words([self.hoge, self.fuga])
             k2 = Key([5, 1, 5, 1])
             self.assertEqual(k1, k2)
+
+    def test_subsequence(self) -> None:
+        with self.subTest(msg="end=4でerror"):
+            with self.assertRaises(ValueError):
+                list(self.key.subsequence(4))
+
+        with self.subTest(msg="end<0でerror"):
+            with self.assertRaises(ValueError):
+                list(self.key.subsequence(-1))
+
+        with self.subTest(msg="end=3の場合"):
+            list_ = list(self.key.subsequence(3))
+            self.assertIn(Key([3]), list_)
+            self.assertIn(Key([2, 3]), list_)
+            self.assertIn(Key([1, 2, 3]), list_)
+            self.assertIn(Key([0, 1, 2, 3]), list_)
+
+        with self.subTest(msg="end=の場合"):
+            pass
 
 
 if __name__ == '__main__':
