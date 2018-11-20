@@ -11,8 +11,8 @@ from sanascan_backend.key import Key
 class TestVocabulary(unittest.TestCase):
     def setUp(self) -> None:
         with (Path.home() / 'arpa/LM0006.txt').open() as f:
-            lm = LangModel(f.read())
-        self.vocab = Vocabulary(lm.get_vocab())
+            self.lm = LangModel(f.read())
+        self.vocab = Vocabulary(self.lm.get_vocab())
         self.key = Key([3, 1, 4, TagWord('<num>')])
         self.keys = [
             Key([TagWord('<num>')]),
@@ -21,9 +21,11 @@ class TestVocabulary(unittest.TestCase):
             Key([3, 1, 4, TagWord('<num>')]),
         ]
 
-    # このテストが通らないことが致命的
     def test_have_num_tagwotd(self) -> None:
-        self.assertIn(TagWord('<num>'), self.vocab._datum.keys())
+        with self.subTest():
+            self.assertIn(TagWord('<num>'), self.lm.get_vocab())
+
+        self.assertIn(Key([TagWord('<num>')]), self.vocab._datum.keys())
 
     def test_get_by_key(self) -> None:
         list(self.vocab.get_by_key(self.key, 3))
