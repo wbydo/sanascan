@@ -2,7 +2,7 @@ from typing import List, Iterable
 
 from .word import Word
 from .lang_model import LangModel
-from .key_to_word_map import KeyToWordMap
+from .vocabulary import Vocabulary
 from .key import Key
 from .node import Node, RootNode, EOSNode
 
@@ -20,14 +20,14 @@ def estimate(
     wait_child: List[List[Node]] = [[] for i in range(len_+1)]
     wait_child[0].append(root_node)
 
-    key_to_word = KeyToWordMap(lang_model.get_vocab())
+    vocab = Vocabulary(lang_model.get_vocab())
 
     for i in range(len_):
         if len(wait_child[i]) == 0:
             continue
 
         candidates = wait_child[i]
-        for word, subkey in key_to_word.get_by_key(key, i):
+        for word, subkey in vocab.get_by_key(key, i):
             node = Node(word, candidates, lang_model)
 
             j = len(subkey) + i
