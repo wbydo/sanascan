@@ -25,14 +25,20 @@ class TestKey(unittest.TestCase):
     def test_subsequence(self) -> None:
         with self.subTest(msg="end=4でerror"):
             with self.assertRaises(ValueError):
-                list(self.key.subsequence(4))
+                list(self.key.subsequence_with_end(4))
 
         with self.subTest(msg="end<0でerror"):
             with self.assertRaises(ValueError):
-                list(self.key.subsequence(-1))
+                list(self.key.subsequence_with_end(-1))
 
-        with self.subTest(msg="end=3の場合"):
-            list_ = list(self.key.subsequence(3))
+        with self.subTest(msg="end=2"):
+            list_ = list(self.key.subsequence_with_end(2))
+            self.assertIn(Key([2]), list_)
+            self.assertIn(Key([1, 2]), list_)
+            self.assertIn(Key([0, 1, 2]), list_)
+
+        with self.subTest(msg="all_of_subsequence（end=3と同等なはず）"):
+            list_ = list(self.key.all_of_subsequence())
             self.assertIn(Key([3]), list_)
             self.assertIn(Key([2, 3]), list_)
             self.assertIn(Key([1, 2, 3]), list_)
