@@ -1,6 +1,6 @@
 import unittest
 
-from sanascan_backend.word import Word
+from sanascan_backend.word import Word, TagWord
 from sanascan_backend.key import Key
 
 
@@ -44,8 +44,19 @@ class TestKey(unittest.TestCase):
             self.assertIn(Key([1, 2, 3]), list_)
             self.assertIn(Key([0, 1, 2, 3]), list_)
 
-        with self.subTest(msg="end=の場合"):
-            pass
+        with self.subTest(msg="TagWordが絡む場合"):
+            k = Key([3, 1, 4, TagWord('<num>')])
+            list_ = list(k.all_of_subsequence())
+            self.assertIn(Key([TagWord('<num>')]), list_)
+            self.assertIn(Key([4, TagWord('<num>')]), list_)
+            self.assertIn(Key([1, 4, TagWord('<num>')]), list_)
+            self.assertIn(Key([3, 1, 4, TagWord('<num>')]), list_)
+
+            list_ = list(k.subsequence_with_end(1))
+            self.assertIn(Key([1]), list_)
+            self.assertIn(Key([3, 1]), list_)
+
+
 
 
 if __name__ == '__main__':
