@@ -21,7 +21,7 @@ class SearchFlag(Enum):
     STOP = auto()
 
 
-class KeyToWordMap():
+class Vocabulary():
     _datum: Dict[Key, List[Word]]
     _search_map: Dict[Key, SearchFlag]
 
@@ -43,11 +43,11 @@ class KeyToWordMap():
         for subkey in key.subsequence(0):
             self._search_map[subkey] = SearchFlag.PROCEED
 
-    def get_by_key(self, key: Key, start: int) -> Iterable[ResultOfGetByKey]:
+    def get_by_key(self, key: Key, end: int) -> Iterable[ResultOfGetByKey]:
         if not isinstance(key, Key):
             raise TypeError
 
-        for subkey in key.subsequence(start):
+        for subkey in key.subsequence(end):
             if self._search_map[subkey] == SearchFlag.STOP:
                 break
             if subkey in self._datum.keys():
