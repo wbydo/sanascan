@@ -13,7 +13,7 @@ class TestEstimator(unittest.TestCase):
         with (Path.home() / 'arpa/LM0006.txt').open() as f:
             self.lm = LangModel(f.read())
 
-    def test_hoge(self) -> None:
+    def test_estimate(self) -> None:
         # sentence = 'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高'
         sentence = '特に１Ｆのバーは最高'
 

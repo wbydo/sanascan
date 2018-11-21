@@ -2,7 +2,7 @@ from typing import List, Iterable
 
 from .word import Word
 from .lang_model import LangModel
-from .key_to_word_map import KeyToWordMap
+from .vocabulary import Vocabulary
 from .key import Key
 from .node import Node, RootNode, EOSNode
 
@@ -16,24 +16,25 @@ def estimate(
 
     root_node = RootNode()
 
-    len_ = len(key)
-    wait_child: List[List[Node]] = [[] for i in range(len_+1)]
+    key_len = len(key)
+    wait_child: List[List[Node]] = [[] for i in range(key_len+1)]
     wait_child[0].append(root_node)
 
-    key_to_word = KeyToWordMap(lang_model.get_vocab())
+    vocab = Vocabulary(lang_model.get_vocab())
 
-    for i in range(len_):
-        if len(wait_child[i]) == 0:
-            continue
+    for i in range(key_len):
+        for word, subkey in vocab.get_by_key(key, i):
+            subkey_len = len(subkey)
 
-        candidates = wait_child[i]
-        for word, subkey in key_to_word.get_by_key(key, i):
+            candidates_idx = i - subkey_len + 1
+            assert candidates_idx >= 0, f'i: {i}, subky: {subkey}'
+            candidates = wait_child[candidates_idx]
+
             node = Node(word, candidates, lang_model)
 
-            j = len(subkey) + i
-            wait_child[j].append(node)
+            wait_child[i+1].append(node)
 
-    eos_node = EOSNode(wait_child[len_], lang_model)
+    eos_node = EOSNode(wait_child[-1], lang_model)
 
     if eos_node.sentence is None:
         raise Exception('eos_node.sentence is None')
