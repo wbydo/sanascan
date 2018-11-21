@@ -3,9 +3,10 @@ from pathlib import Path
 
 from natto import MeCab
 
-from sanascan_backend.estimator import estimate
+from sanascan_backend.estimator import Estimator
 from sanascan_backend.lang_model import LangModel
 from sanascan_backend.word import Word
+from sanascan_backend.key import Key
 
 
 class TestEstimator(unittest.TestCase):
@@ -18,12 +19,14 @@ class TestEstimator(unittest.TestCase):
         sentence = '特に１Ｆのバーは最高'
 
         test_words = list(Word.from_sentence(sentence, MeCab()))
+        key = Key.from_words(test_words)
 
-        result = estimate(
-            test_words,
-            self.lm,
-        )
+        estimator = Estimator(self.lm)
+        for k in key:
+            estimator.add(k)
+        estimator.finish()
 
+        result = estimator.result
         self.assertEqual(test_words, result)
 
 
