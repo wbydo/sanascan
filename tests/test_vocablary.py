@@ -32,8 +32,5 @@ class TestVocabulary(unittest.TestCase):
             list(self.vocab.get_by_key(self.key, 3)),
             []
         )
-        # for word, key in self.vocab.get_by_key(self.key, 3):
-        #     print()
-        #     print(key)
-        #     print()
-        #     self.assertIn(key, self.keys)
+        for word, key in self.vocab.get_by_key(self.key, 3):
+            self.assertIn(key, self.keys)
