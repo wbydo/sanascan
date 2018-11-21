@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4ee810dd9b79d97e1e901e7dfd58f157198e0c71025a9324702454c8443b4373"
+            "sha256": "394db03d72868dcbea513bf334a3da78002080d609300b579a4c8c4b1bc44818"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -56,6 +56,13 @@
         "e1839a8": {
             "editable": true,
             "path": "."
+        },
+        "jaconv": {
+            "hashes": [
+                "sha256:c8d79ad7b44adc38634476f5ff4ee42b6d92ed4b7b01d31addd98f3567132bd8"
+            ],
+            "index": "pypi",
+            "version": "==0.2.3"
         },
         "natto-py": {
             "hashes": [
