@@ -17,14 +17,14 @@ class TestEstimator(unittest.TestCase):
         # sentence = 'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高'
         sentence = '特に１Ｆのバーは最高'
 
-        words = Word.from_sentence(sentence, MeCab())
+        test_words = list(Word.from_sentence(sentence, MeCab()))
+
         result = estimate(
-            words,
+            test_words,
             self.lm,
         )
 
-        correct = '特に/トクニ <num>/<num> <eng>/<eng> の/ノ バー/バー は/ハ 最高/サイコウ'
-        self.assertEqual(Word.to_str(result), correct)
+        self.assertEqual(test_words, result)
 
 
 if __name__ == '__main__':
