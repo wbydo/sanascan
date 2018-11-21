@@ -33,6 +33,8 @@ class Node:
 
 
 class RootNode(Node):
+    _word: TagWord
+
     def __init__(self) -> None:
         word = TagWord('<s>')
         self._word = word

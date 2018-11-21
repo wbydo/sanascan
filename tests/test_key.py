@@ -22,6 +22,14 @@ class TestKey(unittest.TestCase):
             k2 = Key([5, 1, 5, 1])
             self.assertEqual(k1, k2)
 
+    def test_add(self) -> None:
+        k1 = Key([0, 1, TagWord('<num>')])
+        k2 = Key([2, 3])
+        self.assertEqual(
+            k1 + k2,
+            Key([0, 1, TagWord('<num>'), 2, 3])
+        )
+
     def test_subsequence(self) -> None:
         with self.subTest(msg="end=4でerror"):
             with self.assertRaises(ValueError):

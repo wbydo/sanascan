@@ -1,4 +1,4 @@
-from typing import Tuple, Iterable, List, Union
+from typing import Tuple, Iterable, List, Union, Iterator
 
 from .word import Word, TagWord
 
@@ -48,6 +48,13 @@ class Key():
 
     def __repr__(self) -> str:
         return '<Key {}>'.format(repr(self._tpl))
+
+    def __iter__(self) -> 'Iterator[Key]':
+        for i in self._tpl:
+            yield Key([i])
+
+    def __add__(self, other: 'Key') -> 'Key':
+        return Key(self._tpl + other._tpl)
 
     def subsequence_with_end(self, end: int) -> 'Iterable[Key]':
         len_ = len(self._tpl)

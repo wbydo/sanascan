@@ -5,7 +5,7 @@ from natto import MeCab
 
 from sanascan_backend.estimator import Estimator
 from sanascan_backend.lang_model import LangModel
-from sanascan_backend.word import Word
+from sanascan_backend.word import Word, TagWord
 from sanascan_backend.key import Key
 
 
@@ -28,6 +28,22 @@ class TestEstimator(unittest.TestCase):
 
         result = estimator.result
         self.assertEqual(test_words, result)
+
+    def test_add_side_effect(
+            self,
+            msg: str = "addの副作用がちゃんと機能する"
+            ) -> None:
+        est = Estimator(self.lm)
+        est.add(Key([0]))
+
+        with self.subTest():
+            self.assertEqual(len(est.wait_child), 2)
+
+        with self.subTest():
+            self.assertEqual(
+                est.key,
+                Key([TagWord('<s>'), 0])
+            )
 
 
 if __name__ == '__main__':

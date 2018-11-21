@@ -43,11 +43,11 @@ class Vocabulary():
         for subkey in key.all_of_subsequence():
             self._search_map[subkey] = SearchFlag.PROCEED
 
-    def get_by_key(self, key: Key, end: int) -> Iterable[ResultOfGetByKey]:
+    def get_by_key(self, key: Key) -> Iterable[ResultOfGetByKey]:
         if not isinstance(key, Key):
             raise TypeError
 
-        for subkey in key.subsequence_with_end(end):
+        for subkey in key.all_of_subsequence():
             if self._search_map[subkey] == SearchFlag.STOP:
                 break
             if subkey in self._datum.keys():

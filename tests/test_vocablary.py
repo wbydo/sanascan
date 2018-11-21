@@ -28,8 +28,8 @@ class TestVocabulary(unittest.TestCase):
 
     def test_get_by_key(self) -> None:
         self.assertNotEqual(
-            list(self.vocab.get_by_key(self.key, 3)),
+            list(self.vocab.get_by_key(self.key)),
             []
         )
-        for word, key in self.vocab.get_by_key(self.key, 3):
+        for word, key in self.vocab.get_by_key(self.key):
             self.assertIn(key, self.keys)
