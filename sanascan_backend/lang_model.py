@@ -5,6 +5,7 @@ from enum import auto
 from itertools import chain
 
 from .word import Word
+from .vocabulary import Vocabulary
 
 
 class ArpaArea(Enum):
@@ -74,5 +75,8 @@ class LangModel:
             else:
                 return p
 
-    def get_vocab(self) -> Set[Word]:
+    def _get_word_set(self) -> Set[Word]:
         return set(chain.from_iterable(self._dic.keys()))
+
+    def create_vocabrary(self) -> Vocabulary:
+        return Vocabulary(self._get_word_set())

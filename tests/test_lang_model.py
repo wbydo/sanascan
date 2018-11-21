@@ -16,8 +16,11 @@ class TestLangModel(unittest.TestCase):
         words = [Word(surface='ホテル', yomi='ホテル')]
         self.lm.score(words)
 
-    def test_vocab(self, msg: str = 'lm.get_vocabが何らかを返すか\'だけの\'テスト') -> None:
-        self.lm.get_vocab()
+    def test_vocab(
+            self,
+            msg: str = 'lm._get_word_setが何らかを返すか\'だけの\'テスト'
+            ) -> None:
+        self.lm._get_word_set()
 
 
 if __name__ == '__main__':
