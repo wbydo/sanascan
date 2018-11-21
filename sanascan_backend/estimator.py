@@ -2,7 +2,6 @@ from typing import List, Iterable
 
 from .word import Word
 from .lang_model import LangModel
-from .vocabulary import Vocabulary
 from .key import Key
 from .node import Node, RootNode, EOSNode
 
@@ -20,7 +19,7 @@ def estimate(
     wait_child: List[List[Node]] = [[] for i in range(key_len+1)]
     wait_child[0].append(root_node)
 
-    vocab = Vocabulary(lang_model.get_vocab())
+    vocab = lang_model.create_vocabrary()
 
     for i in range(key_len):
         for word, subkey in vocab.get_by_key(key, i):
