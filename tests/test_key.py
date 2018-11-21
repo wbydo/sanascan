@@ -37,26 +37,35 @@ class TestKey(unittest.TestCase):
             self.assertIn(Key([1, 2]), list_)
             self.assertIn(Key([0, 1, 2]), list_)
 
-        with self.subTest(msg="all_of_subsequence（end=3と同等なはず）"):
-            list_ = list(self.key.all_of_subsequence())
-            self.assertIn(Key([3]), list_)
-            self.assertIn(Key([2, 3]), list_)
-            self.assertIn(Key([1, 2, 3]), list_)
-            self.assertIn(Key([0, 1, 2, 3]), list_)
+        with self.subTest(msg="all_of_subsequence（end=3と同等なはず）、順序も検査"):
+            target = list(self.key.all_of_subsequence())
+            wrong = [
+                Key([2, 3]),
+                Key([3]),
+                Key([1, 2, 3]),
+                Key([0, 1, 2, 3]),
+            ]
+            self.assertNotEqual(target, wrong)
 
-        with self.subTest(msg="TagWordが絡む場合"):
+            correct = [
+                Key([3]),
+                Key([2, 3]),
+                Key([1, 2, 3]),
+                Key([0, 1, 2, 3]),
+            ]
+            self.assertEqual(target, correct)
+
+        with self.subTest(msg="TagWordが絡む場合、順序もざっと検査"):
             k = Key([3, 1, 4, TagWord('<num>')])
-            list_ = list(k.all_of_subsequence())
-            self.assertIn(Key([TagWord('<num>')]), list_)
-            self.assertIn(Key([4, TagWord('<num>')]), list_)
-            self.assertIn(Key([1, 4, TagWord('<num>')]), list_)
-            self.assertIn(Key([3, 1, 4, TagWord('<num>')]), list_)
+            target = list(k.all_of_subsequence())
 
-            list_ = list(k.subsequence_with_end(1))
-            self.assertIn(Key([1]), list_)
-            self.assertIn(Key([3, 1]), list_)
-
-
+            correct = [
+                Key([TagWord('<num>')]),
+                Key([4, TagWord('<num>')]),
+                Key([1, 4, TagWord('<num>')]),
+                Key([3, 1, 4, TagWord('<num>')]),
+            ]
+            self.assertEqual(target, correct)
 
 
 if __name__ == '__main__':

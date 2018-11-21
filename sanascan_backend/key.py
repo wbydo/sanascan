@@ -54,7 +54,7 @@ class Key():
         if end > len_ - 1 or end < 0:
             raise ValueError()
 
-        for i in range(end+1):
+        for i in reversed(range(end+1)):
             subtpl = self._tpl[i:end+1]
             yield Key(subtpl)
 
