@@ -21,7 +21,7 @@ class TestVocabulary(unittest.TestCase):
             Key([3, 1, 4, TagWord('<num>')]),
         ]
 
-    def test_have_num_tagwotd(self) -> None:
+    def test_have_num_tagword(self) -> None:
         with self.subTest():
             self.assertIn(TagWord('<num>'), self.lm.get_vocab())
 
