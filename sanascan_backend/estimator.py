@@ -23,12 +23,6 @@ def estimate(
     vocab = Vocabulary(lang_model.get_vocab())
 
     for i in range(key_len):
-        # debug ######################################
-        check = list(vocab.get_by_key(key, i))
-        if not check:
-            raise Exception(f'i: {i}, key: {key}')
-        #############################################
-
         for word, subkey in vocab.get_by_key(key, i):
             subkey_len = len(subkey)
 
