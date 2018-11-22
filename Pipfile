@@ -9,6 +9,8 @@ setuptools = "*"
 natto-py = "*"
 numpy = "*"
 jaconv = "*"
+falcon = "*"
+gunicorn = "*"
 
 [dev-packages]
 sphinx = "*"
