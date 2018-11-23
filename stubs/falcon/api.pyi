@@ -11,7 +11,14 @@ class OnGetResource(Protocol):
 class OnPostResource(Protocol):
     def on_post(self, req: Request, resp: Response) -> None: ...
 
-Resource = Union[OnGetResource, OnPostResource]
+class OnPutResource(Protocol):
+    def on_put(self, req: Request, resp: Response) -> None: ...
+
+Resource = Union[
+    OnGetResource,
+    OnPostResource,
+    OnPutResource
+]
 
 class API(object):
     def add_route(self, uri_template: str, resource: Resource, *args: Any, **kwargs: Any) -> None: ...

@@ -30,11 +30,11 @@ class TestHTTP(testing.TestCase):
             result = self.simulate_put('/', params=params)
             self.assertLess(result.status_code, 400)
 
-        get_result = self.simulate_get('/')
+        get_result = self.simulate_get('/', params={'id': id_})
         self.assertLess(get_result.status_code, 400)
 
         correct = Word.to_str(test_words)
-        self.assertEqual(correct, get_result.json['sentence'])
+        self.assertEqual(correct, get_result.json['result'])
 
 
 if __name__ == '__main__':

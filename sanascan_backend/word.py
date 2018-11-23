@@ -100,6 +100,9 @@ class TagWord(Word):
             raise ValueError(arg)
         super(self.__class__, self).__init__(surface=arg, yomi=arg)
 
+    def __str__(self) -> str:
+        return self.surface
+
 
 class AnalyzeMorp:
     symbol: ClassVar[Pattern] = re.compile(r'^(?:\W|_|・)+$')

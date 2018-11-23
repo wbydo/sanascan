@@ -1,2 +1,5 @@
+from typing import Dict
+
+
 class Request:
-    pass
+    params: Dict[str, str]
