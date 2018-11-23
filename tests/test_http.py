@@ -10,10 +10,9 @@ class TestHTTP(testing.TestCase):
         super(self.__class__, self).setUp()
         self.api = api
 
-    def test_hello(self) -> None:
-        result = self.simulate_get('/')
-        d = {'hello': 'world'}
-        self.assertEqual(result.json, d)
+    def test_post(self) -> None:
+        result = self.simulate_post('/').json
+        self.assertIn('id', result.keys())
 
 
 if __name__ == '__main__':
