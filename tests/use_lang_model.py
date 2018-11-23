@@ -8,6 +8,7 @@ from sanascan_backend.lang_model import LangModel
 with (Path.home() / 'arpa/LM0006.txt').open() as f:
     LM = LangModel(f.read())
 
+
 class UseLangModel(unittest.TestCase):
     LM = ClassVar[LangModel]
 
