@@ -1,0 +1,3 @@
+from typing import Any
+class API(object):
+    def add_route(self, uri_template: str, resource: Any, *args: Any, **kwargs: Any) -> None: ...
