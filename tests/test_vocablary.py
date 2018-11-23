@@ -1,16 +1,12 @@
-import unittest
-
-from pathlib import Path
-
-from sanascan_backend.lang_model import LangModel
 from sanascan_backend.word import TagWord
 from sanascan_backend.key import Key
 
+from tests.use_lang_model import UseLangModel
 
-class TestVocabulary(unittest.TestCase):
+
+class TestVocabulary(UseLangModel):
     def setUp(self) -> None:
-        with (Path.home() / 'arpa/LM0006.txt').open() as f:
-            self.lm = LangModel(f.read())
+        self.lm = self.__class__.LM
         self.vocab = self.lm.create_vocabrary()
         self.key = Key([3, 1, 4, TagWord('<num>')])
         self.keys = [

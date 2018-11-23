@@ -1,15 +1,14 @@
 import unittest
-from pathlib import Path
 
 from sanascan_backend.node import Node, RootNode, EOSNode
 from sanascan_backend.word import Word, TagWord
-from sanascan_backend.lang_model import LangModel
+
+from tests.use_lang_model import UseLangModel
 
 
-class TestNode(unittest.TestCase):
+class TestNode(UseLangModel):
     def setUp(self) -> None:
-        with (Path.home() / 'arpa/LM0006.txt').open() as f:
-            self.lm = LangModel(f.read())
+        self.lm = self.__class__.LM
 
         self.hoge_word = Word(surface='特に', yomi='トクニ')
         self.root = RootNode()
