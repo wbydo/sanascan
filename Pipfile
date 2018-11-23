@@ -9,6 +9,8 @@ setuptools = "*"
 natto-py = "*"
 numpy = "*"
 jaconv = "*"
+falcon = "*"
+gunicorn = "*"
 
 [dev-packages]
 sphinx = "*"
@@ -21,6 +23,7 @@ mypy = "*"
 python_version = "3.6"
 
 [scripts]
+start = "gunicorn sanascan_backend.http:api"
 apidoc = "sphinx-apidoc -f -o ./source ./hoge"
 build = "sphinx-build -a ./source ./docs"
 test = "python -m unittest discover -s ./tests -v"
