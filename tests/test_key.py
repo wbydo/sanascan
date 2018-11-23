@@ -22,6 +22,14 @@ class TestKey(unittest.TestCase):
             k2 = Key([5, 1, 5, 1])
             self.assertEqual(k1, k2)
 
+    def test_str(self) -> None:
+        k = Key([1])
+        self.assertEqual(str(k), '1')
+
+        k = Key([0, 1])
+        with self.assertRaises(TypeError):
+            str(k)
+
     def test_add(self) -> None:
         k1 = Key([0, 1, TagWord('<num>')])
         k2 = Key([2, 3])
