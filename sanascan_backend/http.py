@@ -22,7 +22,9 @@ class RootResource:
         with (Path.home() / 'arpa/LM0006.txt').open() as f:
             self._lm = LangModel(f.read())
 
-    def on_post(self, req: Request, resp: Response) -> None:
+    def on_post(self, req: Request, resp: Response, *, eid: int = 0) -> None:
+        if not eid == 0:
+            raise ValueError()
         e = Estimator(self._lm)
         eid = id(e)
         self._estimators[eid] = e
@@ -44,7 +46,7 @@ class EIDResouce:
     def __init__(self, root_resource: RootResource) -> None:
         self._root = root_resource
 
-    def on_post(self, req: Request, resp: Response, eid: int) -> None:
+    def on_post(self, req: Request, resp: Response, *, eid: int) -> None:
         try:
             key_str = req.params['key']
         except Exception:
@@ -56,7 +58,7 @@ class EIDResouce:
         self._root[eid].add(key)
         resp.status = HTTP_204
 
-    def on_get(self, req: Request, resp: Response, eid: int) -> None:
+    def on_get(self, req: Request, resp: Response, *, eid: int) -> None:
         self._root[eid].finish()
 
         words = self._root[eid].result
