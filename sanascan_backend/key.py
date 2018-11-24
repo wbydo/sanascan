@@ -49,6 +49,11 @@ class Key():
     def __repr__(self) -> str:
         return '<Key {}>'.format(repr(self._tpl))
 
+    def __str__(self) -> str:
+        if not len(self) == 1:
+            raise TypeError('lenが1のときしかstrできない')
+        return str(self._tpl[0])
+
     def __iter__(self) -> 'Iterator[Key]':
         for i in self._tpl:
             yield Key([i])

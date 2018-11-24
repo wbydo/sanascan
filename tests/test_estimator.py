@@ -1,18 +1,17 @@
 import unittest
-from pathlib import Path
 
 from natto import MeCab
 
 from sanascan_backend.estimator import Estimator
-from sanascan_backend.lang_model import LangModel
 from sanascan_backend.word import Word, TagWord
 from sanascan_backend.key import Key
 
+from tests.use_lang_model import UseLangModel
 
-class TestEstimator(unittest.TestCase):
+
+class TestEstimator(UseLangModel):
     def setUp(self) -> None:
-        with (Path.home() / 'arpa/LM0006.txt').open() as f:
-            self.lm = LangModel(f.read())
+        self.lm = self.__class__.LM
 
     def test_estimate(self) -> None:
         # sentence = 'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高'

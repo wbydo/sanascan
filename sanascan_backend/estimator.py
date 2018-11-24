@@ -29,7 +29,7 @@ class Estimator:
 
         self.key = Key([s_tag])
 
-    def add(self, key: Key) -> List[Word]:
+    def add(self, key: Key) -> None:
         assert len(key) == 1
 
         self.wait_child.append([])
@@ -44,7 +44,7 @@ class Estimator:
 
         scores = [node.score for node in self.wait_child[-1]]
         max_node = self.wait_child[-1][scores.index(max(scores))]
-        return max_node.sentence
+        self.result = max_node.sentence[1:]
 
     def finish(self) -> None:
         self.eos_node = EOSNode(self.wait_child[-1], self.lang_model)
