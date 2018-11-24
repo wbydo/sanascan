@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 
 from falcon import API, MEDIA_JSON, Request, Response
-from falcon import HTTP_200, HTTP_201, HTTP_204
+from falcon import HTTP_200, HTTP_201
 
 from .estimator import Estimator
 from .lang_model import LangModel
@@ -56,7 +56,14 @@ class EIDResouce:
         key: Key = Key([klass(key_str)])
 
         self._root[eid].add(key)
-        resp.status = HTTP_204
+        words = self._root[eid].result
+
+        resp.data = json.dumps({
+            'eid': eid,
+            'result': Word.to_str(words),
+        }).encode('utf-8')
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
 
     def on_get(self, req: Request, resp: Response, *, eid: int) -> None:
         self._root[eid].finish()
