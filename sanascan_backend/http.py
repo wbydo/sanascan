@@ -11,7 +11,7 @@ from .word import Word, TagWord
 from .key import Key
 
 
-class Resource:
+class RootResource:
     _estimators: Dict[int, Estimator]
     _lm: LangModel
 
@@ -24,37 +24,48 @@ class Resource:
 
     def on_post(self, req: Request, resp: Response) -> None:
         e = Estimator(self._lm)
-        id_ = id(e)
-        self._estimators[id_] = e
+        eid = id(e)
+        self._estimators[eid] = e
 
         resp.data = json.dumps(
-            {'id': id_}
+            {'eid': eid}
         ).encode('utf-8')
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_201
+        return
 
-    def on_put(self, req: Request, resp: Response) -> None:
-        id_ = int(req.params['id'])
-        key_str = req.params['key']
+    def __getitem__(self, arg: int) -> Estimator:
+        return self._estimators[arg]
+
+
+class EIDResouce:
+    _root: RootResource
+
+    def __init__(self, root_resource: RootResource) -> None:
+        self._root = root_resource
+
+    def on_post(self, req: Request, resp: Response, eid: int) -> None:
+        try:
+            key_str = req.params['key']
+        except Exception:
+            raise Exception(req.params)
 
         klass = TagWord if TagWord.is_include(key_str) else int
         key: Key = Key([klass(key_str)])
 
-        self._estimators[id_].add(key)
-
+        self._root[eid].add(key)
         resp.status = HTTP_204
 
-    def on_get(self, req: Request, resp: Response) -> None:
-        id_ = int(req.params['id'])
-        self._estimators[id_].finish()
+    def on_get(self, req: Request, resp: Response, eid: int) -> None:
+        self._root[eid].finish()
 
-        words = self._estimators[id_].result
+        words = self._root[eid].result
 
         if words is None:
             raise Exception()
 
         resp.data = json.dumps({
-            'id': id_,
+            'id': eid,
             'result': Word.to_str(words)
         }).encode('utf-8')
 
@@ -62,6 +73,9 @@ class Resource:
         resp.status = HTTP_200
 
 
+root = RootResource()
+eid_resource = EIDResouce(root)
+
 api = API()
-resource = Resource()
-api.add_route('/', resource)
+api.add_route('/', root)
+api.add_route('/{eid:int}', eid_resource)

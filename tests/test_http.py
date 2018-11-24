@@ -14,9 +14,9 @@ class TestHTTP(testing.TestCase):
         self.api = api
 
     def test_http_estimate(self) -> None:
-        post_result = self.simulate_post('/').json
-        self.assertIn('id', post_result.keys())
-        id_ = post_result['id']
+        resp = self.simulate_post('/').json
+        self.assertIn('eid', resp.keys())
+        eid = resp['eid']
 
         sentence = '特に１Ｆのバーは最高'
         test_words = list(Word.from_sentence(sentence, MeCab()))
@@ -24,13 +24,12 @@ class TestHTTP(testing.TestCase):
 
         for k in key:
             params = {
-                'id': id_,
                 'key': str(k)
             }
-            result = self.simulate_put('/', params=params)
+            result = self.simulate_post(f'/{eid}', params=params)
             self.assertLess(result.status_code, 400)
 
-        get_result = self.simulate_get('/', params={'id': id_})
+        get_result = self.simulate_get(f'/{eid}')
         self.assertLess(get_result.status_code, 400)
 
         correct = Word.to_str(test_words)
