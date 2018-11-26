@@ -4,9 +4,10 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 
 import App from "./App";
-import {default as characterBoardReducer} from "./characterBoard/index";
+import reducer from "./reducers";
+import * as ActionType from "./types";
 
-const store = createStore(characterBoardReducer);
+const store = createStore(reducer);
 
 ReactDOM.render(
   <Provider store={store}>

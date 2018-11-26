@@ -1,7 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
 
-import ColumnStatus from "./ColumnStatus";
+import ColumnStatus from "./characterBoard/ColumnStatus";
 import {State} from "./reducers";
 
 const chars: string[][] = [
