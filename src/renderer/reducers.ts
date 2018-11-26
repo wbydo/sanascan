@@ -2,7 +2,7 @@ import {Action} from "./actions";
 import CharacterBoard from "./CharacterBoard";
 import {MAX_COLUMN_INDEX} from "./CharacterBoard";
 import * as types from "./types";
-import SanaScanError from "../error";
+import SanaScanError from "./error";
 
 export interface State {
   activeColumn: number;
