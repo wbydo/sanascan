@@ -147,5 +147,6 @@ const renderer = {
 };
 
 module.exports = [
-  main, renderer
+  main,
+  renderer,
 ];
