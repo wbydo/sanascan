@@ -12,10 +12,7 @@ const initialState: State = {
   activeColumn: 0,
 };
 
-type Reducer = (state: State | undefined, action: Action) => State;
-type NonNullableReducer = (state: State, action: Action) => State;
-
-const increment: NonNullableReducer = (state, action) => {
+const increment = (state: State, action: Action) => {
   if (action.type !== types.INCREMENT) {
     throw new SanaScanError();
   }
@@ -26,7 +23,7 @@ const increment: NonNullableReducer = (state, action) => {
   return {activeColumn: state.activeColumn + 1};
 };
 
-const reducer: Reducer = (state, action) => {
+const reducer = (state: State | undefined, action: Action) => {
   if (!state) {
     return initialState;
   }
@@ -34,7 +31,7 @@ const reducer: Reducer = (state, action) => {
   if (action.type === types.INCREMENT) {
     return increment(state, action);
   }
-  throw new SanaScanError();
+  return state;
 };
 
 export default reducer;
