@@ -1,17 +1,22 @@
-import { delay } from "redux-saga";
-import { put, all } from "redux-saga/effects";
+import { delay, SagaIterator } from "redux-saga";
+import { put, takeEvery, call, all } from "redux-saga/effects";
+
+import { ASYNC_INCREMENT } from "./types";
 
 import { increment } from "./actions";
 
-// export function* incrementAsync(): IterableIterator<any> {
-//   while(true){
-//     yield delay(1000);
-//     yield put(increment());
-//   }
-// }
-//
-// export default function* rootSaga(): Iterable<any> {
-//   while(true){
-//     yield incrementAsync();
-//   }
-// }
+export function* incrementAsync(){
+  console.log('incrementAsync');
+  yield delay(1000);
+  yield put(increment());
+}
+
+function* watchAsyncIncrement() {
+  yield takeEvery(ASYNC_INCREMENT, incrementAsync)
+}
+
+export default function* rootSaga() {
+  yield all([
+    call(watchAsyncIncrement),
+  ]);
+}
