@@ -34,7 +34,7 @@ const reducer: Reducer = (state, action) => {
   if (action.type === types.INCREMENT) {
     return increment(state, action);
   }
-  return state
+  return state;
 };
 
 export default reducer;

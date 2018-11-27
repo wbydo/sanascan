@@ -38,8 +38,8 @@ class App extends React.Component<Props, {}> {
 
 const mdp: MapDispatchToProps = (dispatch) => {
   return {
-    increment: () => dispatch(increment()),
     async_increment: () => dispatch(incrementAsync()),
+    increment: () => dispatch(increment()),
   };
 };
 

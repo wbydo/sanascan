@@ -5,14 +5,13 @@ import { ASYNC_INCREMENT } from "./types";
 
 import { increment } from "./actions";
 
-export function* incrementAsync(){
-  console.log('incrementAsync');
+export function* incrementAsync() {
   yield delay(1000);
   yield put(increment());
 }
 
 function* watchAsyncIncrement() {
-  yield takeEvery(ASYNC_INCREMENT, incrementAsync)
+  yield takeEvery(ASYNC_INCREMENT, incrementAsync);
 }
 
 export default function* rootSaga() {
