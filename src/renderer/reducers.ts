@@ -1,7 +1,7 @@
 import {Action} from "./actions";
 import CharacterBoard from "./CharacterBoard";
 import {MAX_COLUMN_INDEX} from "./CharacterBoard";
-import * as types from "./types";
+import { INCREMENT } from "./types";
 import SanaScanError from "./error";
 
 export interface State {
@@ -13,7 +13,7 @@ const initialState: State = {
 };
 
 const increment = (state: State, action: Action) => {
-  if (action.type !== types.INCREMENT) {
+  if (action.type !== INCREMENT) {
     throw new SanaScanError();
   }
 
@@ -28,7 +28,7 @@ const reducer = (state: State | undefined, action: Action) => {
     return initialState;
   }
 
-  if (action.type === types.INCREMENT) {
+  if (action.type === INCREMENT) {
     return increment(state, action);
   }
   return state;

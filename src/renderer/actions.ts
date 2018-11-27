@@ -10,8 +10,8 @@ export const increment: () => Action = () => {
   };
 };
 
-export const asyncIncrement: () => Action = () => {
+export const startIncrement: () => Action = () => {
   return {
-    type: types.ASYNC_INCREMENT,
+    type: types.START_INCREMENT,
   };
 };

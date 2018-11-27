@@ -1,17 +1,19 @@
 import { delay, SagaIterator } from "redux-saga";
 import { put, takeEvery, call, all } from "redux-saga/effects";
 
-import { ASYNC_INCREMENT } from "./types";
+import { START_INCREMENT } from "./types";
 
 import { increment } from "./actions";
 
-export function* incrementAsync() {
-  yield delay(1000);
-  yield put(increment());
+export function* infinity_increment() {
+  while (true) {
+    yield delay(1000);
+    yield put(increment());
+  }
 }
 
 function* watchAsyncIncrement() {
-  yield takeEvery(ASYNC_INCREMENT, incrementAsync);
+  yield takeEvery(START_INCREMENT, infinity_increment);
 }
 
 export default function* rootSaga() {

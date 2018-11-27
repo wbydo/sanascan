@@ -3,10 +3,10 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, asyncIncrement} from "./actions";
+import {Action, startIncrement} from "./actions";
 
 interface Props {
-  asyncIncrement: () => void;
+  startIncrement: () => void;
 }
 
 type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
@@ -17,20 +17,20 @@ class App extends React.Component<Props, {}> {
       <div>
         <CharacterBoard />
         <button type="button" onClick={this.handleOnClick}>
-          async
+          start
         </button>
       </div>
     );
   }
 
   public handleOnClick = (event: React.MouseEvent): void => {
-    return this.props.asyncIncrement();
+    return this.props.startIncrement();
   }
 }
 
 const mdp: MapDispatchToProps = (dispatch) => {
   return {
-    asyncIncrement: () => dispatch(asyncIncrement()),
+    startIncrement: () => dispatch(startIncrement()),
   };
 };
 
