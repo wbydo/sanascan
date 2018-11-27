@@ -11,19 +11,16 @@ interface Props {
 
 type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
 
-class App extends React.Component<Props, {}> {
+class App extends React.Component<Props> {
   public render() {
     return(
       <div>
         <CharacterBoard />
-        <button type="button" onClick={this.handleOnClick}>
-          start
-        </button>
       </div>
     );
   }
 
-  public handleOnClick = (event: React.MouseEvent): void => {
+  public componentDidMount = () => {
     return this.props.startIncrement();
   }
 }
