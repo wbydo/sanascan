@@ -1,30 +1,35 @@
+import { combineReducers } from "redux";
+
 import {Action} from "./actions";
 import CharacterBoard from "./CharacterBoard";
 import {MAX_COLUMN_INDEX} from "./CharacterBoard";
 import { INCREMENT } from "./types";
 import SanaScanError from "./error";
 
-export interface State {
+interface RootState {
   activeColumn: number;
 }
 
-const initialState: State = {
-  activeColumn: 0,
-};
+// CharacterBoardReducer
+// /////////////////////////////////////////////
 
-const increment = (state: State, action: Action) => {
+type CharacterBoardState = number;
+
+const initialState: number = 0;
+
+const increment = (state: number, action: Action) => {
   if (action.type !== INCREMENT) {
     throw new SanaScanError();
   }
 
-  if (state.activeColumn === MAX_COLUMN_INDEX) {
+  if (state === MAX_COLUMN_INDEX) {
     return initialState;
   }
-  return {activeColumn: state.activeColumn + 1};
+  return state + 1;
 };
 
-const reducer = (state: State | undefined, action: Action) => {
-  if (!state) {
+const characterBoardreducer = (state: number | undefined, action: Action) => {
+  if (state === undefined) {
     return initialState;
   }
 
@@ -34,4 +39,15 @@ const reducer = (state: State | undefined, action: Action) => {
   return state;
 };
 
-export default reducer;
+// /////////////////////////////////////////////
+// CharacterBoardReducer
+
+// rootReducer
+// /////////////////////////////////////////////
+
+export const rootReducer = combineReducers<RootState>({
+  activeColumn: characterBoardreducer,
+});
+// /////////////////////////////////////////////
+
+// rootReducer
