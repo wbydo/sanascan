@@ -8,6 +8,7 @@ import SanaScanError from "./error";
 
 interface RootState {
   activeColumn: number;
+  scanSpeed: number;
 }
 
 // CharacterBoardReducer
@@ -42,11 +43,30 @@ const characterBoardreducer = (state: number | undefined, action: Action) => {
 // /////////////////////////////////////////////
 // CharacterBoardReducer
 
+// /////////////////////////////////////////////
+// sagaReducer
+type SagaState = number;
+const initialSagaState: SagaState = 500;
+
+const sagaReducer = (state: number | undefined, action: Action) => {
+  if (state === undefined) {
+    return initialSagaState;
+  }
+
+// 本来はアクション毎に振り分ける
+
+  return state;
+};
+
+// sagaReducer
+// /////////////////////////////////////////////
+
 // rootReducer
 // /////////////////////////////////////////////
 
 export const rootReducer = combineReducers({
   activeColumn: characterBoardreducer,
+  scanSpeed: sagaReducer,
 });
 // /////////////////////////////////////////////
 

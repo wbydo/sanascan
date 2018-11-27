@@ -1,5 +1,5 @@
 import { delay, SagaIterator } from "redux-saga";
-import { put, takeEvery, call, all } from "redux-saga/effects";
+import { put, takeEvery, call, all, select } from "redux-saga/effects";
 
 import { START_INCREMENT } from "./types";
 
@@ -7,7 +7,9 @@ import { increment } from "./actions";
 
 export function* infinity_increment() {
   while (true) {
-    yield delay(1000);
+    const state = yield select();
+    const scanSpeed = state.scanSpeed;
+    yield delay(scanSpeed);
     yield put(increment());
   }
 }
