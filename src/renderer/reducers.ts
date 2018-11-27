@@ -45,7 +45,7 @@ const characterBoardreducer = (state: number | undefined, action: Action) => {
 // rootReducer
 // /////////////////////////////////////////////
 
-export const rootReducer = combineReducers<RootState>({
+export const rootReducer = combineReducers({
   activeColumn: characterBoardreducer,
 });
 // /////////////////////////////////////////////
