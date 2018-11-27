@@ -7,7 +7,7 @@ import createSagaMiddleware from "redux-saga";
 import App from "./App";
 import reducer from "./reducers";
 import * as ActionType from "./types";
-import rootSaga from "./sagas";
+// import rootSaga from "./sagas";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -16,7 +16,7 @@ const store = createStore(
   applyMiddleware(sagaMiddleware),
 );
 
-sagaMiddleware.run(rootSaga);
+// sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>

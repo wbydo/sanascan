@@ -14,8 +14,11 @@ type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
 class App extends React.Component<Props, {}> {
   public render() {
     return(
-      <div onClick={this.handleOnClick}>
+      <div>
         <CharacterBoard />
+        <button type="button" onClick={this.handleOnClick}>
+          sync
+        </button>
       </div>
     );
   }
