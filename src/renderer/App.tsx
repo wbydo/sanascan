@@ -3,10 +3,9 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, increment, asyncIncrement} from "./actions";
+import {Action, asyncIncrement} from "./actions";
 
 interface Props {
-  increment: () => void;
   asyncIncrement: () => void;
 }
 
@@ -18,9 +17,6 @@ class App extends React.Component<Props, {}> {
       <div>
         <CharacterBoard />
         <button type="button" onClick={this.handleOnClick}>
-          sync
-        </button>
-        <button type="button" onClick={this.handleAsync}>
           async
         </button>
       </div>
@@ -28,10 +24,6 @@ class App extends React.Component<Props, {}> {
   }
 
   public handleOnClick = (event: React.MouseEvent): void => {
-    return this.props.increment();
-  }
-
-  public handleAsync = (event: React.MouseEvent): void => {
     return this.props.asyncIncrement();
   }
 }
@@ -39,7 +31,6 @@ class App extends React.Component<Props, {}> {
 const mdp: MapDispatchToProps = (dispatch) => {
   return {
     asyncIncrement: () => dispatch(asyncIncrement()),
-    increment: () => dispatch(increment()),
   };
 };
 
