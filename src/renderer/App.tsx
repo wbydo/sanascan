@@ -3,11 +3,11 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, increment, incrementAsync} from "./actions";
+import {Action, increment, asyncIncrement} from "./actions";
 
 interface Props {
   increment: () => void;
-  async_increment: () => void;
+  asyncIncrement: () => void;
 }
 
 type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
@@ -32,13 +32,13 @@ class App extends React.Component<Props, {}> {
   }
 
   public handleAsync = (event: React.MouseEvent): void => {
-    return this.props.async_increment();
+    return this.props.asyncIncrement();
   }
 }
 
 const mdp: MapDispatchToProps = (dispatch) => {
   return {
-    async_increment: () => dispatch(incrementAsync()),
+    asyncIncrement: () => dispatch(asyncIncrement()),
     increment: () => dispatch(increment()),
   };
 };

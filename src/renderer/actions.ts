@@ -10,7 +10,7 @@ export const increment: () => Action = () => {
   };
 };
 
-export const incrementAsync: () => Action = () => {
+export const asyncIncrement: () => Action = () => {
   return {
     type: types.ASYNC_INCREMENT,
   };
