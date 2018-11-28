@@ -1,17 +1,25 @@
-import { delay } from "redux-saga";
-import { put, all } from "redux-saga/effects";
+import { delay, SagaIterator } from "redux-saga";
+import { put, takeEvery, call, all, select } from "redux-saga/effects";
+
+import { START_INCREMENT } from "./types";
 
 import { increment } from "./actions";
 
-export function* incrementAsync(): IterableIterator<any> {
-  while(true){
-    yield delay(1000);
+export function* infinity_increment() {
+  while (true) {
+    const state = yield select();
+    const scanSpeed = state.scanSpeed;
+    yield delay(scanSpeed);
     yield put(increment());
   }
 }
 
-export default function* rootSaga(): Iterable<any> {
-  while(true){
-    yield incrementAsync();
-  }
+function* watchAsyncIncrement() {
+  yield takeEvery(START_INCREMENT, infinity_increment);
+}
+
+export default function* rootSaga() {
+  yield all([
+    call(watchAsyncIncrement),
+  ]);
 }

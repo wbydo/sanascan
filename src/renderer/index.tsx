@@ -3,17 +3,21 @@ import * as ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 import App from "./App";
-import reducer from "./reducers";
-import * as ActionType from "./types";
+import { rootReducer } from "./reducers";
 import rootSaga from "./sagas";
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
-  reducer,
+const enhancer = composeWithDevTools(
   applyMiddleware(sagaMiddleware),
+);
+
+const store = createStore(
+  rootReducer,
+  enhancer,
 );
 
 sagaMiddleware.run(rootSaga);

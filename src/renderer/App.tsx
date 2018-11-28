@@ -3,30 +3,32 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, increment} from "./actions";
+import {Action, startIncrement} from "./actions";
 
 interface Props {
-  increment: () => void;
+  startIncrement: () => void;
 }
 
 type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
 
-class App extends React.Component<Props, {}> {
+class App extends React.Component<Props> {
   public render() {
     return(
-      <div onClick={this.handleOnClick}>
+      <div>
         <CharacterBoard />
       </div>
     );
   }
 
-  public handleOnClick = (event: React.MouseEvent): void => {
-    return this.props.increment();
+  public componentDidMount = () => {
+    return this.props.startIncrement();
   }
 }
 
 const mdp: MapDispatchToProps = (dispatch) => {
-  return {increment: () => dispatch(increment())};
+  return {
+    startIncrement: () => dispatch(startIncrement()),
+  };
 };
 
 export default connect(null, mdp)(App);

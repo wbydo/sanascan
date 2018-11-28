@@ -9,3 +9,9 @@ export const increment: () => Action = () => {
     type: types.INCREMENT,
   };
 };
+
+export const startIncrement: () => Action = () => {
+  return {
+    type: types.START_INCREMENT,
+  };
+};
