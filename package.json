@@ -4,9 +4,11 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "webpack-dev-server --hot --config ./webpack.renderer.js"
+    "build:all": "webpack",
+    "build:renderer": "webpack --config webpack.renderer.build.js",
+    "build:main": "webpack --config webpack.main.js",
+    "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "git+https://wbydo@bitbucket.org/wbydo/caluculator.git",
   "author": "wbydo <wbydo@users.noreply.github.com>",
