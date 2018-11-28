@@ -1,23 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-/*
-* SplitChunksPlugin is enabled by default and replaced
-* deprecated CommonsChunkPlugin. It automatically identifies modules which
-* should be splitted of chunk by heuristics using module duplication count and
-* module category (i. e. node_modules). And splits the chunks…
-*
-* It is safe to remove "splitChunks" from the generated configuration
-* and was added as an educational example.
-*
-* https://webpack.js.org/plugins/split-chunks-plugin/
-*
-*/
 module.exports = {
   mode: 'development',
-  // target: 'electron-renderer',
   entry: path.join(__dirname, 'src', 'renderer','index'),
 
   output: {
@@ -86,11 +72,4 @@ module.exports = {
       name: false
     }
   },
-
-  devServer: {
-    inline: true,
-    contentBase: 'dist'
-  },
-
-  devtool: "cheap-module-source-map",
 };
