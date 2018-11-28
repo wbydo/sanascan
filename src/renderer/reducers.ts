@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 import {Action} from "./actions";
 import CharacterBoard from "./CharacterBoard";
 import {MAX_COLUMN_INDEX} from "./CharacterBoard";
-import { INCREMENT } from "./types";
+import * as types from "./types";
 import SanaScanError from "./error";
 
 interface RootState {
@@ -19,7 +19,7 @@ type CharacterBoardState = number;
 const initialState: number = 0;
 
 const increment = (state: number, action: Action) => {
-  if (action.type !== INCREMENT) {
+  if (action.type !== types.INCREMENT) {
     throw new SanaScanError();
   }
 
@@ -34,7 +34,7 @@ const characterBoardreducer = (state: number | undefined, action: Action) => {
     return initialState;
   }
 
-  if (action.type === INCREMENT) {
+  if (action.type === types.INCREMENT) {
     return increment(state, action);
   }
   return state;
@@ -53,7 +53,13 @@ const sagaReducer = (state: number | undefined, action: Action) => {
     return initialSagaState;
   }
 
-// 本来はアクション毎に振り分ける
+  if (action.type === types.SET_SCAN_SPEED) {
+    if (!("scanSpeed" in action)) {
+      throw new TypeError();
+    }
+
+    return action.scanSpeed;
+  }
 
   return state;
 };
