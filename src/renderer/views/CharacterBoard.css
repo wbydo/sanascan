@@ -1,7 +1,9 @@
+@value tableHeight from "../global.css";
+
 .characterBoard {
   border-collapse: collapse;
   width: 100%;
-  height: 500px;
+  height: tableHeight;
 }
 
 .data {

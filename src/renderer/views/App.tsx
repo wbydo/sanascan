@@ -5,6 +5,7 @@ import {Dispatch} from "redux";
 import CharacterBoard from "./CharacterBoard";
 import {Action, startIncrement} from "../state/actions";
 import { Modal } from "./Modal";
+import * as styles from "./App.css";
 
 interface Props {
   startIncrement: () => void;
@@ -15,8 +16,9 @@ type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
 class App extends React.Component<Props> {
   public render() {
     return(
-      <div>
+      <div id="App" className={styles.app}>
         <CharacterBoard />
+        <Modal />
         <button>On</button>
       </div>
     );
