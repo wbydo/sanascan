@@ -8,10 +8,11 @@ import SanaScanError from "../error";
 interface RootState {
   activeColumn: number;
   scanSpeed: number;
+  configIsActive: boolean;
 }
 
-// CharacterBoardReducer
 // /////////////////////////////////////////////
+// activeColumn
 
 type CharacterBoardState = number;
 
@@ -39,11 +40,11 @@ const characterBoardreducer = (state: number | undefined, action: Action) => {
   return state;
 };
 
+// activeColumn
 // /////////////////////////////////////////////
-// CharacterBoardReducer
 
 // /////////////////////////////////////////////
-// sagaReducer
+// scanSpeed
 type SagaState = number;
 const initialSagaState: SagaState = 500;
 
@@ -63,16 +64,16 @@ const sagaReducer = (state: number | undefined, action: Action) => {
   return state;
 };
 
-// sagaReducer
+// scanSpeed
 // /////////////////////////////////////////////
 
-// rootReducer
 // /////////////////////////////////////////////
+// rootReducer
 
 export const rootReducer = combineReducers({
   activeColumn: characterBoardreducer,
   scanSpeed: sagaReducer,
 });
-// /////////////////////////////////////////////
 
 // rootReducer
+// /////////////////////////////////////////////
