@@ -1,7 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
 
-import ColumnStatus from "./characterBoard/ColumnStatus";
+import ColumnStatus from "./ColumnStatus";
 
 const chars: string[][] = [
   ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"],

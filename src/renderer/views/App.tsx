@@ -2,8 +2,8 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import CharacterBoard from "./CharacterBoard";
-import {Action, startIncrement} from "./actions";
+import CharacterBoard from "./CharacterBoard/index";
+import {Action, startIncrement} from "../actions";
 import { Modal } from "./modal";
 
 interface Props {
