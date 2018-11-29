@@ -8,7 +8,7 @@ import SanaScanError from "../error";
 interface RootState {
   activeColumn: number;
   scanSpeed: number;
-  configIsActive: boolean;
+  modalIsActive: boolean;
 }
 
 // /////////////////////////////////////////////
@@ -68,10 +68,32 @@ const sagaReducer = (state: number | undefined, action: Action) => {
 // /////////////////////////////////////////////
 
 // /////////////////////////////////////////////
+// modalIsActive
+
+const modalIsActiveReducer = (state: boolean | undefined, action: Action) => {
+  if (state === undefined) {
+    return false;
+  }
+
+  if (action.type === types.ACTIVATE_CONFIGURE) {
+    return true;
+  }
+
+  if (action.type === types.DEACTIVATE_CONFIGURE) {
+    return false;
+  }
+
+  return state;
+};
+// modalIsActive
+// /////////////////////////////////////////////
+
+// /////////////////////////////////////////////
 // rootReducer
 
 export const rootReducer = combineReducers({
   activeColumn: characterBoardreducer,
+  modalIsActive: modalIsActiveReducer,
   scanSpeed: sagaReducer,
 });
 

@@ -23,3 +23,15 @@ export const setScanSpeed = (scanSpeed: number): Action => {
     type: types.SET_SCAN_SPEED,
   };
 };
+
+export const activateConfigure: () => Action = () => {
+  return {
+    type: types.ACTIVATE_CONFIGURE,
+  };
+};
+
+export const deactivateConfigure: () => Action = () => {
+  return {
+    type: types.DEACTIVATE_CONFIGURE,
+  };
+};

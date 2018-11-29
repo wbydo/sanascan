@@ -3,23 +3,28 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, startIncrement} from "../state/actions";
-import { Configure } from "./Configure";
+import {Action, startIncrement, activateConfigure} from "../state/actions";
+import Configure from "./Configure";
 import * as styles from "./App.css";
 
-interface Props {
+interface StateProps {
+  modalIsActive: boolean;
+}
+
+interface DispatchProps {
+  activateConfigure: () => void;
   startIncrement: () => void;
 }
 
-type MapDispatchToProps = (dispatch: Dispatch<Action>) => Props;
+type Props = StateProps & DispatchProps;
 
 class App extends React.Component<Props> {
   public render() {
     return(
       <div id="App" className={styles.app}>
         <CharacterBoard />
-        <Configure />
-        <button>On</button>
+        {this.props.modalIsActive && <Configure />}
+        <button onClick={(event) => this.props.activateConfigure()}>設定</button>
       </div>
     );
   }
@@ -29,10 +34,12 @@ class App extends React.Component<Props> {
   }
 }
 
-const mdp: MapDispatchToProps = (dispatch) => {
-  return {
-    startIncrement: () => dispatch(startIncrement()),
-  };
-};
-
-export default connect(null, mdp)(App);
+export default connect(
+  (state: StateProps): StateProps => state,
+  (dispatch: Dispatch<Action>): DispatchProps => {
+    return {
+      activateConfigure: () => dispatch(activateConfigure()),
+      startIncrement: () => dispatch(startIncrement()),
+    };
+  },
+)(App);
