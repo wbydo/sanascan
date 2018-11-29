@@ -2,9 +2,9 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import CharacterBoard from "./CharacterBoard/index";
+import CharacterBoard from "./CharacterBoard";
 import {Action, startIncrement} from "../state/actions";
-import { Modal } from "./modal";
+import { Modal } from "./Modal";
 
 interface Props {
   startIncrement: () => void;
