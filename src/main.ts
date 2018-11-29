@@ -11,16 +11,14 @@ const estimatorProcess = child_process.spawn(
   {stdio: "inherit"},
 );
 
-
 app.on("ready", () => {
   Menu.setApplicationMenu(menu);
-  let mainWindow: BrowserWindow | null = new BrowserWindow({width: 360, height: 650});
+  const mainWindow: BrowserWindow = new BrowserWindow({width: 360, height: 650});
   mainWindow.loadURL(`file://${__dirname}/renderer/index.html`);
 });
 
-
 estimatorProcess.on("close", () => {
-  app.exit()
+  app.exit();
 });
 
 app.once("will-quit", (event) => {

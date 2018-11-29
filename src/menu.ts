@@ -1,6 +1,6 @@
 import { app, Menu, MenuItem, BrowserWindow, Event } from "electron";
 
-const SEPARATOR : "separator" = "separator";
+const SEPARATOR: "separator" = "separator";
 
 const template = [
   {
@@ -11,14 +11,12 @@ const template = [
       {label: "環境設定..."},
       {type: SEPARATOR},
       {
+        accelerator: "CommandOrControl+Q",
+        click: () => app.quit(),
         label: app.getName() + " を終了",
-        accelerator: 'CommandOrControl+Q',
-        click: () => {
-          app.quit();
-        }
-      }
+      },
     ],
-  }
+  },
 ];
 
 export const menu = Menu.buildFromTemplate(template);
