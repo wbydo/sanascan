@@ -4,7 +4,7 @@ import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
 import {Action, startIncrement} from "../state/actions";
-import { Modal } from "./Modal";
+import { Configure } from "./Configure";
 import * as styles from "./App.css";
 
 interface Props {
@@ -18,7 +18,7 @@ class App extends React.Component<Props> {
     return(
       <div id="App" className={styles.app}>
         <CharacterBoard />
-        <Modal />
+        <Configure />
         <button>On</button>
       </div>
     );
