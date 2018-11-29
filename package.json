@@ -1,5 +1,6 @@
 {
-  "name": "caluculator",
+  "name": "sanascan",
+  "productName": "sanascan",
   "private": true,
   "main": "dist/main.js",
   "scripts": {

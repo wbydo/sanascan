@@ -1,7 +1,9 @@
-import {app, BrowserWindow} from "electron";
+import {app, BrowserWindow, Menu} from "electron";
 import * as child_process from "child_process";
 
 import * as util from "util";
+
+import { menu } from "./menu";
 
 const estimatorProcess = child_process.spawn(
   "pipenv",
@@ -9,10 +11,13 @@ const estimatorProcess = child_process.spawn(
   {stdio: "inherit"},
 );
 
+
 app.on("ready", () => {
+  Menu.setApplicationMenu(menu);
   let mainWindow: BrowserWindow | null = new BrowserWindow({width: 360, height: 650});
   mainWindow.loadURL(`file://${__dirname}/renderer/index.html`);
 });
+
 
 estimatorProcess.on("close", () => {
   app.exit()
