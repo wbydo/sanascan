@@ -13,7 +13,9 @@ const estimatorProcess = child_process.spawn(
 
 app.on("ready", () => {
   Menu.setApplicationMenu(menu);
-  const mainWindow: BrowserWindow = new BrowserWindow({width: 360, height: 650});
+  const mainWindow: BrowserWindow = new BrowserWindow(
+    {width: 600, height: 500}
+  );
   mainWindow.loadURL(`file://${__dirname}/renderer/index.html`);
 });
 

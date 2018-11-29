@@ -18,7 +18,6 @@ class App extends React.Component<Props> {
       <div>
         <CharacterBoard />
         <button>On</button>
-        <Modal />
       </div>
     );
   }
