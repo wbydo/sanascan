@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard/index";
-import {Action, startIncrement} from "../actions";
+import {Action, startIncrement} from "../state/actions";
 import { Modal } from "./modal";
 
 interface Props {
