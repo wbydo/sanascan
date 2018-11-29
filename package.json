@@ -9,6 +9,7 @@
     "build:renderer": "webpack --config webpack.renderer.build.js",
     "build:main": "webpack --config webpack.main.js",
     "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
+    "serve:css": "tcm src/renderer --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "git+https://wbydo@bitbucket.org/wbydo/caluculator.git",

@@ -4,6 +4,7 @@ import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
 import {Action, startIncrement} from "./actions";
+import { Modal } from "./modal";
 
 interface Props {
   startIncrement: () => void;
@@ -16,6 +17,8 @@ class App extends React.Component<Props> {
     return(
       <div>
         <CharacterBoard />
+        <button>On</button>
+        <Modal />
       </div>
     );
   }
