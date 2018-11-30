@@ -5,7 +5,7 @@ import {MAX_COLUMN_INDEX} from "../views/CharacterBoard";
 import * as types from "./types";
 import SanaScanError from "../error";
 
-interface RootState {
+export interface RootState {
   activeColumn: number;
   scanSpeed: number;
   modalIsActive: boolean;

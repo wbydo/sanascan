@@ -24,13 +24,13 @@ class App extends React.Component<Props> {
       <div id="App" className={styles.app}>
         <CharacterBoard />
         {this.props.modalIsActive && <Configure />}
-        <button onClick={(event) => this.props.activateConfigure()}>設定</button>
+        <button onClick={(event) => this.props.startIncrement()}>設定</button>
       </div>
     );
   }
 
   public componentDidMount = () => {
-    return this.props.startIncrement();
+    // return this.props.startIncrement();
   }
 }
 
