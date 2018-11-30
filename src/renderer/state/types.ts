@@ -1,8 +1,17 @@
 export const INCREMENT: "sanascan/INCREMENT"
   = "sanascan/INCREMENT";
 
-export const START_INCREMENT: "sanascan/START_INCREMENT"
-  = "sanascan/START_INCREMENT";
+// ////////////////////////////////////////////
+// timer
+
+export const START_TIMER: "sanascan/START_TIMER"
+  = "sanascan/START_TIMER";
+
+export const FINISH_TIMER: "sanasctan/FINISH_TIMER"
+  = "sanasctan/FINISH_TIMER";
+
+// timer
+// ////////////////////////////////////////////
 
 export const SET_SCAN_SPEED: "sanascan/SET_SCAN_SPEED"
   = "sanascan/SET_SCAN_SPEED";

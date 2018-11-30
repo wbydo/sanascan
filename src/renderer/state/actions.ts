@@ -11,11 +11,23 @@ export const increment: () => Action = () => {
   };
 };
 
-export const startIncrement: () => Action = () => {
+// ////////////////////////////////////////////
+// timer
+
+export const startTimer: () => Action = () => {
   return {
-    type: types.START_INCREMENT,
+    type: types.START_TIMER,
   };
 };
+
+export const finishTimer: () => Action = () => {
+  return {
+    type: types.FINISH_TIMER,
+  };
+};
+
+// timer
+// ////////////////////////////////////////////
 
 export const setScanSpeed = (scanSpeed: number): Action => {
   return {

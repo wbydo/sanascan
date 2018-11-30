@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 
 import { RootState } from "./reducers";
-import { Action, increment } from "./actions";
+import { Action, increment, startTimer, finishTimer } from "./actions";
 import * as types from "./types";
 
 interface Store {
@@ -9,7 +9,7 @@ interface Store {
   dispatch: Dispatch;
 }
 
-type Middleware = (store: Store) => (next: Dispatch) => (action: Action) => void
+type Middleware = (store: Store) => (next: Dispatch) => (action: Action) => void;
 
 const setTimeoutPromise = (delay: number) => {
   return new Promise((resolve) => {
@@ -23,9 +23,14 @@ const setTimeoutPromise = (delay: number) => {
 export const middleware: Middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {
 
-  if (action.type === types.START_INCREMENT) {
-    setTimeoutPromise(1000).then(() => {
-      next(increment());
-    });
+  switch (action.type) {
+    case types.START_TIMER:
+      setTimeoutPromise(1000).then(() => {
+        next(finishTimer());
+      });
+      break;
+
+    case types.FINISH_TIMER:
+      break;
   }
 };

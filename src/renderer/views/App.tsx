@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, startIncrement, activateConfigure} from "../state/actions";
+import {Action, startTimer, activateConfigure} from "../state/actions";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
@@ -13,7 +13,7 @@ interface StateProps {
 
 interface DispatchProps {
   activateConfigure: () => void;
-  startIncrement: () => void;
+  startTimer: () => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -24,7 +24,7 @@ class App extends React.Component<Props> {
       <div id="App" className={styles.app}>
         <CharacterBoard />
         {this.props.modalIsActive && <Configure />}
-        <button onClick={(event) => this.props.startIncrement()}>設定</button>
+        <button onClick={(event) => this.props.startTimer()}>設定</button>
       </div>
     );
   }
@@ -39,7 +39,7 @@ export default connect(
   (dispatch: Dispatch<Action>): DispatchProps => {
     return {
       activateConfigure: () => dispatch(activateConfigure()),
-      startIncrement: () => dispatch(startIncrement()),
+      startTimer: () => dispatch(startTimer()),
     };
   },
 )(App);
