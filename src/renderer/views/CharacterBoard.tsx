@@ -4,15 +4,7 @@ import {connect} from "react-redux";
 import ColumnStatus from "./ColumnStatus";
 import * as styles from "./CharacterBoard.css";
 
-const chars: string[][] = [
-  ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"],
-  ["い", "き", "し", "ち", "に", "ひ", "み", "",   "り", ""],
-  ["う", "く", "す", "つ", "ぬ", "ふ", "む", "ゆ", "る", "を"],
-  ["え", "け", "せ", "て", "ね", "へ", "め", "",   "れ", ""],
-  ["お", "こ", "そ", "と", "の", "ほ", "も", "よ", "を", "ん"],
-];
-
-export const MAX_COLUMN_INDEX: number = chars[0].length - 1;
+import { chars } from "../constant";
 
 interface Props {
   activeColumn: number;
