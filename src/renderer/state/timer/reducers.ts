@@ -9,7 +9,7 @@ interface RootState {
 }
 
 const initialState: RootState = {
-  isActive: true,
+  isActive: false,
   scanSpeed: 500,
 };
 
@@ -18,7 +18,7 @@ const isActiveReducer = (state: boolean | undefined, action: Action): boolean =>
     return initialState.isActive;
   }
 
-  if (types.SET_ACTIVE && action.payload && action.payload.isActive) {
+  if (types.SET_ACTIVE && action.payload && (action.payload.isActive !== undefined)) {
     return action.payload.isActive;
   }
 
@@ -30,7 +30,7 @@ const scanSpeedReducer = (state: number | undefined, action: Action): number => 
     return initialState.scanSpeed;
   }
 
-  if (types.SET_ACTIVE && action.payload && action.payload.scanSpeed) {
+  if (types.SET_SCAN_SPEED && action.payload && action.payload.scanSpeed) {
     return action.payload.scanSpeed;
   }
 

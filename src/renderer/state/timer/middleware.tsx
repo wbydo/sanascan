@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { RootState } from "../reducers";
 import { increment } from "../actions";
 
-import { Action, start, finish, runMiddleware } from "./actions";
+import { Action, start, finish, runMiddleware, setActive } from "./actions";
 import * as types from "./types";
 
 interface Store {
@@ -25,16 +25,25 @@ const setTimeoutPromise = (delay: number) => {
 const middleware: Middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {
 
+  const state = store.getState();
   switch (action.type) {
     case types.START:
       next(runMiddleware());
-      next(start());
-      setTimeoutPromise(1000).then(() => {
-        next(finish());
-      });
+      if (!state.timer.isActive) {
+        next(setActive(true));
+        setTimeoutPromise(state.timer.scanSpeed).then(() => {
+          middleware(store)(next)(finish());
+        });
+      }
       break;
 
     case types.FINISH:
+      next(runMiddleware());
+      if (state.timer.isActive) {
+        next(increment());
+        next(setActive(false));
+        middleware(store)(next)(start());
+      }
       break;
 
     default:
