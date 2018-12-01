@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { RootState } from "../reducers";
 import { increment } from "../actions";
 
-import { Action, start, finish } from "./actions";
+import { Action, start, finish, runMiddleware } from "./actions";
 import * as types from "./types";
 
 interface Store {
@@ -27,6 +27,7 @@ const middleware: Middleware
 
   switch (action.type) {
     case types.START:
+      next(runMiddleware());
       next(start());
       setTimeoutPromise(1000).then(() => {
         next(finish());

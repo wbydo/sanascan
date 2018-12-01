@@ -38,3 +38,10 @@ export const setScanSpeed = (scanSpeed: number): Action => {
     type: types.SET_SCAN_SPEED,
   };
 };
+
+export const runMiddleware = (): Action => {
+  return {
+    error: true,
+    type: types.RUN_MIDDLEWARE,
+  };
+};
