@@ -2,8 +2,10 @@ import React from "react";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import {Action, deactivateConfigure} from "../state/actions";
 import * as styles from "./Configure.css";
+
+import { configWindowActions } from "../state/configWindow";
+import { timerActions } from "../state/timer";
 
 interface StateProps {
   scanSpeed: number;
@@ -40,9 +42,12 @@ class Configure extends React.Component<Props> {
 
 export default connect(
   (state: StateProps) => state,
-  (dispatch: Dispatch<Action>): DispatchProps => {
+  (dispatch: Dispatch): DispatchProps => {
     return {
-      deactivateConfigure: () => dispatch(deactivateConfigure()),
+      deactivateConfigure: () => {
+        dispatch(configWindowActions.setActive(false));
+        dispatch(timerActions.start());
+      },
       // setScanSpeed: (scanSpeed: number) => dispatch(setScanSpeed(scanSpeed)),
     };
   },

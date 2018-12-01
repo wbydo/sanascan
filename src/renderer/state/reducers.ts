@@ -1,17 +1,15 @@
 import { combineReducers } from "redux";
 
-import {Action} from "./actions";
-import * as types from "./types";
-
+import { configWindowReducer } from "./configWindow/index";
 import { cursolReducer } from "./cursol/index";
 import { timerReducer } from "./timer/index";
 
-// /////////////////////////////////////////////
-// windowReducer
-
-interface WindowState {
-  configure: {
+export interface RootState {
+  configWindow: {
     isActive: boolean;
+  };
+  cursol: {
+    activeColumn: number;
   };
   timer: {
     isActive: boolean;
@@ -19,47 +17,10 @@ interface WindowState {
   };
 }
 
-const windowReducer = (state: WindowState | undefined, action: Action): WindowState => {
-  if (state === undefined) {
-    return {
-      configure: {
-        isActive: false,
-      },
-      timer: timerReducer(state, action),
-    };
-  }
-
-  if (action.type === types.ACTIVATE_CONFIGURE_WINDOW) {
-    return {
-      configure: {
-        isActive: true,
-      },
-      timer: {
-        isActive: false,
-        scanSpeed: state.timer.scanSpeed,
-      },
-    };
-  }
-
-  return {
-    configure: {
-      isActive: state.configure.isActive,
-    },
-    timer: timerReducer(state.timer, action),
-  };
-};
-// windowReducer
-// /////////////////////////////////////////////
-
-// /////////////////////////////////////////////
-// root
-
 const reducer = combineReducers({
+  configWindow: configWindowReducer,
   cursol: cursolReducer,
-  window: windowReducer,
+  timer: timerReducer,
 });
 
 export default reducer;
-
-// root
-// /////////////////////////////////////////////

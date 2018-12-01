@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import { RootState } from "../index";
+import { RootState } from "../reducers";
 
 import { cursolActions } from "../cursol/index";
 
@@ -30,9 +30,9 @@ const middleware: Middleware
   switch (action.type) {
     case types.START:
       next(runMiddleware());
-      if (!state.window.timer.isActive) {
+      if (!state.timer.isActive) {
         next(setActive(true));
-        setTimeoutPromise(state.window.timer.scanSpeed).then(() => {
+        setTimeoutPromise(state.timer.scanSpeed).then(() => {
           middleware(store)(next)(finish());
         });
       }
@@ -40,7 +40,7 @@ const middleware: Middleware
 
     case types.FINISH:
       next(runMiddleware());
-      if (state.window.timer.isActive) {
+      if (state.timer.isActive) {
         next(cursolActions.increment());
         next(setActive(false));
         middleware(store)(next)(start());

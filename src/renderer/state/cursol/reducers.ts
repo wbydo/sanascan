@@ -3,6 +3,8 @@ import { combineReducers } from "redux";
 import { Action } from "./actions";
 import * as types from "./types";
 
+import SanaScanError from "../../error";
+
 import {MAX_COLUMN_INDEX} from "../../views/CharacterBoard";
 
 interface RootState {
@@ -13,13 +15,25 @@ const initialState: RootState = {
   activeColumn: 0,
 };
 
+const increment = (state: number, action: Action): number => {
+  if (action.type !== types.INCREMENT) {
+    throw new SanaScanError();
+  }
+
+  if (state === MAX_COLUMN_INDEX) {
+    return initialState.activeColumn;
+  }
+
+  return state + 1;
+};
+
 const activeColumnReducer = (state: number | undefined, action: Action) => {
-  if (state === undefined || state === MAX_COLUMN_INDEX) {
+  if (state === undefined) {
     return initialState.activeColumn;
   }
 
   if (action.type === types.INCREMENT) {
-    return state + 1;
+    return increment(state, action);
   }
   return state;
 };

@@ -3,21 +3,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import middlewares from "./middlewares";
 import reducer from "./reducers";
+import { RootState } from "./reducers";
 
-export interface RootState {
-  cursol: {
-    activeColumn: number;
-  };
-  window: {
-    configure: {
-      isActive: boolean;
-    },
-    timer: {
-      isActive: boolean;
-      scanSpeed: number;
-    },
-  };
-}
+export type RootState = RootState;
 
 const enhancer = composeWithDevTools(
   applyMiddleware(...middlewares),

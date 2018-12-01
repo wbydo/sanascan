@@ -7,8 +7,10 @@ import { start as startTimer } from "../state/timer/actions";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
-import { RootState } from "../state/index";
-import * as Actions from "../state/actions";
+import { RootState } from "../state/";
+
+import { configWindowActions } from "../state/configWindow/index";
+import { timerActions } from "../state/timer/index";
 
 interface StateProps {
   configureWindowIsActive: boolean;
@@ -40,12 +42,15 @@ class App extends React.Component<Props> {
 export default connect(
   (state: RootState): StateProps => {
     return {
-      configureWindowIsActive: state.window.configure.isActive,
+      configureWindowIsActive: state.configWindow.isActive,
     };
   },
   (dispatch: Dispatch): DispatchProps => {
     return {
-      openConfigureWindow: () => dispatch(Actions.activateConfigure()),
+      openConfigureWindow: () => {
+        dispatch(configWindowActions.setActive(true));
+        dispatch(timerActions.setActive(false));
+      },
       startTimer: () => dispatch(startTimer()),
     };
   },
