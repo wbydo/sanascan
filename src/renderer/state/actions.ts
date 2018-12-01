@@ -4,12 +4,6 @@ export interface Action {
   type: string;
 }
 
-export const increment: () => Action = () => {
-  return {
-    type: types.INCREMENT,
-  };
-};
-
 export const activateConfigure: () => Action = () => {
   return {
     type: types.ACTIVATE_CONFIGURE,

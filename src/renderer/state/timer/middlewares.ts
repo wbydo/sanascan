@@ -1,7 +1,8 @@
 import { Dispatch } from "redux";
 
 import { RootState } from "../reducers";
-import { increment } from "../actions";
+
+import { cursolActions } from "../cursol/index";
 
 import { Action, start, finish, runMiddleware, setActive } from "./actions";
 import * as types from "./types";
@@ -40,7 +41,7 @@ const middleware: Middleware
     case types.FINISH:
       next(runMiddleware());
       if (state.timer.isActive) {
-        next(increment());
+        next(cursolActions.increment());
         next(setActive(false));
         middleware(store)(next)(start());
       }

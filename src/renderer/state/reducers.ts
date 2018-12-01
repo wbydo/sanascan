@@ -5,48 +5,19 @@ import {MAX_COLUMN_INDEX} from "../views/CharacterBoard";
 import * as types from "./types";
 import SanaScanError from "../error";
 
+import { cursolReducer } from "./cursol/index";
 import { timerReducer } from "./timer/index";
 
 export interface RootState {
-  activeColumn: number;
+  cursol: {
+    activeColumn: number;
+  };
   modalIsActive: boolean;
   timer: {
     isActive: boolean;
     scanSpeed: number;
   };
 }
-
-// /////////////////////////////////////////////
-// activeColumn
-
-type CharacterBoardState = number;
-
-const initialState: number = 0;
-
-const increment = (state: number, action: Action) => {
-  if (action.type !== types.INCREMENT) {
-    throw new SanaScanError();
-  }
-
-  if (state === MAX_COLUMN_INDEX) {
-    return initialState;
-  }
-  return state + 1;
-};
-
-const characterBoardreducer = (state: number | undefined, action: Action) => {
-  if (state === undefined) {
-    return initialState;
-  }
-
-  if (action.type === types.INCREMENT) {
-    return increment(state, action);
-  }
-  return state;
-};
-
-// activeColumn
-// /////////////////////////////////////////////
 
 // /////////////////////////////////////////////
 // modalIsActive
@@ -73,7 +44,7 @@ const modalIsActiveReducer = (state: boolean | undefined, action: Action) => {
 // rootReducer
 
 const reducer = combineReducers({
-  activeColumn: characterBoardreducer,
+  cursol: cursolReducer,
   modalIsActive: modalIsActiveReducer,
   timer: timerReducer,
 });
