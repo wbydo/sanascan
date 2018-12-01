@@ -11,21 +11,21 @@ export interface Action {
 
 export const start: () => Action = () => {
   return {
-    error: true,
+    error: false,
     type: types.START,
   };
 };
 
 export const finish: () => Action = () => {
   return {
-    error: true,
+    error: false,
     type: types.FINISH,
   };
 };
 
 export const setActive = (isActive: boolean): Action => {
   return {
-    error: true,
+    error: false,
     payload: { isActive },
     type: types.SET_ACTIVE,
   };
@@ -33,7 +33,7 @@ export const setActive = (isActive: boolean): Action => {
 
 export const setScanSpeed = (scanSpeed: number): Action => {
   return {
-    error: true,
+    error: false,
     payload: { scanSpeed },
     type: types.SET_SCAN_SPEED,
   };
@@ -41,7 +41,7 @@ export const setScanSpeed = (scanSpeed: number): Action => {
 
 export const runMiddleware = (): Action => {
   return {
-    error: true,
+    error: false,
     type: types.RUN_MIDDLEWARE,
   };
 };
