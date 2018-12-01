@@ -18,12 +18,16 @@ interface Props {
   activeColumn: number;
 }
 
+interface State {
+  cursol: Props;
+}
+
 class CharacterBoard extends React.Component<Props, {}> {
   public render() {
     return(
       <table id="CharacterBoard" className={styles.characterBoard}>
         <caption></caption>
-          {chars[0].map((row, idx) => {
+          {chars[0].map((_, idx) => {
             return <ColumnStatus isActive={idx === this.props.activeColumn}/>;
           })}
         <tbody>
@@ -40,6 +44,6 @@ class CharacterBoard extends React.Component<Props, {}> {
 }
 
 export default connect(
-  (state) => state as Props,
+  (state: State) => state.cursol as Props,
   null,
 )(CharacterBoard);

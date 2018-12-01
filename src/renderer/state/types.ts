@@ -1,6 +1,3 @@
-export const INCREMENT: "sanascan/INCREMENT"
-  = "sanascan/INCREMENT";
-
 export const ACTIVATE_CONFIGURE: "sanascan/ACTIVATE_CONFIGURE"
   = "sanascan/ACTIVATE_CONFIGURE";
 
