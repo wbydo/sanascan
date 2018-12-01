@@ -4,7 +4,8 @@ export interface Action {
   error: boolean;
   type: string;
   payload?: {
-    isActive: boolean;
+    isActive?: boolean;
+    scanSpeed?: number;
   };
 }
 
@@ -15,5 +16,15 @@ export const setActive = (isActive: boolean): Action => {
       isActive,
     },
     type: types.SET_ACTIVE,
+  };
+};
+
+export const setScanSpeed = (scanSpeed: number): Action => {
+  return {
+    error: false,
+    payload: {
+      scanSpeed,
+    },
+    type: types.SET_SCAN_SPEED,
   };
 };

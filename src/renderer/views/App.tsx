@@ -15,10 +15,11 @@ import { timerActions } from "../state/timer/index";
 interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
+  timerScanSpeed: number;
 }
 
 interface DispatchProps {
-  openConfigureWindow: () => void;
+  openConfigureWindow: (scanSpeed: number) => void;
   startTimer: () => void;
 }
 
@@ -30,13 +31,17 @@ class App extends React.Component<Props> {
       <div id="App" className={styles.app}>
         <CharacterBoard activeColumn={this.props.activeColumn}/>
         {this.props.configureWindowIsActive && <Configure />}
-        <button onClick={this.props.openConfigureWindow}>設定</button>
+        <button onClick={this.openConfigureWindow}>設定</button>
       </div>
     );
   }
 
   public componentDidMount = () => {
     return this.props.startTimer();
+  }
+
+  private openConfigureWindow = () => {
+    this.props.openConfigureWindow(this.props.timerScanSpeed);
   }
 }
 
@@ -45,13 +50,15 @@ export default connect(
     return {
       activeColumn: state.cursol.activeColumn,
       configureWindowIsActive: state.configWindow.isActive,
+      timerScanSpeed: state.timer.scanSpeed,
     };
   },
   (dispatch: Dispatch): DispatchProps => {
     return {
-      openConfigureWindow: () => {
-        dispatch(configWindowActions.setActive(true));
+      openConfigureWindow: (scanSpeed: number) => {
         dispatch(timerActions.setActive(false));
+        dispatch(configWindowActions.setScanSpeed(scanSpeed));
+        dispatch(configWindowActions.setActive(true));
       },
       startTimer: () => dispatch(startTimer()),
     };

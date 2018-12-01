@@ -1,9 +1,7 @@
 import reducer from "./reducers";
 
-import { setActive } from "./actions";
+import * as actions from "./actions";
 
-export const configWindowActions = {
-  setActive,
-};
+export const configWindowActions = actions;
 
 export const configWindowReducer = reducer;
