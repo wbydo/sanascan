@@ -9,6 +9,7 @@
     "build:renderer": "webpack --config webpack.renderer.build.js",
     "build:main": "webpack --config webpack.main.js",
     "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
+    "serve:css": "tcm src/renderer --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "git+https://wbydo@bitbucket.org/wbydo/caluculator.git",
@@ -35,7 +36,6 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.6",
-    "redux-saga": "^0.16.2",
     "style-loader": "^0.23.1",
     "ts-loader": "^5.2.2",
     "tslint": "^5.11.0",

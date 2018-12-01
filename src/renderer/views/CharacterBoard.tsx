@@ -1,7 +1,8 @@
 import * as React from "react";
 import {connect} from "react-redux";
 
-import ColumnStatus from "./characterBoard/ColumnStatus";
+import ColumnStatus from "./ColumnStatus";
+import * as styles from "./CharacterBoard.css";
 
 const chars: string[][] = [
   ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"],
@@ -17,17 +18,24 @@ interface Props {
   activeColumn: number;
 }
 
+interface State {
+  cursol: Props;
+}
+
 class CharacterBoard extends React.Component<Props, {}> {
   public render() {
     return(
-      <table>
+      <table id="CharacterBoard" className={styles.characterBoard}>
         <caption></caption>
-          {chars[0].map((row, idx) => {
+          {chars[0].map((_, idx) => {
             return <ColumnStatus isActive={idx === this.props.activeColumn}/>;
           })}
         <tbody>
           {chars.map((row) => {
-            return <tr>{row.map((c) => <td>{c}</td>)}</tr>;
+            return(<tr>
+              {row.map((c) => <td className={styles.data}>{c}</td>)}
+            </tr>
+            );
           })}
         </tbody>
       </table>
@@ -36,6 +44,6 @@ class CharacterBoard extends React.Component<Props, {}> {
 }
 
 export default connect(
-  (state) => state as Props,
+  (state: State) => state.cursol as Props,
   null,
 )(CharacterBoard);

@@ -1,0 +1,12 @@
+@value tableHeight from "../global.css";
+
+.characterBoard {
+  border-collapse: collapse;
+  width: 100%;
+  height: tableHeight;
+}
+
+.data {
+  text-align: center;
+  font-size: 20pt;
+}
