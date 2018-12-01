@@ -6,12 +6,12 @@ export interface Action {
 
 export const activateConfigure: () => Action = () => {
   return {
-    type: types.ACTIVATE_CONFIGURE,
+    type: types.ACTIVATE_CONFIGURE_WINDOW,
   };
 };
 
 export const deactivateConfigure: () => Action = () => {
   return {
-    type: types.DEACTIVATE_CONFIGURE,
+    type: types.DEACTIVATE_CONFIGURE_WINDOW,
   };
 };

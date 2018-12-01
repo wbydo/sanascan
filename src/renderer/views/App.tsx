@@ -7,12 +7,15 @@ import { start as startTimer } from "../state/timer/actions";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
+import { RootState } from "../state/index";
+import * as Actions from "../state/actions";
+
 interface StateProps {
-  modalIsActive: boolean;
+  configureWindowIsActive: boolean;
 }
 
 interface DispatchProps {
-  // activateConfigure: () => void;
+  openConfigureWindow: () => void;
   startTimer: () => void;
 }
 
@@ -23,8 +26,8 @@ class App extends React.Component<Props> {
     return(
       <div id="App" className={styles.app}>
         <CharacterBoard />
-        {this.props.modalIsActive && <Configure />}
-        <button onClick={(event) => {undefined;}}>設定</button>
+        {this.props.configureWindowIsActive && <Configure />}
+        <button onClick={this.props.openConfigureWindow}>設定</button>
       </div>
     );
   }
@@ -35,10 +38,14 @@ class App extends React.Component<Props> {
 }
 
 export default connect(
-  (state: StateProps): StateProps => state,
+  (state: RootState): StateProps => {
+    return {
+      configureWindowIsActive: state.window.configure.isActive,
+    };
+  },
   (dispatch: Dispatch): DispatchProps => {
     return {
-      // activateConfigure: () => dispatch(activateConfigure()),
+      openConfigureWindow: () => dispatch(Actions.activateConfigure()),
       startTimer: () => dispatch(startTimer()),
     };
   },
