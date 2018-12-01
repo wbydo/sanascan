@@ -5,7 +5,7 @@ import {MAX_COLUMN_INDEX} from "../views/CharacterBoard";
 import * as types from "./types";
 import SanaScanError from "../error";
 
-import timerReducer from "./timer/reducers";
+import { timerReducer } from "./timer/index";
 
 export interface RootState {
   activeColumn: number;
@@ -72,11 +72,13 @@ const modalIsActiveReducer = (state: boolean | undefined, action: Action) => {
 // /////////////////////////////////////////////
 // rootReducer
 
-export const rootReducer = combineReducers({
+const reducer = combineReducers({
   activeColumn: characterBoardreducer,
   modalIsActive: modalIsActiveReducer,
   timer: timerReducer,
 });
+
+export default reducer;
 
 // rootReducer
 // /////////////////////////////////////////////
