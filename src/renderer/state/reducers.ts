@@ -7,6 +7,7 @@ import { timerReducer } from "./timer/index";
 export interface RootState {
   configWindow: {
     isActive: boolean;
+    scanSpeed: number;
   };
   cursol: {
     activeColumn: number;

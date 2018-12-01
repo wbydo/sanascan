@@ -4,7 +4,8 @@ export interface Action {
   error: boolean;
   type: string;
   payload?: {
-    isActive: boolean;
+    isActive?: boolean;
+    scanSpeed?: number;
   };
 }
 
@@ -18,9 +19,12 @@ export const setActive = (isActive: boolean): Action => {
   };
 };
 
-export const runMiddleware = (): Action => {
+export const setScanSpeed = (scanSpeed: number): Action => {
   return {
     error: false,
-    type: types.RUN_MIDDLEWARE,
+    payload: {
+      scanSpeed,
+    },
+    type: types.SET_SCAN_SPEED,
   };
 };

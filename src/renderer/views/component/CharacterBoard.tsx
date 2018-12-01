@@ -1,0 +1,31 @@
+import * as React from "react";
+
+import ColumnStatus from "./ColumnStatus";
+import * as styles from "./CharacterBoard.css";
+
+import { chars } from "../../constant";
+
+interface Props {
+  activeColumn: number;
+}
+
+export default class CharacterBoard extends React.Component<Props, {}> {
+  public render() {
+    return(
+      <table id="CharacterBoard" className={styles.characterBoard}>
+        <caption></caption>
+          {chars[0].map((_, idx) => {
+            return <ColumnStatus isActive={idx === this.props.activeColumn}/>;
+          })}
+        <tbody>
+          {chars.map((row) => {
+            return(<tr>
+              {row.map((c) => <td className={styles.data}>{c}</td>)}
+            </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
+}

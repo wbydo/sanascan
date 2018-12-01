@@ -1,4 +1,4 @@
-@value activeColor, nonActiveColor from "../global.css";
+@value activeColor, nonActiveColor from "../../global.css";
 
 .active {
   background-color: activeColor;
