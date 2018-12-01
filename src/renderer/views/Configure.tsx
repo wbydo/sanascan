@@ -25,7 +25,7 @@ class Configure extends React.Component<Props> {
         <div className={styles.content}>
           <h1>環境設定</h1>
           <input type="number" value={this.props.scanSpeed} onChange={this.handleChange}/>
-          <button onClick={(event) => this.props.deactivateConfigure()}>Off</button>
+          <button onClick={() => this.props.deactivateConfigure()}>Off</button>
         </div>
       </div>
     );
