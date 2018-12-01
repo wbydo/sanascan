@@ -5,7 +5,7 @@ import * as types from "./types";
 
 import SanaScanError from "../../error";
 
-import {MAX_COLUMN_INDEX} from "../../views/CharacterBoard";
+import {MAX_COLUMN_INDEX} from "../../constant";
 
 interface RootState {
   activeColumn: number;

@@ -1,4 +1,4 @@
-@value tableHeight from "../global.css";
+@value tableHeight from "../../global.css";
 
 .characterBoard {
   border-collapse: collapse;
