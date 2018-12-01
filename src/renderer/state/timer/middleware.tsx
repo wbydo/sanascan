@@ -1,7 +1,9 @@
 import { Dispatch } from "redux";
 
-import { RootState } from "./reducers";
-import { Action, increment, startTimer, finishTimer } from "./actions";
+import { RootState } from "../reducers";
+import { increment } from "../actions";
+
+import { Action, start, finish } from "./actions";
 import * as types from "./types";
 
 interface Store {
@@ -20,17 +22,23 @@ const setTimeoutPromise = (delay: number) => {
   });
 };
 
-export const middleware: Middleware
+const middleware: Middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {
 
   switch (action.type) {
-    case types.START_TIMER:
+    case types.START:
+      next(start());
       setTimeoutPromise(1000).then(() => {
-        next(finishTimer());
+        next(finish());
       });
       break;
 
-    case types.FINISH_TIMER:
+    case types.FINISH:
       break;
+
+    default:
+      next(action);
   }
 };
+
+export default middleware;

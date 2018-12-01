@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, startTimer, activateConfigure} from "../state/actions";
+import { start as startTimer } from "../state/timer/actions";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
@@ -12,7 +12,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  activateConfigure: () => void;
+  // activateConfigure: () => void;
   startTimer: () => void;
 }
 
@@ -36,9 +36,9 @@ class App extends React.Component<Props> {
 
 export default connect(
   (state: StateProps): StateProps => state,
-  (dispatch: Dispatch<Action>): DispatchProps => {
+  (dispatch: Dispatch): DispatchProps => {
     return {
-      activateConfigure: () => dispatch(activateConfigure()),
+      // activateConfigure: () => dispatch(activateConfigure()),
       startTimer: () => dispatch(startTimer()),
     };
   },

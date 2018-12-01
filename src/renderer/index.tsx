@@ -6,10 +6,10 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import App from "./views/App";
 import { rootReducer } from "./state/reducers";
-import { middleware } from "./state/middleware";
+import timerMiddleware from "./state/timer/middleware";
 
 const enhancer = composeWithDevTools(
-  applyMiddleware(middleware),
+  applyMiddleware(timerMiddleware),
 );
 
 const store = createStore(
