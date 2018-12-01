@@ -17,10 +17,3 @@ export const setActive = (isActive: boolean): Action => {
     type: types.SET_ACTIVE,
   };
 };
-
-export const runMiddleware = (): Action => {
-  return {
-    error: false,
-    type: types.RUN_MIDDLEWARE,
-  };
-};
