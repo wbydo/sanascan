@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./CharacterBoard";
-import {Action, startIncrement, activateConfigure} from "../state/actions";
+import { start as startTimer } from "../state/timer/actions";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
@@ -12,8 +12,8 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  activateConfigure: () => void;
-  startIncrement: () => void;
+  // activateConfigure: () => void;
+  startTimer: () => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -24,22 +24,22 @@ class App extends React.Component<Props> {
       <div id="App" className={styles.app}>
         <CharacterBoard />
         {this.props.modalIsActive && <Configure />}
-        <button onClick={(event) => this.props.activateConfigure()}>設定</button>
+        <button onClick={(event) => {undefined;}}>設定</button>
       </div>
     );
   }
 
   public componentDidMount = () => {
-    return this.props.startIncrement();
+    return this.props.startTimer();
   }
 }
 
 export default connect(
   (state: StateProps): StateProps => state,
-  (dispatch: Dispatch<Action>): DispatchProps => {
+  (dispatch: Dispatch): DispatchProps => {
     return {
-      activateConfigure: () => dispatch(activateConfigure()),
-      startIncrement: () => dispatch(startIncrement()),
+      // activateConfigure: () => dispatch(activateConfigure()),
+      startTimer: () => dispatch(startTimer()),
     };
   },
 )(App);

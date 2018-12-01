@@ -5,10 +5,15 @@ import {MAX_COLUMN_INDEX} from "../views/CharacterBoard";
 import * as types from "./types";
 import SanaScanError from "../error";
 
-interface RootState {
+import { timerReducer } from "./timer/index";
+
+export interface RootState {
   activeColumn: number;
-  scanSpeed: number;
   modalIsActive: boolean;
+  timer: {
+    isActive: boolean;
+    scanSpeed: number;
+  };
 }
 
 // /////////////////////////////////////////////
@@ -44,30 +49,6 @@ const characterBoardreducer = (state: number | undefined, action: Action) => {
 // /////////////////////////////////////////////
 
 // /////////////////////////////////////////////
-// scanSpeed
-type SagaState = number;
-const initialSagaState: SagaState = 500;
-
-const sagaReducer = (state: number | undefined, action: Action) => {
-  if (state === undefined) {
-    return initialSagaState;
-  }
-
-  if (action.type === types.SET_SCAN_SPEED) {
-    if (!("scanSpeed" in action)) {
-      throw new TypeError();
-    }
-
-    return action.scanSpeed;
-  }
-
-  return state;
-};
-
-// scanSpeed
-// /////////////////////////////////////////////
-
-// /////////////////////////////////////////////
 // modalIsActive
 
 const modalIsActiveReducer = (state: boolean | undefined, action: Action) => {
@@ -91,11 +72,13 @@ const modalIsActiveReducer = (state: boolean | undefined, action: Action) => {
 // /////////////////////////////////////////////
 // rootReducer
 
-export const rootReducer = combineReducers({
+const reducer = combineReducers({
   activeColumn: characterBoardreducer,
   modalIsActive: modalIsActiveReducer,
-  scanSpeed: sagaReducer,
+  timer: timerReducer,
 });
+
+export default reducer;
 
 // rootReducer
 // /////////////////////////////////////////////
