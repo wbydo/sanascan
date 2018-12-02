@@ -1,8 +1,6 @@
 import {app, BrowserWindow, Menu} from "electron";
 import * as child_process from "child_process";
 
-import * as util from "util";
-
 import { menu } from "./menu";
 
 const estimatorProcess = child_process.spawn(
@@ -13,7 +11,7 @@ const estimatorProcess = child_process.spawn(
 
 app.on("ready", () => {
   const mainWindow: BrowserWindow = new BrowserWindow(
-    {width: 600, height: 500}
+    {width: 600, height: 500},
   );
   Menu.setApplicationMenu(menu);
   mainWindow.loadURL(`file://${__dirname}/renderer/index.html`);

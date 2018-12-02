@@ -1,4 +1,4 @@
-import { app, Menu, MenuItem, BrowserWindow, Event } from "electron";
+import { app, Menu, MenuItem, BrowserWindow } from "electron";
 
 const SEPARATOR: "separator" = "separator";
 
