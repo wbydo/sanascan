@@ -8,7 +8,12 @@ const template = [
     submenu: [
       {label: app.getName() + " について"},
       {type: SEPARATOR},
-      {label: "環境設定..."},
+      {
+        click: (_: MenuItem, browserWindow: BrowserWindow) => {
+          browserWindow.webContents.send("openConfigureWindow");
+        },
+        label: "環境設定...",
+      },
       {type: SEPARATOR},
       {
         accelerator: "CommandOrControl+Q",

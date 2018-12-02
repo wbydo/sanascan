@@ -12,6 +12,8 @@ import { RootState } from "../state/";
 import { configWindowActions } from "../state/configWindow/index";
 import { timerActions } from "../state/timer/index";
 
+import { ipcRenderer } from "electron";
+
 interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
@@ -26,6 +28,14 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps;
 
 class App extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    ipcRenderer.on("openConfigureWindow", () => {
+      this.openConfigureWindow();
+    });
+  }
+
   public render() {
     return(
       <div id="App" className={styles.app}>
