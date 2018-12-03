@@ -11,6 +11,11 @@ from .word import Word, TagWord
 from .key import Key
 
 
+class CORSMiddleware:
+    def process_request(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*')
+
+
 class RootResource:
     _estimators: Dict[int, Estimator]
     _lm: LangModel
@@ -85,6 +90,6 @@ class EIDResouce:
 root = RootResource()
 eid_resource = EIDResouce(root)
 
-api = API()
+api = API(middleware=[CORSMiddleware()])
 api.add_route('/', root)
 api.add_route('/{eid:int}', eid_resource)
