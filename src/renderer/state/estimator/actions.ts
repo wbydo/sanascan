@@ -9,7 +9,7 @@ export interface Action {
   };
 }
 
-export const fetchID = (status: "start" | "done" | "error"): Action => {
+export const fetchId = (status: "start" | "done" | "error"): Action => {
   return {
     error: status === "error",
     payload: {
@@ -19,7 +19,7 @@ export const fetchID = (status: "start" | "done" | "error"): Action => {
   };
 };
 
-export const setID = (id: number): Action => {
+export const setId = (id: number): Action => {
   return {
     error: false,
     payload: {

@@ -5,11 +5,11 @@ import { RootState } from "../reducers";
 import * as types from "./types";
 import * as actions from "./actions";
 
-import * as timerActions from "../timer";
-
 import { url } from "../../constant";
 
 import SanascanError from "../../error";
+
+import { setTimeoutPromise } from "../../myutil";
 
 interface Store {
   getState: () => RootState;
@@ -22,48 +22,41 @@ const TRY_NUMBER = 10;
 const TIMEOUT = 5000;
 
 const tryFethIdOnce = async (next: Dispatch) => {
-  console.log(new Date());
-  return await fetch(url, {method: "POST"})
-    .then((resp) => resp.json())
-    .then((result) => {
-      if (result.eid !== undefined && (typeof result.eid === "number")) {
-        console.log(result);
-        return next(actions.setID(result.eid as number));
-      } else {
-        throw new SanascanError();
-      }
-    });
+  const response = await fetch(url, {method: "POST"});
+  const result = await response.json();
+
+  if (result.eid !== undefined && (typeof result.eid === "number")) {
+    next(actions.fetchId("done"));
+    next(actions.setId(result.eid as number));
+    return;
+  } else {
+    throw new SanascanError();
+  }
 };
 
-const processFetchIDAction = async (
-    next: Dispatch,
-    action: actions.Action,
-    ) => {
+const fetchIdStart = async (next: Dispatch) => {
+  let isSuccess = false;
+  for (const _ of Array(TRY_NUMBER).keys()) {
+    if (isSuccess) {
+      break;
+    }
+    try {
+      await tryFethIdOnce(next).then(() => { isSuccess = true; });
+    } catch (err) {
+      await setTimeoutPromise(TIMEOUT);
+    }
+  }
 
+  if (isSuccess) {
+    next(actions.fetchId("error"));
+  }
+};
+
+const processFetchIdAction = (next: Dispatch, action: actions.Action) => {
   switch (action.payload.status) {
     case "start":
       next(action);
-
-      let isSuccess = false;
-      for (const _ of Array(TRY_NUMBER).keys()) {
-        if (isSuccess) {
-          console.log(isSuccess);
-          break;
-        }
-        console.log(_);
-        try {
-          await tryFethIdOnce(next).then(() => { isSuccess = true; });
-        } catch (err) {
-          console.log(err);
-          await new Promise((resolve, _) => {
-            setTimeout(() => {
-              console.log("error");
-              resolve();
-            }, TIMEOUT);
-          });
-        }
-      }
-
+      fetchIdStart(next);
       break;
   }
 };
@@ -76,7 +69,7 @@ const middleware: Middleware
       if (action.payload.status === undefined) {
         throw new SanascanError();
       }
-      processFetchIDAction(next, action);
+      processFetchIdAction(next, action);
       break;
 
     default:

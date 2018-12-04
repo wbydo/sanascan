@@ -7,21 +7,14 @@ import { cursolActions } from "../cursol/index";
 import { Action, start, finish, runMiddleware, setActive } from "./actions";
 import * as types from "./types";
 
+import { setTimeoutPromise } from "../../myutil";
+
 interface Store {
   getState: () => RootState;
   dispatch: Dispatch;
 }
 
 type Middleware = (store: Store) => (next: Dispatch) => (action: Action) => void;
-
-const setTimeoutPromise = (delay: number) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    },
-    delay);
-  });
-};
 
 const middleware: Middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {

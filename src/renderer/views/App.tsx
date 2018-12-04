@@ -70,7 +70,7 @@ export default connect(
         dispatch(configWindowActions.setScanSpeed(scanSpeed));
         dispatch(configWindowActions.setActive(true));
       },
-      startFetchEstimatorId: () => dispatch(estimatorActions.fetchID("start")),
+      startFetchEstimatorId: () => dispatch(estimatorActions.fetchId("start")),
     };
   },
 )(App);
