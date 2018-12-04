@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import { configWindowReducer } from "./configWindow/index";
 import { cursolReducer } from "./cursol/index";
 import { timerReducer } from "./timer/index";
+import { estimatorReducer } from "./estimator";
 
 export interface RootState {
   configWindow: {
@@ -16,11 +17,15 @@ export interface RootState {
     isActive: boolean;
     scanSpeed: number;
   };
+  estimator: {
+    id: number | null;
+  };
 }
 
 const reducer = combineReducers({
   configWindow: configWindowReducer,
   cursol: cursolReducer,
+  estimator: estimatorReducer,
   timer: timerReducer,
 });
 
