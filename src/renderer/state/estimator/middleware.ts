@@ -18,6 +18,9 @@ interface Store {
 
 type Middleware = (store: Store) => (next: Dispatch) => (action: actions.Action) => void;
 
+const TRY_NUMBER = 10;
+const TIMEOUT = 5000;
+
 const tryFethIdOnce = async (next: Dispatch) => {
   console.log(new Date());
   return await fetch(url, {method: "POST"})
@@ -42,7 +45,7 @@ const processFetchIDAction = async (
       next(action);
 
       let isSuccess = false;
-      for (const _ of Array(5).keys()) {
+      for (const _ of Array(TRY_NUMBER).keys()) {
         if (isSuccess) {
           console.log(isSuccess);
           break;
@@ -56,7 +59,7 @@ const processFetchIDAction = async (
             setTimeout(() => {
               console.log("error");
               resolve();
-            }, 1000);
+            }, TIMEOUT);
           });
         }
       }

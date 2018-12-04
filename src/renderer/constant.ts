@@ -8,4 +8,4 @@ export const chars: string[][] = [
 
 export const MAX_COLUMN_INDEX: number = chars[0].length - 1;
 
-export const url = "http://127.0.0.1:8000";
+export const url = "http://localhost:8000";
