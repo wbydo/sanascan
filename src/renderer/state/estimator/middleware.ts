@@ -47,7 +47,7 @@ const fetchIdStart = async (next: Dispatch) => {
     }
   }
 
-  if (isSuccess) {
+  if (!isSuccess) {
     next(actions.fetchId("error"));
   }
 };
