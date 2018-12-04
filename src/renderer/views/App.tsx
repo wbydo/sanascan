@@ -3,7 +3,6 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./component/CharacterBoard";
-import { start as startTimer } from "../state/timer/actions";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
@@ -11,8 +10,9 @@ import { RootState } from "../state/";
 
 import { configWindowActions } from "../state/configWindow/index";
 import { timerActions } from "../state/timer/index";
+import { estimatorActions } from "../state/estimator";
 
-import { ipcRenderer } from "electron";
+// import { ipcRenderer } from "electron";
 
 interface StateProps {
   configureWindowIsActive: boolean;
@@ -22,7 +22,7 @@ interface StateProps {
 
 interface DispatchProps {
   openConfigureWindow: (scanSpeed: number) => void;
-  startTimer: () => void;
+  startFetchEstimatorId: () => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -31,9 +31,9 @@ class App extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    ipcRenderer.on("openConfigureWindow", () => {
-      this.openConfigureWindow();
-    });
+    // ipcRenderer.on("openConfigureWindow", () => {
+    //   this.openConfigureWindow();
+    // });
   }
 
   public render() {
@@ -47,7 +47,7 @@ class App extends React.Component<Props> {
   }
 
   public componentDidMount = () => {
-    return this.props.startTimer();
+    return this.props.startFetchEstimatorId();
   }
 
   private openConfigureWindow = () => {
@@ -70,7 +70,7 @@ export default connect(
         dispatch(configWindowActions.setScanSpeed(scanSpeed));
         dispatch(configWindowActions.setActive(true));
       },
-      startTimer: () => dispatch(startTimer()),
+      startFetchEstimatorId: () => dispatch(estimatorActions.fetchID("start")),
     };
   },
 )(App);
