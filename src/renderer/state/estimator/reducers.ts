@@ -7,10 +7,12 @@ import SanaScanError from "../../error";
 
 interface RootState {
   id: number | null;
+  result: string;
 }
 
 const initialState: RootState = {
   id: null,
+  result: "",
 };
 
 const setId = (state: number | null, action: actions.Action) => {
@@ -36,8 +38,23 @@ const idReducer = (state: number | null | undefined, action: actions.Action) => 
   return state;
 };
 
+const resultReducer = (state: string | undefined, action: actions.Action) => {
+  if (state === undefined) {
+    return initialState.result;
+  }
+
+  switch (action.type) {
+    case types.SET_RESULT:
+      return action.payload.content;
+
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
   id: idReducer,
+  result: resultReducer,
 });
 
 export default reducer;

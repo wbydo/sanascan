@@ -23,6 +23,7 @@ interface StateProps {
 interface DispatchProps {
   openConfigureWindow: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
+  sendKeyFour: () => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -42,6 +43,7 @@ class App extends React.Component<Props> {
         <CharacterBoard activeColumn={this.props.activeColumn}/>
         {this.props.configureWindowIsActive && <Configure />}
         <button onClick={this.openConfigureWindow}>設定</button>
+        <button onClick={this.props.sendKeyFour}>SendKey4</button>
       </div>
     );
   }
@@ -70,6 +72,7 @@ export default connect(
         dispatch(configWindowActions.setScanSpeed(scanSpeed));
         dispatch(configWindowActions.setActive(true));
       },
+      sendKeyFour: () => dispatch(estimatorActions.sendKey(4)),
       startFetchEstimatorId: () => dispatch(estimatorActions.fetchId("start")),
     };
   },

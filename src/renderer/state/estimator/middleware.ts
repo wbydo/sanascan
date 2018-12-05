@@ -1,11 +1,13 @@
 import { Dispatch } from "redux";
+import { URL } from "url";
+import { stringify } from "querystring";
 
 import { RootState } from "../reducers";
 
 import * as types from "./types";
 import * as actions from "./actions";
 
-import { url } from "../../constant";
+import { url as baseUrl } from "../../constant";
 
 import SanascanError from "../../error";
 
@@ -24,7 +26,7 @@ const TRY_NUMBER = 10;
 const TIMEOUT = 5000;
 
 const tryFethIdOnce = async (storeDispatch: Dispatch) => {
-  const response = await fetch(url, {method: "POST"});
+  const response = await fetch(baseUrl, {method: "POST"});
   const result = await response.json();
 
   if (result.eid !== undefined && (typeof result.eid === "number")) {
@@ -80,6 +82,34 @@ const middleware: Middleware
       }
       processFetchIdAction(next, store.dispatch, action);
       break;
+
+    case types.SEND_KEY:
+      next(action);
+      const id = store.getState().estimator.id;
+      if (id === null) {
+        throw new SanascanError();
+      }
+
+      if (action.payload.key === undefined) {
+        throw new SanascanError();
+      }
+
+      const url = new URL(id.toString(), baseUrl);
+      const query = stringify({key: action.payload.key.toString()});
+      fetch(url.toString(), {
+        body: query.toString(),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        method: "POST",
+      }).then((resp) => {
+        return Promise.resolve(resp.json());
+      }).then((json) => {
+        if (json.result === undefined) {
+          throw new SanascanError();
+        }
+        next(actions.setResult(json.result));
+      });
 
     default:
       next(action);
