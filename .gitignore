@@ -1,5 +1,5 @@
 .venv/
-
+.cache/
 node_modules/
 
 /dist/

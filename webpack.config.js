@@ -1,20 +1,15 @@
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const main = require('./webpack.main.js');
 const renderer = require('./webpack.renderer.js')
 
+main.plugins.push(
+  new CleanWebpackPlugin(['dist']),
+);
+
 module.exports = [
-  Object.assign(
-    main,
-    {
-      plugins: [
-        new CleanWebpackPlugin(['dist']),
-        new HardSourceWebpackPlugin(),
-      ]
-    }
-  ),
+  main,
   Object.assign(
     renderer,
     {

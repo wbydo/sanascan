@@ -13,11 +13,13 @@ module.exports = {
   },
 
   plugins: [
+    new HardSourceWebpackPlugin({
+      cacheDirectory: path.resolve(__dirname, '.cache', 'renderer')
+    }),
     new HtmlWebpackPlugin({
       template: "./src/renderer/index.html",
       filename: "index.html"
     }),
-    new HardSourceWebpackPlugin(),
   ],
 
   module: {

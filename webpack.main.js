@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -15,6 +16,12 @@ module.exports = {
     __dirname: false,
     __filename: false
   },
+
+  plugins: [
+    new HardSourceWebpackPlugin({
+      cacheDirectory: path.resolve(__dirname, '.cache', 'main')
+    }),
+  ],
 
   module: {
     rules: [{

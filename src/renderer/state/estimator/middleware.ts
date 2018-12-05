@@ -110,6 +110,7 @@ const middleware: Middleware
         }
         next(actions.setResult(json.result));
       });
+      break;
 
     default:
       next(action);
