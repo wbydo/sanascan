@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const main = require('./webpack.main.js');
 const renderer = require('./webpack.renderer.js')
@@ -9,7 +10,8 @@ module.exports = [
     main,
     {
       plugins: [
-        new CleanWebpackPlugin(['dist'])
+        new CleanWebpackPlugin(['dist']),
+        new HardSourceWebpackPlugin(),
       ]
     }
   ),

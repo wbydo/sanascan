@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -15,7 +16,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/renderer/index.html",
       filename: "index.html"
-    })
+    }),
+    new HardSourceWebpackPlugin(),
   ],
 
   module: {
