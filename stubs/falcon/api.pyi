@@ -1,7 +1,7 @@
-from typing import Any, Union
+from typing import Any, Union, Iterable
 from typing_extensions import Protocol
 
-from .request import Request as Request
+from .request import Request as Request, RequestOptions as RequestOptions
 from .response import Response as Response
 
 
@@ -20,5 +20,14 @@ Resource = Union[
     OnPutResource
 ]
 
+class ProcessRequestMiddleware(Protocol):
+    def process_request(self, req: Request, resp: Response) -> None: ...
+
+Middleware = Union[
+    ProcessRequestMiddleware,
+]
+
 class API(object):
+    req_options: RequestOptions = ...
+    def __init__(self, middleware: Iterable[Middleware] = ...) -> None: ...
     def add_route(self, uri_template: str, resource: Resource, *args: Any, **kwargs: Any) -> None: ...

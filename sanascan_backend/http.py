@@ -12,7 +12,7 @@ from .key import Key
 
 
 class CORSMiddleware:
-    def process_request(self, req, resp) -> None:
+    def process_request(self, req: Request, resp: Response) -> None:
         resp.set_header('Access-Control-Allow-Origin', '*')
 
 
@@ -62,6 +62,9 @@ class EIDResouce:
 
         self._root[eid].add(key)
         words = self._root[eid].result
+
+        if words is None:
+            raise Exception('Estimator has no result')
 
         resp.data = json.dumps({
             'eid': eid,
