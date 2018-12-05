@@ -12,7 +12,7 @@ from .key import Key
 
 
 class CORSMiddleware:
-    def process_request(self, req, resp):
+    def process_request(self, req, resp) -> None:
         resp.set_header('Access-Control-Allow-Origin', '*')
 
 
@@ -91,5 +91,8 @@ root = RootResource()
 eid_resource = EIDResouce(root)
 
 api = API(middleware=[CORSMiddleware()])
+
+api.req_options.auto_parse_form_urlencoded = True
+
 api.add_route('/', root)
 api.add_route('/{eid:int}', eid_resource)
