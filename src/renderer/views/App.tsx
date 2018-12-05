@@ -18,12 +18,13 @@ interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
   timerScanSpeed: number;
+  result: string;
 }
 
 interface DispatchProps {
   openConfigureWindow: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
-  sendKeyFour: () => void;
+  sendKey: (key: number) => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -39,11 +40,15 @@ class App extends React.Component<Props> {
 
   public render() {
     return(
-      <div id="App" className={styles.app}>
+      <div
+          id="App"
+          className={styles.app}
+          onClick={this.handleClick}
+      >
+        <div>{this.props.result}</div>
         <CharacterBoard activeColumn={this.props.activeColumn}/>
         {this.props.configureWindowIsActive && <Configure />}
         <button onClick={this.openConfigureWindow}>設定</button>
-        <button onClick={this.props.sendKeyFour}>SendKey4</button>
       </div>
     );
   }
@@ -55,6 +60,10 @@ class App extends React.Component<Props> {
   private openConfigureWindow = () => {
     this.props.openConfigureWindow(this.props.timerScanSpeed);
   }
+
+  private handleClick = () => {
+    this.props.sendKey(this.props.activeColumn);
+  }
 }
 
 export default connect(
@@ -62,6 +71,7 @@ export default connect(
     return {
       activeColumn: state.cursol.activeColumn,
       configureWindowIsActive: state.configWindow.isActive,
+      result: state.estimator.result,
       timerScanSpeed: state.timer.scanSpeed,
     };
   },
@@ -72,7 +82,7 @@ export default connect(
         dispatch(configWindowActions.setScanSpeed(scanSpeed));
         dispatch(configWindowActions.setActive(true));
       },
-      sendKeyFour: () => dispatch(estimatorActions.sendKey(4)),
+      sendKey: (key: number) => dispatch(estimatorActions.sendKey(key)),
       startFetchEstimatorId: () => dispatch(estimatorActions.fetchId("start")),
     };
   },

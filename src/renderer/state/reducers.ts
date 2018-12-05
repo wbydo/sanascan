@@ -19,6 +19,7 @@ export interface RootState {
   };
   estimator: {
     id: number | null;
+    result: string;
   };
 }
 
