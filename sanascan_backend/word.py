@@ -60,7 +60,7 @@ class Word:
 
     @staticmethod
     def to_str(words: 'Iterable[Word]') -> str:
-        return ' '.join([str(w) for w in words])
+        return ''.join([w.surface for w in words])
 
     def __init__(self, surface: str, yomi: str) -> None:
         self.surface = surface

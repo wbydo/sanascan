@@ -35,7 +35,7 @@ class TestWord(unittest.TestCase):
             Word(surface='日余', yomi='ピヨ'),
         ]
 
-        self.assertEqual(Word.to_str(words), '歩下/ホゲ 普が/フガ 日余/ピヨ')
+        self.assertEqual(Word.to_str(words), '歩下普が日余')
 
     def test_eq(self) -> None:
         self.assertNotEqual(
