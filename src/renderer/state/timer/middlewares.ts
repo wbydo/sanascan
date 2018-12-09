@@ -4,7 +4,7 @@ import { RootState } from "../reducers";
 
 import { cursolActions } from "../cursol/index";
 
-import { Action, start, finish, runMiddleware, setActive } from "./actions";
+import { Action, start, finish, setActive } from "./actions";
 import * as types from "./types";
 
 import { setTimeoutPromise } from "../../myutil";
@@ -22,7 +22,6 @@ const middleware: Middleware
   const state = store.getState();
   switch (action.type) {
     case types.START:
-      next(runMiddleware());
       if (!state.timer.isActive) {
         next(setActive(true));
         setTimeoutPromise(state.timer.scanSpeed).then(() => {
@@ -32,7 +31,6 @@ const middleware: Middleware
       break;
 
     case types.FINISH:
-      next(runMiddleware());
       if (state.timer.isActive) {
         next(cursolActions.increment());
         next(setActive(false));
