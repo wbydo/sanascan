@@ -4,7 +4,7 @@ import { RootState } from "../reducers";
 
 import { cursolActions } from "../cursol/index";
 
-import { Action, start, finish, setActive } from "./actions";
+import { Action, start, finish, setActive, setId } from "./actions";
 import * as types from "./types";
 
 import { setTimeoutPromise } from "../../myutil";
@@ -22,20 +22,29 @@ const middleware: Middleware
   const state = store.getState();
   switch (action.type) {
     case types.START:
+      next(action);
       if (!state.timer.isActive) {
+        const id = Date.now();
         next(setActive(true));
+        next(setId(id));
         setTimeoutPromise(state.timer.scanSpeed).then(() => {
-          store.dispatch(finish());
+          store.dispatch(finish(id));
         });
       }
       break;
 
     case types.FINISH:
-      if (state.timer.isActive) {
+      next(action);
+      if (state.timer.isActive === false) {
+        break;
+      }
+
+      next(setActive(false));
+      if (action.payload.id === state.timer.id) {
         next(cursolActions.increment());
-        next(setActive(false));
         store.dispatch(start());
       }
+
       break;
 
     default:
