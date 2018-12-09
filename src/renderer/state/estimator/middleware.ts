@@ -11,7 +11,7 @@ import { url as baseUrl } from "../../constant";
 
 import SanascanError from "../../error";
 
-import { setTimeoutPromise } from "../../myutil";
+import { setTimeoutPromise } from "../util";
 
 import { timerActions } from "../timer";
 

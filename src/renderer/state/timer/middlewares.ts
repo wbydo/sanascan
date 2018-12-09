@@ -4,10 +4,11 @@ import { RootState } from "../reducers";
 
 import { cursolActions } from "../cursol/index";
 
-import { Action, start, finish, setActive, setId } from "./actions";
+import { start, finish, setActive, setId } from "./actions";
+import { Action } from "./reducers";
 import * as types from "./types";
 
-import { setTimeoutPromise } from "../../myutil";
+import { setTimeoutPromise } from "../util";
 
 interface Store {
   getState: () => RootState;

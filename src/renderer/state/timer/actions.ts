@@ -38,21 +38,3 @@ export const setScanSpeed = (scanSpeed: number) => {
     type: types.SET_SCAN_SPEED,
   };
 };
-
-// export interface Action {
-//   type: string;
-//   payload?: {
-//     isActive?: boolean,
-//     scanSpeed?: number,
-//     id?: number,
-//   };
-//   error: boolean;
-// }
-
-export type Action = (
-  ReturnType<typeof start> |
-  ReturnType<typeof finish> |
-  ReturnType<typeof setActive> |
-  ReturnType<typeof setId> |
-  ReturnType<typeof setScanSpeed>
-);

@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 
-import { Action } from "./actions";
+import * as actions from "./actions";
 import * as types from "./types";
+
+import { Action as _Action } from "../util";
+
+export type Action = _Action<typeof actions>;
 
 interface RootState {
   isActive: boolean;
@@ -20,11 +24,7 @@ const isActiveReducer = (state: boolean | undefined, action: Action): boolean =>
     return initialState.isActive;
   }
 
-  if (
-      (action.type === types.SET_ACTIVE)
-        && action.payload
-        && (action.payload.isActive !== undefined)
-  ) {
+  if (action.type === types.SET_ACTIVE) {
     return action.payload.isActive;
   }
 
@@ -36,11 +36,7 @@ const scanSpeedReducer = (state: number | undefined, action: Action): number => 
     return initialState.scanSpeed;
   }
 
-  if (
-      (action.type === types.SET_SCAN_SPEED)
-        && action.payload
-        && (action.payload.scanSpeed !== undefined)
-  ) {
+  if (action.type === types.SET_SCAN_SPEED) {
     return action.payload.scanSpeed;
   }
 
@@ -52,11 +48,7 @@ const idReducer = (state: number | null | undefined, action: Action): number | n
     return initialState.id;
   }
 
-  if (
-      (action.type === types.SET_ID)
-      && action.payload
-      && (action.payload.id !== undefined)
-  ) {
+  if (action.type === types.SET_ID) {
     return action.payload.id;
   }
 
