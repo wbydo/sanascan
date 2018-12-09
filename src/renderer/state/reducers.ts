@@ -14,6 +14,7 @@ export interface RootState {
     activeColumn: number;
   };
   timer: {
+    id: number | null;
     isActive: boolean;
     scanSpeed: number;
   };

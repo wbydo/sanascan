@@ -18,9 +18,9 @@ module.exports = {
   },
 
   plugins: [
-    new HardSourceWebpackPlugin({
-      cacheDirectory: path.resolve(__dirname, '.cache', 'main')
-    }),
+    // new HardSourceWebpackPlugin({
+    //   cacheDirectory: path.resolve(__dirname, '.cache', 'main')
+    // }),
   ],
 
   module: {
