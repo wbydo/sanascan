@@ -25,7 +25,7 @@ const middleware: Middleware
       if (!state.timer.isActive) {
         next(setActive(true));
         setTimeoutPromise(state.timer.scanSpeed).then(() => {
-          middleware(store)(next)(finish());
+          store.dispatch(finish());
         });
       }
       break;
@@ -34,7 +34,7 @@ const middleware: Middleware
       if (state.timer.isActive) {
         next(cursolActions.increment());
         next(setActive(false));
-        middleware(store)(next)(start());
+        store.dispatch(start());
       }
       break;
 
