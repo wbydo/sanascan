@@ -89,6 +89,16 @@ class EIDResouce:
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
 
+    def on_delete(self, req: Request, resp: Response, *, eid: int) -> None:
+        self._root[eid].reset()
+        words = self._root[eid].result
+
+        if words is not None:
+            raise Exception()
+
+        resp.content_type = MEDIA_JSON
+        resp.status = HTTP_200
+
 
 root = RootResource()
 eid_resource = EIDResouce(root)

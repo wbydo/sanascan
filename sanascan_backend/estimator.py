@@ -49,3 +49,7 @@ class Estimator:
     def finish(self) -> None:
         self.eos_node = EOSNode(self.wait_child[-1], self.lang_model)
         self.result = self.eos_node.sentence[1:-1]
+
+    def reset(self) -> None:
+        self.__init__(self.lang_model)
+        self.result = None

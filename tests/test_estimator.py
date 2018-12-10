@@ -28,6 +28,10 @@ class TestEstimator(UseLangModel):
         result = estimator.result
         self.assertEqual(test_words, result)
 
+        with self.subTest():
+            estimator.reset()
+            self.assertEqual(len(estimator.wait_child), 1)
+
     def test_add_side_effect(
             self,
             msg: str = "addの副作用がちゃんと機能する"
