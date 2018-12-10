@@ -25,6 +25,7 @@ interface DispatchProps {
   openConfigureWindow: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
   sendKey: (key: number) => void;
+  resetEstimator: () => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -43,12 +44,14 @@ class App extends React.Component<Props> {
       <div
           id="App"
           className={styles.app}
-          onClick={this.handleClick}
       >
         <div>{this.props.result}</div>
-        <CharacterBoard activeColumn={this.props.activeColumn}/>
+        <div onClick={this.handleClick}>
+          <CharacterBoard activeColumn={this.props.activeColumn}/>
+        </div>
         {this.props.configureWindowIsActive && <Configure />}
         <button onClick={this.openConfigureWindow}>設定</button>
+        <button onClick={this.props.resetEstimator}>はじめから</button>
       </div>
     );
   }
@@ -82,6 +85,7 @@ export default connect(
         dispatch(configWindowActions.setScanSpeed(scanSpeed));
         dispatch(configWindowActions.setActive(true));
       },
+      resetEstimator: () => dispatch(estimatorActions.reset()),
       sendKey: (key: number) => dispatch(estimatorActions.sendKey(key)),
       startFetchEstimatorId: () => dispatch(estimatorActions.fetchId("start")),
     };

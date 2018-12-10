@@ -1,17 +1,6 @@
 import * as types from "./types";
 
-export interface Action {
-  error: boolean;
-  type: string;
-  payload: {
-    status?: "start" | "done" | "error";
-    id?: number;
-    content?: string;
-    key?: number; // とりあえずnumberのみ
-  };
-}
-
-export const fetchId = (status: "start" | "done" | "error"): Action => {
+export const fetchId = (status: "start" | "done" | "error") => {
   return {
     error: status === "error",
     payload: {
@@ -21,7 +10,7 @@ export const fetchId = (status: "start" | "done" | "error"): Action => {
   };
 };
 
-export const setId = (id: number): Action => {
+export const setId = (id: number) => {
   return {
     error: false,
     payload: {
@@ -31,7 +20,7 @@ export const setId = (id: number): Action => {
   };
 };
 
-export const sendKey = (key: number): Action => {
+export const sendKey = (key: number) => {
   return {
     error: false,
     payload: {
@@ -41,12 +30,19 @@ export const sendKey = (key: number): Action => {
   };
 };
 
-export const setResult = (result: string): Action => {
+export const setResult = (result: string) => {
   return {
     error: false,
     payload: {
       content: result,
     },
     type: types.SET_RESULT,
+  };
+};
+
+export const reset = () => {
+  return {
+    error: false,
+    type: types.RESET,
   };
 };

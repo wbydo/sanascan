@@ -9,3 +9,6 @@ export const SEND_KEY: "sanascan/estimator/SEND_KEY"
 
 export const SET_RESULT: "sanascan/estimator/SET_RESULT"
     = "sanascan/estimator/SET_RESULT";
+
+export const RESET: "sanascan/extimator/RESET"
+    = "sanascan/extimator/RESET";

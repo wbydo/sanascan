@@ -5,6 +5,9 @@ import * as types from "./types";
 
 import SanaScanError from "../../error";
 
+import { Action as _Action } from "../util";
+export type Action = _Action<typeof actions>;
+
 interface RootState {
   id: number | null;
   result: string;
@@ -15,7 +18,7 @@ const initialState: RootState = {
   result: "",
 };
 
-const setId = (state: number | null, action: actions.Action) => {
+const setId = (state: number | null, action: Action) => {
   if (action.type !== types.SET_ID) {
     throw new SanaScanError();
   }
@@ -27,7 +30,7 @@ const setId = (state: number | null, action: actions.Action) => {
   return action.payload.id;
 };
 
-const idReducer = (state: number | null | undefined, action: actions.Action) => {
+const idReducer = (state: number | null | undefined, action: Action) => {
   if (state === undefined) {
     return initialState.id;
   }
@@ -38,7 +41,7 @@ const idReducer = (state: number | null | undefined, action: actions.Action) => 
   return state;
 };
 
-const resultReducer = (state: string | undefined, action: actions.Action) => {
+const resultReducer = (state: string | undefined, action: Action) => {
   if (state === undefined) {
     return initialState.result;
   }

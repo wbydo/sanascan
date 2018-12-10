@@ -15,12 +15,14 @@ import { setTimeoutPromise } from "../util";
 
 import { timerActions } from "../timer";
 
+import { Action } from "./reducers";
+
 interface Store {
   getState: () => RootState;
   dispatch: Dispatch;
 }
 
-type Middleware = (store: Store) => (next: Dispatch) => (action: actions.Action) => void;
+type Middleware = (store: Store) => (next: Dispatch) => (action: Action) => void;
 
 const TRY_NUMBER = 10;
 const TIMEOUT = 5000;
@@ -58,7 +60,7 @@ const fetchIdStart = async (storeDispatch: Dispatch) => {
   }
 };
 
-const processFetchIdAction = (next: Dispatch, storeDispatch: Dispatch, action: actions.Action) => {
+const processFetchIdAction = (next: Dispatch, storeDispatch: Dispatch, action: ReturnType<typeof actions.fetchId>) => {
   switch (action.payload.status) {
     case "start":
       next(action);
@@ -72,8 +74,25 @@ const processFetchIdAction = (next: Dispatch, storeDispatch: Dispatch, action: a
   }
 };
 
+const processReset = async (store: Store, next: Dispatch, action: Action) => {
+  next(action);
+  store.dispatch(timerActions.finish());
+
+  const id = store.getState().estimator.id;
+
+  const url = new URL(id!.toString(), baseUrl);
+  await fetch(url.toString(), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "DELETE",
+  });
+  store.dispatch(actions.setResult(""));
+  store.dispatch(timerActions.start());
+};
+
 const middleware: Middleware
-    = (store: Store) => (next: Dispatch) => (action: actions.Action) => {
+    = (store: Store) => (next: Dispatch) => (action: Action) => {
 
   switch (action.type) {
     case types.FETCH_ID:
@@ -110,6 +129,10 @@ const middleware: Middleware
         }
         next(actions.setResult(json.result));
       });
+      break;
+
+    case types.RESET:
+      processReset(store, next, action);
       break;
 
     default:
