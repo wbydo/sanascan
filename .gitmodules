@@ -1,0 +1,3 @@
+[submodule "sanascan_backend"]
+	path = sanascan_backend
+	url = https://github.com/wbydo/sanascan_backend.git
