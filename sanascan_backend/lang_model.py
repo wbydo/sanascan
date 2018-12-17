@@ -1,5 +1,5 @@
 import re
-from typing import NamedTuple, Dict, Set, Tuple, Iterable
+from typing import Dict, Set, Tuple, Iterable
 from enum import Enum
 from enum import auto
 from itertools import chain
@@ -22,9 +22,13 @@ class ParseError(Exception):
 
 
 class LangModel:
-    class Data(NamedTuple):
+    class Data:
         prob: float
         backoff: float
+
+        def __init__(self, prob: float, backoff: float) -> None:
+            self.prob = prob
+            self.backoff = backoff
 
     _dic: Dict[Tuple[Word, ...], Data]
     order: int
