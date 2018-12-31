@@ -4,9 +4,9 @@ import unittest
 
 from sanascan_backend.lang_model import LangModel
 
-
-with (Path.home() / 'arpa/LM0006.txt').open() as f:
-    LM = LangModel(f.read())
+path = (Path.home() / 'arpa/LM0006.txt').resolve()
+with path.open('r') as f:
+    LM = LangModel(f)
 
 
 class UseLangModel(unittest.TestCase):
