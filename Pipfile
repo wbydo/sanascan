@@ -10,6 +10,7 @@ jupyter = "*"
 pyyaml = "*"
 natto-py = "*"
 pytablewriter = "*"
+jaconv = "*"
 
 [dev-packages]
 

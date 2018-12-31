@@ -16,13 +16,16 @@ from sanakin import Corpus
 from sanakin import SentenceDelimiter
 from sanakin import CorpusFile
 from sanakin import SNKSession
+from sanakin.snkmecab import SNKMeCab
 from sanakin import Sentence
+from sanakin import LangModel
 
 from sanakin.cli_util import SNKCLIEngine
 from sanakin.cli_util.db_api import simple_insert
 from sanakin.cli_util.db_api import bulk_insert
 
 from env import RAKUTEN_TRAVEL_DIR
+from env import LANG_MODEL_FILE_DIR
 
 # ロガー設定
 import logging
@@ -49,10 +52,25 @@ class SeedEngine(SNKCLIEngine):
         pass
 
     def _non_wrapped_insert_mode(self, *, is_develop_mode=True):
-        with SNKSession() as s:
-            q = s.query(Sentence).limit(300)
-            for i in q:
-                print(i.text)
+        from sanakin import CreatedLangModel
+        from itertools import tee
+
+        with SNKMeCab() as mecab:
+            with SNKSession() as s:
+                with s.commit_manager() as c:
+                    query = s.query(Sentence)\
+                        .order_by(Sentence.sentence_id)\
+                        .limit(3)
+
+                    text_iter = map(lambda s1: s1.text, query)
+                    id_iter = map(lambda s: s.sentence_id, query)
+
+                    lm = LangModel.create(text_iter, mecab, LANG_MODEL_FILE_DIR)
+                    c.add(lm)
+
+                    for i in id_iter:
+                        clm = CreatedLangModel(sentence_id=i, lang_model_id=lm.lang_model_id)
+                        c.add(clm)
 
     @SNKCLIEngine.confirm(msg=f'{_work}:時間がかかりますがいいですか？')
     def _long_time_insert_mode(self, *, is_develop_mode=True):
