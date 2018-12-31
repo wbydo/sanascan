@@ -11,6 +11,7 @@ pyyaml = "*"
 natto-py = "*"
 pytablewriter = "*"
 jaconv = "*"
+"flake8" = "*"
 
 [dev-packages]
 
