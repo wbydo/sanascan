@@ -20,7 +20,7 @@ mypy = "*"
 "flake8" = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
 
 [scripts]
 start = "gunicorn sanascan_backend.http:api"

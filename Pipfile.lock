@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f7ac9f36a572bd63c94d270203730b4d1f9473c399ac2bd0f628e8f559d136f7"
+            "sha256": "27c7b628e719a4a1abedbc8b270d479637d0f079bc554dc8c0251f11690f589a"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.6"
+            "python_version": "3.7"
         },
         "sources": [
             {
@@ -16,6 +16,10 @@
         ]
     },
     "default": {
+        "9f1a152": {
+            "editable": true,
+            "path": "./sanascan_backend"
+        },
         "appnope": {
             "hashes": [
                 "sha256:5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0",
@@ -117,6 +121,13 @@
             ],
             "version": "==0.2.3"
         },
+        "falcon": {
+            "hashes": [
+                "sha256:0a66b33458fab9c1e400a9be1a68056abda178eb02a8cb4b8f795e9df20b053b",
+                "sha256:3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4"
+            ],
+            "version": "==1.4.1"
+        },
         "flake8": {
             "hashes": [
                 "sha256:6a35f5b8761f45c5513e3405f110a86bea57982c3b75b766ce7b65217abe1670",
@@ -124,6 +135,14 @@
             ],
             "index": "pypi",
             "version": "==3.6.0"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:aa8e0b40b4157b36a5df5e599f45c9c76d6af43845ba3b3b0efe2c70473c2471",
+                "sha256:fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3"
+            ],
+            "index": "pypi",
+            "version": "==19.9.0"
         },
         "ipykernel": {
             "hashes": [
@@ -137,6 +156,7 @@
                 "sha256:6a9496209b76463f1dec126ab928919aaf1f55b38beb9219af3fe202f6bbdd12",
                 "sha256:f69932b1e806b38a7818d9a1e918e5821b685715040b48e59c657b3c7961b742"
             ],
+            "markers": "python_version >= '3.3'",
             "version": "==7.2.0"
         },
         "ipython-genutils": {
@@ -257,6 +277,9 @@
             "version": "==1.1.0"
         },
         "mbstrdecoder": {
+            "extras": [
+                "all"
+            ],
             "hashes": [
                 "sha256:1b8302ebb013fd0f304e1eaf3019a1157d91959b0af377763bf0bbe411892c06",
                 "sha256:746eadd3b311ce32743cd1eba72e754ff75e58368dc8def7222bb133ccd87762"
@@ -371,7 +394,6 @@
         },
         "pycodestyle": {
             "hashes": [
-                "sha256:74abc4e221d393ea5ce1f129ea6903209940c1ecd29e002e8c6933c2b21026e0",
                 "sha256:cbc619d09254895b0d12c2c691e237b2e91e9b2ecf5e84c26b35400f93dcfb83",
                 "sha256:cbfca99bd594a10f674d0cd97a3d802a1fdef635d4361e1a2658de47ed261e3a"
             ],
@@ -419,6 +441,13 @@
                 "sha256:88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
             ],
             "version": "==2.7.5"
+        },
+        "python-mimeparse": {
+            "hashes": [
+                "sha256:76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78",
+                "sha256:a295f03ff20341491bfe4717a39cd0a8cc9afad619ba44b77e86b0ab8a2b8282"
+            ],
+            "version": "==1.6.0"
         },
         "pytz": {
             "hashes": [
@@ -543,6 +572,9 @@
             "version": "==4.3.2"
         },
         "typepy": {
+            "extras": [
+                "datetime"
+            ],
             "hashes": [
                 "sha256:8d099da6b63b500a3df490fab4f4cef775ba3d9539c24051c5d3d4f9b11a962c",
                 "sha256:eaccce52809b7448c599ebff2a63324270f86806730226fd2b6156e6b7125546"
