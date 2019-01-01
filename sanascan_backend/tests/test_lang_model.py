@@ -1,5 +1,5 @@
 import unittest
-
+import pickle
 
 from sanascan_backend.word import Word
 
@@ -19,6 +19,9 @@ class TestLangModel(UseLangModel):
             msg: str = 'lm._get_word_setが何らかを返すか\'だけの\'テスト'
             ) -> None:
         self.lm._get_word_set()
+
+    def test_pickle(self) -> None:
+        pickle.dumps(self.lm)
 
 
 if __name__ == '__main__':

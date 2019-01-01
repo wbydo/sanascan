@@ -1,6 +1,7 @@
 from typing import Dict
 from pathlib import Path
 import json
+import pickle
 
 from falcon import API, MEDIA_JSON, Request, Response
 from falcon import HTTP_200, HTTP_201
@@ -24,8 +25,8 @@ class RootResource:
         self._estimators = {}
 
         # あとで変更
-        with (Path.home() / 'arpa/LM0006.txt').open() as f:
-            self._lm = LangModel(f.read())
+        with (Path.home() / 'arpa/LM0006.pickle').open('rb') as f:
+            self._lm = pickle.load(f)
 
     def on_post(self, req: Request, resp: Response, *, eid: int = 0) -> None:
         if not eid == 0:

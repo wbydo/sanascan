@@ -1,5 +1,5 @@
 import re
-from typing import NamedTuple, Dict, Set, Tuple, Iterable
+from typing import Dict, Set, Tuple, Iterable, IO
 from enum import Enum
 from enum import auto
 from itertools import chain
@@ -22,19 +22,23 @@ class ParseError(Exception):
 
 
 class LangModel:
-    class Data(NamedTuple):
+    class Data:
         prob: float
         backoff: float
+
+        def __init__(self, prob: float, backoff: float) -> None:
+            self.prob = prob
+            self.backoff = backoff
 
     _dic: Dict[Tuple[Word, ...], Data]
     order: int
 
-    def __init__(self, arpa_text: str) -> None:
+    def __init__(self, arpa: IO[str]) -> None:
         title = re.compile(r'^\\(\d)-grams:$')
         area = ArpaArea.DATA
 
         result = {}
-        for unstriped_line in arpa_text.split('\n'):
+        for unstriped_line in iter(arpa.readline, ''):
             line = unstriped_line.strip()
             m = title.match(line)
             if m:
