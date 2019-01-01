@@ -1,0 +1,31 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+setuptools = "*"
+"e1839a8" = {path = ".", editable = true}
+natto-py = "*"
+numpy = "*"
+jaconv = "*"
+falcon = "*"
+gunicorn = "*"
+
+[dev-packages]
+sphinx = "*"
+sphinx-rtd-theme = "*"
+twine = "*"
+mypy = "*"
+"flake8" = "*"
+
+[requires]
+python_version = "3.6"
+
+[scripts]
+start = "gunicorn sanascan_backend.http:api"
+apidoc = "sphinx-apidoc -f -o ./source ./hoge"
+build = "sphinx-build -a ./source ./docs"
+test = "python -m unittest discover -s ./tests -v"
+type = "mypy sanascan_backend tests"
+lint = "flake8 sanascan_backend tests"

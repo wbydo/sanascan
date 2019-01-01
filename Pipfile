@@ -12,8 +12,13 @@ natto-py = "*"
 pytablewriter = "*"
 jaconv = "*"
 "flake8" = "*"
+"9f1a152" = {path = "./sanascan_backend", editable = true}
+gunicorn = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+start = "gunicorn sanascan_backend.http:api"

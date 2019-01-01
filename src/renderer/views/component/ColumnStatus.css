@@ -1,0 +1,9 @@
+@value activeColor, nonActiveColor from "../../global.css";
+
+.active {
+  background-color: activeColor;
+}
+
+.disactive {
+  background-color: nonActiveColor;
+}

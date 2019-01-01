@@ -5,3 +5,6 @@ __pycache__
 
 vendor/
 config.yml
+
+.cache/
+node_modules/
