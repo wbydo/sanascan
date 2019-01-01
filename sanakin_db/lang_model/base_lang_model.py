@@ -6,8 +6,8 @@ import re
 import jaconv
 from hashlib import sha1
 from pathlib import Path
+from sanascan_backend.word import Word
 
-from ..word import Word
 from ..srilm import srilm
 from ..next_id import NextIdSearchable
 

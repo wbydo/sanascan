@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "27c7b628e719a4a1abedbc8b270d479637d0f079bc554dc8c0251f11690f589a"
+            "sha256": "38bf3be82a3ee2152baa7380e81dd204ffed4922c4fe621fe9d96214ce9afe5e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -509,6 +509,10 @@
                 "sha256:bc1ba15f50c29ed50f1268ad823bb6543be263c18dd093b80495e9df63b003ac"
             ],
             "version": "==4.4.3"
+        },
+        "sanascan-db": {
+            "editable": true,
+            "path": "."
         },
         "send2trash": {
             "hashes": [

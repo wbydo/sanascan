@@ -12,8 +12,9 @@ natto-py = "*"
 pytablewriter = "*"
 jaconv = "*"
 "flake8" = "*"
-"9f1a152" = {path = "./sanascan_backend", editable = true}
+9f1a152 = {path = "./sanascan_backend",editable = true}
 gunicorn = "*"
+sanascan-db = {editable = true,path = "."}
 
 [dev-packages]
 
