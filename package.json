@@ -7,7 +7,6 @@
     "start": "electron ./dist/main.js",
     "build:all": "webpack --config webpack.config.js",
     "build:renderer": "webpack --config webpack.renderer.build.js",
-    "build:main": "webpack --config webpack.main.js",
     "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
     "serve:css": "tcm src/renderer --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,7 +28,6 @@
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
     "electron-devtools-installer": "^2.2.4",
-    "hard-source-webpack-plugin": "https://github.com/nomcopter/hard-source-webpack-plugin",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "postcss-icss-values": "^2.0.1",
