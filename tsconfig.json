@@ -6,7 +6,11 @@
     "outDir": "./dist",
     "strict": true,
     "strictNullChecks": true,
-    "paths": {},
+    "baseUrl": ".",
+    "rootDirs": ["src"],
+    "paths": {
+          "sanascan/*": ["src/*"]
+        },
     "esModuleInterop": true
   }
 }
