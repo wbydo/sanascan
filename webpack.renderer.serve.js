@@ -5,9 +5,10 @@ const renderer = require('./webpack.renderer.js')
 module.exports = Object.assign(
   renderer,
   {
+    target: 'web',
     devServer: {
       inline: true,
-      contentBase: 'dist'
+      contentBase: 'dist/renderer'
     },
     devtool: "cheap-module-source-map",
   }

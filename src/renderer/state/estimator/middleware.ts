@@ -1,5 +1,4 @@
 import { Dispatch } from "redux";
-import { URL } from "url";
 import { stringify } from "querystring";
 
 import { RootState } from "../reducers";
