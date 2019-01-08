@@ -4,5 +4,5 @@ const renderer = require('./webpack.renderer.js')
 
 module.exports = Object.assign(
   renderer,
-  {target: 'electron-renderer'}
+  {target: 'web'}
 );
