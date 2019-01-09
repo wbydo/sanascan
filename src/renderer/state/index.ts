@@ -57,6 +57,8 @@ export const store = createStore(
 
 export const operations = (dispatch: Dispatch) => {
   return {
+    changeDisplayValue: configWindowOperations.setScanSpeed(dispatch),
+    configureWindowClose: configWindowOperations.windowClose(dispatch),
     configureWindowOpen: configWindowOperations.windowOpen(dispatch),
     resetEstimator: estimatorOperations.reset(dispatch),
     sendKey: estimatorOperations.sendKey(dispatch),

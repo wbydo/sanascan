@@ -4,9 +4,7 @@ import {Dispatch} from "redux";
 
 import * as styles from "./Configure.css";
 
-import { RootState } from "../state";
-import { actions as configWindowActions } from "../state/configWindow";
-import { actions as timerActions } from "../state/timer";
+import { RootState, operations } from "../state";
 
 interface StateProps {
   scanSpeed: {
@@ -16,7 +14,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  deactivateConfigure: (lastValue: number) => void;
+  configureWindowClose: (lastValue: number) => void;
   changeDisplayValue: (scanSpeed: number) => void;
 }
 
@@ -36,7 +34,7 @@ class Configure extends React.Component<Props> {
   }
 
   private deactivateConfigure = () => {
-    this.props.deactivateConfigure(this.props.scanSpeed.configWindow);
+    this.props.configureWindowClose(this.props.scanSpeed.configWindow);
   }
 
   private handleChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -55,18 +53,5 @@ export default connect(
       },
     };
   },
-  (dispatch: Dispatch): DispatchProps => {
-    return {
-      changeDisplayValue: (scanSpeed: number) => {
-        dispatch(configWindowActions.setScanSpeed(scanSpeed));
-      },
-      deactivateConfigure: (lastValue: number) => {
-        if (lastValue > 0) {
-          dispatch(timerActions.setScanSpeed(lastValue));
-        }
-        dispatch(configWindowActions.setActive(false));
-        dispatch(timerActions.start());
-      },
-    };
-  },
+  (dispatch: Dispatch): DispatchProps => operations(dispatch),
 )(Configure);
