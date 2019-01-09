@@ -3,38 +3,30 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./component/CharacterBoard";
-import Configure from "./Configure";
+import Configure, { Props as ConfigureProps } from "./Configure";
 import * as styles from "./App.css";
 
-import { RootState, operations } from "../state/";
+import { RootState, operations, selectors } from "../state/";
 
 // import { ipcRenderer } from "electron";
 
-interface StateProps {
+export interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
   timerScanSpeed: number;
   result: string;
 }
 
-interface DispatchProps {
+export interface DispatchProps {
   configureWindowOpen: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
   sendKey: (key: number) => void;
   resetEstimator: () => void;
 }
 
-type Props = StateProps & DispatchProps;
+type Props = DispatchProps & StateProps & ConfigureProps;
 
 class App extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-
-    // ipcRenderer.on("openConfigureWindow", () => {
-    //   this.openConfigureWindow();
-    // });
-  }
-
   public render() {
     return(
       <div
@@ -45,7 +37,7 @@ class App extends React.Component<Props> {
         <div onClick={this.handleClick}>
           <CharacterBoard activeColumn={this.props.activeColumn}/>
         </div>
-        {this.props.configureWindowIsActive && <Configure />}
+        {this.props.configureWindowIsActive && <Configure { ...this.props }/>}
         <button onClick={this.configureWindowOpen}>設定</button>
         <button onClick={this.props.resetEstimator}>はじめから</button>
       </div>
@@ -66,13 +58,6 @@ class App extends React.Component<Props> {
 }
 
 export default connect(
-  (state: RootState): StateProps => {
-    return {
-      activeColumn: state.cursol.activeColumn,
-      configureWindowIsActive: state.configWindow.isActive,
-      result: state.estimator.result,
-      timerScanSpeed: state.timer.scanSpeed,
-    };
-  },
-  (dispatch: Dispatch): DispatchProps => operations(dispatch),
+  (state: RootState) => selectors(state),
+  (dispatch: Dispatch) => operations(dispatch),
 )(App);

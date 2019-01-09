@@ -55,6 +55,16 @@ export const store = createStore(
   enhancer,
 );
 
+export const selectors = (state: RootState) => {
+  return {
+    activeColumn: state.cursol.activeColumn,
+    configureWindowIsActive: state.configWindow.isActive,
+    configureWindowScanSpeed: state.configWindow.scanSpeed,
+    result: state.estimator.result,
+    timerScanSpeed: state.timer.scanSpeed,
+  };
+};
+
 export const operations = (dispatch: Dispatch) => {
   return {
     changeDisplayValue: configWindowOperations.setScanSpeed(dispatch),
