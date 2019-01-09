@@ -1,34 +1,25 @@
 import React from "react";
-import {connect} from "react-redux";
-import {Dispatch} from "redux";
 
 import * as styles from "./Configure.css";
 
-import { RootState } from "../state";
-import { actions as configWindowActions } from "../state/configWindow";
-import { actions as timerActions } from "../state/timer";
-
 interface StateProps {
-  scanSpeed: {
-    configWindow: number,
-    timer: number,
-  };
+  configureWindowScanSpeed: number;
 }
 
 interface DispatchProps {
-  deactivateConfigure: (lastValue: number) => void;
+  configureWindowClose: (lastValue: number) => void;
   changeDisplayValue: (scanSpeed: number) => void;
 }
 
-type Props = StateProps & DispatchProps;
+export type Props = StateProps & DispatchProps;
 
-class Configure extends React.Component<Props> {
+export default class Configure extends React.Component<Props> {
   public render() {
     return(
       <div id="Configure" className={styles.frame}>
         <div className={styles.content}>
           <h1>環境設定</h1>
-          <input type="number" value={this.props.scanSpeed.configWindow} onChange={this.handleChange}/>
+          <input type="number" value={this.props.configureWindowScanSpeed} onChange={this.handleChange}/>
           <button onClick={this.deactivateConfigure}>Off</button>
         </div>
       </div>
@@ -36,7 +27,7 @@ class Configure extends React.Component<Props> {
   }
 
   private deactivateConfigure = () => {
-    this.props.deactivateConfigure(this.props.scanSpeed.configWindow);
+    this.props.configureWindowClose(this.props.configureWindowScanSpeed);
   }
 
   private handleChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -45,28 +36,3 @@ class Configure extends React.Component<Props> {
     this.props.changeDisplayValue(scanSpeed);
   }
 }
-
-export default connect(
-  (state: RootState): StateProps => {
-    return {
-      scanSpeed: {
-        configWindow: state.configWindow.scanSpeed,
-        timer: state.timer.scanSpeed,
-      },
-    };
-  },
-  (dispatch: Dispatch): DispatchProps => {
-    return {
-      changeDisplayValue: (scanSpeed: number) => {
-        dispatch(configWindowActions.setScanSpeed(scanSpeed));
-      },
-      deactivateConfigure: (lastValue: number) => {
-        if (lastValue > 0) {
-          dispatch(timerActions.setScanSpeed(lastValue));
-        }
-        dispatch(configWindowActions.setActive(false));
-        dispatch(timerActions.start());
-      },
-    };
-  },
-)(Configure);

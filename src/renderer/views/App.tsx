@@ -3,42 +3,30 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./component/CharacterBoard";
-import Configure from "./Configure";
+import Configure, { Props as ConfigureProps } from "./Configure";
 import * as styles from "./App.css";
 
-import { RootState } from "../state/";
-
-import { actions as configWindowActions } from "../state/configWindow";
-import { actions as timerActions } from "../state/timer";
-import { actions as estimatorActions } from "../state/estimator";
+import { RootState, operations, selectors } from "../state/";
 
 // import { ipcRenderer } from "electron";
 
-interface StateProps {
+export interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
   timerScanSpeed: number;
   result: string;
 }
 
-interface DispatchProps {
-  openConfigureWindow: (scanSpeed: number) => void;
+export interface DispatchProps {
+  configureWindowOpen: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
   sendKey: (key: number) => void;
   resetEstimator: () => void;
 }
 
-type Props = StateProps & DispatchProps;
+type Props = DispatchProps & StateProps & ConfigureProps;
 
 class App extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-
-    // ipcRenderer.on("openConfigureWindow", () => {
-    //   this.openConfigureWindow();
-    // });
-  }
-
   public render() {
     return(
       <div
@@ -49,8 +37,8 @@ class App extends React.Component<Props> {
         <div onClick={this.handleClick}>
           <CharacterBoard activeColumn={this.props.activeColumn}/>
         </div>
-        {this.props.configureWindowIsActive && <Configure />}
-        <button onClick={this.openConfigureWindow}>設定</button>
+        {this.props.configureWindowIsActive && <Configure { ...this.props }/>}
+        <button onClick={this.configureWindowOpen}>設定</button>
         <button onClick={this.props.resetEstimator}>はじめから</button>
       </div>
     );
@@ -60,8 +48,8 @@ class App extends React.Component<Props> {
     return this.props.startFetchEstimatorId();
   }
 
-  private openConfigureWindow = () => {
-    this.props.openConfigureWindow(this.props.timerScanSpeed);
+  private configureWindowOpen = () => {
+    this.props.configureWindowOpen(this.props.timerScanSpeed);
   }
 
   private handleClick = () => {
@@ -70,24 +58,6 @@ class App extends React.Component<Props> {
 }
 
 export default connect(
-  (state: RootState): StateProps => {
-    return {
-      activeColumn: state.cursol.activeColumn,
-      configureWindowIsActive: state.configWindow.isActive,
-      result: state.estimator.result,
-      timerScanSpeed: state.timer.scanSpeed,
-    };
-  },
-  (dispatch: Dispatch): DispatchProps => {
-    return {
-      openConfigureWindow: (scanSpeed: number) => {
-        dispatch(timerActions.setActive(false));
-        dispatch(configWindowActions.setScanSpeed(scanSpeed));
-        dispatch(configWindowActions.setActive(true));
-      },
-      resetEstimator: () => dispatch(estimatorActions.reset()),
-      sendKey: (key: number) => dispatch(estimatorActions.sendKey(key)),
-      startFetchEstimatorId: () => dispatch(estimatorActions.fetchId("start")),
-    };
-  },
+  (state: RootState) => selectors(state),
+  (dispatch: Dispatch) => operations(dispatch),
 )(App);
