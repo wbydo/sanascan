@@ -1,19 +1,54 @@
 import { createStore, applyMiddleware } from "redux";
+import { combineReducers } from "redux";
+
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import middlewares from "./middlewares";
-import reducer from "./reducers";
-import { RootState } from "./reducers";
+import { configWindowReducer } from "./configWindow";
 
-export type RootState = RootState;
+import { cursolReducer } from "./cursol";
+
+import { estimatorReducer } from "./estimator";
+import { estimatorMiddleware } from "./estimator";
+
+import { timerMiddleware } from "./timer";
+import { timerReducer } from "./timer";
+
+export interface RootState {
+  configWindow: {
+    isActive: boolean;
+    scanSpeed: number;
+  };
+  cursol: {
+    activeColumn: number;
+  };
+  timer: {
+    id: number | null;
+    isActive: boolean;
+    scanSpeed: number;
+  };
+  estimator: {
+    id: number | null;
+    result: string;
+  };
+}
+
+const middlewares = [
+  timerMiddleware,
+  estimatorMiddleware,
+];
 
 const enhancer = composeWithDevTools(
   applyMiddleware(...middlewares),
 );
 
-const store = createStore(
+export const reducer = combineReducers({
+  configWindow: configWindowReducer,
+  cursol: cursolReducer,
+  estimator: estimatorReducer,
+  timer: timerReducer,
+});
+
+export const store = createStore(
   reducer,
   enhancer,
 );
-
-export default store;

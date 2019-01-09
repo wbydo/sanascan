@@ -9,7 +9,8 @@
     "build:renderer": "webpack --config webpack.renderer.build.js",
     "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
     "serve:css": "tcm src/renderer --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve:test": "jest --watch",
+    "test": "jest"
   },
   "repository": "git+https://wbydo@bitbucket.org/wbydo/caluculator.git",
   "author": "wbydo <wbydo@users.noreply.github.com>",

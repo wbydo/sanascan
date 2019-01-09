@@ -1,13 +1,7 @@
 import * as types from "./types";
 
-export interface Action {
-  error: boolean;
-  type: string;
-}
-
-export const increment: () => Action = () => {
+export const increment = () => {
   return {
-    error: false,
     type: types.INCREMENT,
   };
 };

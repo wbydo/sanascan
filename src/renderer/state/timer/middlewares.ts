@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import { RootState } from "../reducers";
+import { RootState } from "..";
 
 import { cursolActions } from "../cursol/index";
 

@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { stringify } from "querystring";
 
-import { RootState } from "../reducers";
+import { RootState } from "..";
 
 import * as types from "./types";
 import * as actions from "./actions";
