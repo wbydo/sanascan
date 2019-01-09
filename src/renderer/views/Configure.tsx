@@ -5,8 +5,8 @@ import {Dispatch} from "redux";
 import * as styles from "./Configure.css";
 
 import { RootState } from "../state";
-import { configWindowActions } from "../state/configWindow";
-import { timerActions } from "../state/timer";
+import { actions as configWindowActions } from "../state/configWindow";
+import { actions as timerActions } from "../state/timer";
 
 interface StateProps {
   scanSpeed: {

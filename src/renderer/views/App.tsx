@@ -8,9 +8,9 @@ import * as styles from "./App.css";
 
 import { RootState } from "../state/";
 
-import { configWindowActions } from "../state/configWindow/index";
-import { timerActions } from "../state/timer/index";
-import { estimatorActions } from "../state/estimator";
+import { actions as configWindowActions } from "../state/configWindow";
+import { actions as timerActions } from "../state/timer";
+import { actions as estimatorActions } from "../state/estimator";
 
 // import { ipcRenderer } from "electron";
 

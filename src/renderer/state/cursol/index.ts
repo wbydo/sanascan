@@ -1,9 +1,7 @@
-import reducer from "./reducers";
+import { reducer } from "./reducers";
+import * as actions from "./actions";
 
-import { increment } from "./actions";
-
-export const cursolActions = {
-  increment,
+export {
+  actions,
+  reducer,
 };
-
-export const cursolReducer = reducer;

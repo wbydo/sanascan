@@ -39,9 +39,7 @@ const scanSpeedReducer = (state: number | undefined, action: Action): number => 
   return state;
 };
 
-const reducer = combineReducers({
+export const reducer = combineReducers({
   isActive: isActiveReducer,
   scanSpeed: scanSpeedReducer,
 });
-
-export default reducer;

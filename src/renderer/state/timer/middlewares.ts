@@ -2,7 +2,7 @@ import { Dispatch } from "redux";
 
 import { RootState } from "..";
 
-import { cursolActions } from "../cursol/index";
+import { actions as cursolActions } from "../cursol";
 
 import { start, finish, setActive, setId } from "./actions";
 import { Action } from "./reducers";
@@ -17,7 +17,7 @@ interface Store {
 
 type Middleware = (store: Store) => (next: Dispatch) => (action: Action) => void;
 
-const middleware: Middleware
+export const middleware: Middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {
 
   const state = store.getState();
@@ -52,5 +52,3 @@ const middleware: Middleware
       next(action);
   }
 };
-
-export default middleware;

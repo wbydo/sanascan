@@ -18,7 +18,7 @@ const initialState: RootState = {
   result: "",
 };
 
-const setId = (state: number | null | undefined, action: Action) => {
+const setId = (_: number | null | undefined, action: Action) => {
   if (action.type !== types.SET_ID) {
     throw new SanaScanError();
   }
@@ -56,9 +56,7 @@ const resultReducer = (state: string | undefined, action: Action) => {
   }
 };
 
-const reducer = combineReducers({
+export const reducer = combineReducers({
   id: idReducer,
   result: resultReducer,
 });
-
-export default reducer;

@@ -1,9 +1,9 @@
-import * as Actions from "./actions";
-import middleware from "./middlewares";
-import reducer from "./reducers";
-import * as types from "./types";
+import { reducer } from "./reducers";
+import * as actions from "./actions";
+import { middleware } from "./middlewares";
 
-export const timerActions = Actions;
-export const timerMiddleware = middleware;
-export const timerReducer = reducer;
-export const timerActionTypes = types;
+export {
+  actions,
+  reducer,
+  middleware,
+};

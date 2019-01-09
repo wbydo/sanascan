@@ -54,10 +54,8 @@ const idReducer = (state: number | null | undefined, action: Action): number | n
   return state;
 };
 
-const reducer = combineReducers({
+export const reducer = combineReducers({
   id: idReducer,
   isActive: isActiveReducer,
   scanSpeed: scanSpeedReducer,
 });
-
-export default reducer;

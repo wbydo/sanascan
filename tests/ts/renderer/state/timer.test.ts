@@ -1,16 +1,14 @@
 import { reducer } from "sanascan/renderer/state";
+import { actions } from "sanascan/renderer/state/timer";
+
 import { initialState } from "./initialState";
 
 describe("isActiveが設定できる", () => {
   for (const i of [true, false]) {
     test( i.toString() + "の場合", () => {
-      const isActive = i;
       const result = reducer(
         initialState,
-        {
-          payload: { isActive },
-          type: "sanascan/timer/SET_ACTIVE",
-        },
+        actions.setActive(i),
       );
       expect(result).toMatchSnapshot();
     });
@@ -21,22 +19,16 @@ test("idが設定できる", () => {
   const id = 1234;
   const result = reducer(
     initialState,
-    {
-      payload: { id },
-      type: "sanascan/timer/SET_ID",
-    },
+    actions.setId(id),
   );
   expect(result).toMatchSnapshot();
 });
 
 test("scanSpeedが設定できる", () => {
-  const scanSpeed = 500;
+  const scanSpeed = 234;
   const result = reducer(
     initialState,
-    {
-      payload: { scanSpeed },
-      type: "sanascan/timer/SET_SCAN_SPEED",
-    },
+    actions.setScanSpeed(scanSpeed),
   );
   expect(result).toMatchSnapshot();
 });

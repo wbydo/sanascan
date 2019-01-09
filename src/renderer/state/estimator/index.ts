@@ -1,7 +1,9 @@
+import { reducer } from "./reducers";
 import * as actions from "./actions";
-import middleware from "./middleware";
-import reducer from "./reducers";
+import { middleware } from "./middleware";
 
-export const estimatorActions = actions;
-export const estimatorMiddleware = middleware;
-export const estimatorReducer = reducer;
+export {
+  actions,
+  reducer,
+  middleware,
+};

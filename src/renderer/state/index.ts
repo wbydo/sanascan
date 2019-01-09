@@ -3,15 +3,15 @@ import { combineReducers } from "redux";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { configWindowReducer } from "./configWindow";
+import { reducer as configWindowReducer } from "./configWindow";
 
-import { cursolReducer } from "./cursol";
+import { reducer as cursolReducer } from "./cursol";
 
-import { estimatorReducer } from "./estimator";
-import { estimatorMiddleware } from "./estimator";
+import { reducer as estimatorReducer } from "./estimator";
+import { middleware as estimatorMiddleware } from "./estimator";
 
-import { timerMiddleware } from "./timer";
-import { timerReducer } from "./timer";
+import { reducer as timerReducer } from "./timer";
+import { middleware as timerMiddleware } from "./timer";
 
 export interface RootState {
   configWindow: {

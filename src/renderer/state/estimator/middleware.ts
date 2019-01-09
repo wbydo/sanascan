@@ -12,7 +12,7 @@ import SanascanError from "../../error";
 
 import { setTimeoutPromise } from "../util";
 
-import { timerActions } from "../timer";
+import { actions as timerActions } from "../timer";
 
 import { Action } from "./reducers";
 
@@ -90,7 +90,7 @@ const processReset = async (store: Store, next: Dispatch, action: Action) => {
   store.dispatch(timerActions.start());
 };
 
-const middleware: Middleware
+export const middleware: Middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {
 
   switch (action.type) {
@@ -138,5 +138,3 @@ const middleware: Middleware
       next(action);
   }
 };
-
-export default middleware;

@@ -41,8 +41,6 @@ const activeColumnReducer = (state: number | undefined, action: Action) => {
   return state;
 };
 
-const reducer = combineReducers({
+export const reducer = combineReducers({
   activeColumn: activeColumnReducer,
 });
-
-export default reducer;

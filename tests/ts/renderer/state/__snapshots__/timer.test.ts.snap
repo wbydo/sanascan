@@ -79,7 +79,7 @@ Object {
   "timer": Object {
     "id": null,
     "isActive": false,
-    "scanSpeed": 500,
+    "scanSpeed": 234,
   },
 }
 `;
