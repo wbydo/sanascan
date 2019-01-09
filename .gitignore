@@ -1,11 +1,17 @@
-env.py
+# Python
 __pycache__
 .ipynb_checkpoints/
 .venv/
+*.egg-info
 
-vendor/
-config.yml
+
+# JavaScript
+node_modules/
 
 /dist/
-.cache/
-node_modules/
+/.cache/
+
+
+# Ruby
+vendor/
+config.yml
