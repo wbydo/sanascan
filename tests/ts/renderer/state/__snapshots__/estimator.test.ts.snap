@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`idが設定できる 1`] = `
+Object {
+  "configWindow": Object {
+    "isActive": false,
+    "scanSpeed": 0,
+  },
+  "cursol": Object {
+    "activeColumn": 0,
+  },
+  "estimator": Object {
+    "id": 1234,
+    "result": "",
+  },
+  "timer": Object {
+    "id": null,
+    "isActive": false,
+    "scanSpeed": 500,
+  },
+}
+`;
+
+exports[`resultを設定できる 1`] = `
+Object {
+  "configWindow": Object {
+    "isActive": false,
+    "scanSpeed": 0,
+  },
+  "cursol": Object {
+    "activeColumn": 0,
+  },
+  "estimator": Object {
+    "id": null,
+    "result": "あらゆる現実を全て自分の方へねじ曲げたのだ",
+  },
+  "timer": Object {
+    "id": null,
+    "isActive": false,
+    "scanSpeed": 500,
+  },
+}
+`;

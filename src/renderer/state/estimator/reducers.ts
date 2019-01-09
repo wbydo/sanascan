@@ -18,7 +18,7 @@ const initialState: RootState = {
   result: "",
 };
 
-const setId = (state: number | null, action: Action) => {
+const setId = (state: number | null | undefined, action: Action) => {
   if (action.type !== types.SET_ID) {
     throw new SanaScanError();
   }
@@ -31,13 +31,14 @@ const setId = (state: number | null, action: Action) => {
 };
 
 const idReducer = (state: number | null | undefined, action: Action) => {
+  if (action.type === types.SET_ID) {
+    return setId(state, action);
+  }
+
   if (state === undefined) {
     return initialState.id;
   }
 
-  if (action.type === types.SET_ID) {
-    return setId(state, action);
-  }
   return state;
 };
 

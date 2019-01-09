@@ -1,16 +1,20 @@
-import { store } from "sanascan/renderer/state";
 import { reducer } from "sanascan/renderer/state";
 
-test("isActiveが設定できる", () => {
+import { initialState } from "./initialState";
+
+describe("isActiveが設定できる", () => {
   for (const i of [true, false]) {
-    const isActive = i;
-    const result = reducer(
-      undefined,
-      {
-        payload: { isActive },
-        type: "sanascan/configWindow/SET_ACTIVE",
-      },
-    );
-    expect(result.configWindow.isActive).toEqual(isActive);
+    test(i.toString() + "の場合", () => {
+      const isActive = i;
+      const result = reducer(
+        initialState,
+        {
+          payload: { isActive },
+          type: "sanascan/configWindow/SET_ACTIVE",
+        },
+      );
+      expect(result).toMatchSnapshot();
+    });
   }
+
 });
