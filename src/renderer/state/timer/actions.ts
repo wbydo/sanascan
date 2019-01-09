@@ -1,5 +1,6 @@
 import * as types from "./types";
 
+// 移動検討
 export const start = () => {
   return {
     error: false,
@@ -7,6 +8,7 @@ export const start = () => {
   };
 };
 
+// 移動検討
 export const finish = (id?: number) => {
   return {
     error: false,

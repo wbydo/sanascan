@@ -1,6 +1,8 @@
+// 移動検討
 export const START: "sanascan/timer/START"
   = "sanascan/timer/START";
 
+// 移動検討
 export const FINISH: "sanascan/timer/FINISH"
   = "sanascan/timer/FINISH";
 

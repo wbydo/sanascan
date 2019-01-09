@@ -1,15 +1,6 @@
 import * as types from "./types";
 
-export interface Action {
-  error: boolean;
-  type: string;
-  payload?: {
-    isActive?: boolean;
-    scanSpeed?: number;
-  };
-}
-
-export const setActive = (isActive: boolean): Action => {
+export const setActive = (isActive: boolean) => {
   return {
     error: false,
     payload: {
@@ -19,7 +10,7 @@ export const setActive = (isActive: boolean): Action => {
   };
 };
 
-export const setScanSpeed = (scanSpeed: number): Action => {
+export const setScanSpeed = (scanSpeed: number) => {
   return {
     error: false,
     payload: {

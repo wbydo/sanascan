@@ -1,7 +1,10 @@
 import { combineReducers } from "redux";
 
-import { Action } from "./actions";
+import * as actions from "./actions";
 import * as types from "./types";
+
+import { Action as _Action } from "../util";
+export type Action = _Action<typeof actions>;
 
 interface RootState {
   isActive: boolean;
@@ -14,13 +17,14 @@ const initialState: RootState = {
 };
 
 const isActiveReducer = (state: boolean | undefined, action: Action): boolean => {
+  if ((action.type === types.SET_ACTIVE) && action.payload && (action.payload.isActive !== undefined)) {
+    return action.payload.isActive;
+  }
+
   if (state === undefined) {
     return initialState.isActive;
   }
 
-  if ((action.type === types.SET_ACTIVE) && action.payload && (action.payload.isActive !== undefined)) {
-    return action.payload.isActive;
-  }
   return state;
 };
 
