@@ -1,3 +1,5 @@
+import snapshotDiff from "snapshot-diff";
+
 import { reducer } from "sanascan/renderer/state";
 import { actions } from "sanascan/renderer/state/estimator";
 
@@ -9,7 +11,9 @@ test("idが設定できる", () => {
     initialState,
     actions.setId(id),
   );
-  expect(result).toMatchSnapshot();
+  expect(
+    snapshotDiff( initialState, result),
+  ).toMatchSnapshot();
 });
 
 test("resultを設定できる", () => {
@@ -18,5 +22,7 @@ test("resultを設定できる", () => {
     initialState,
     actions.setResult(content),
   );
-  expect(result).toMatchSnapshot();
+  expect(
+    snapshotDiff( initialState, result),
+  ).toMatchSnapshot();
 });

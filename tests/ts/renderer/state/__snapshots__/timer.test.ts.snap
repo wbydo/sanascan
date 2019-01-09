@@ -1,85 +1,60 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`idが設定できる 1`] = `
-Object {
-  "configWindow": Object {
-    "isActive": false,
-    "scanSpeed": 0,
-  },
-  "cursol": Object {
-    "activeColumn": 0,
-  },
-  "estimator": Object {
-    "id": null,
-    "result": "",
-  },
-  "timer": Object {
-    "id": 1234,
-    "isActive": false,
-    "scanSpeed": 500,
-  },
-}
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -9,10 +9,10 @@
+    \\"estimator\\": Object {
+      \\"id\\": null,
+      \\"result\\": \\"\\",
+    },
+    \\"timer\\": Object {
+-     \\"id\\": null,
++     \\"id\\": 1234,
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 500,
+    },
+  }"
 `;
 
 exports[`isActiveが設定できる falseの場合 1`] = `
-Object {
-  "configWindow": Object {
-    "isActive": false,
-    "scanSpeed": 0,
-  },
-  "cursol": Object {
-    "activeColumn": 0,
-  },
-  "estimator": Object {
-    "id": null,
-    "result": "",
-  },
-  "timer": Object {
-    "id": null,
-    "isActive": false,
-    "scanSpeed": 500,
-  },
-}
+"Snapshot Diff:
+Compared values have no visual difference."
 `;
 
 exports[`isActiveが設定できる trueの場合 1`] = `
-Object {
-  "configWindow": Object {
-    "isActive": false,
-    "scanSpeed": 0,
-  },
-  "cursol": Object {
-    "activeColumn": 0,
-  },
-  "estimator": Object {
-    "id": null,
-    "result": "",
-  },
-  "timer": Object {
-    "id": null,
-    "isActive": true,
-    "scanSpeed": 500,
-  },
-}
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -10,9 +10,9 @@
+      \\"id\\": null,
+      \\"result\\": \\"\\",
+    },
+    \\"timer\\": Object {
+      \\"id\\": null,
+-     \\"isActive\\": false,
++     \\"isActive\\": true,
+      \\"scanSpeed\\": 500,
+    },
+  }"
 `;
 
 exports[`scanSpeedが設定できる 1`] = `
-Object {
-  "configWindow": Object {
-    "isActive": false,
-    "scanSpeed": 0,
-  },
-  "cursol": Object {
-    "activeColumn": 0,
-  },
-  "estimator": Object {
-    "id": null,
-    "result": "",
-  },
-  "timer": Object {
-    "id": null,
-    "isActive": false,
-    "scanSpeed": 234,
-  },
-}
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -11,8 +11,8 @@
+      \\"result\\": \\"\\",
+    },
+    \\"timer\\": Object {
+      \\"id\\": null,
+      \\"isActive\\": false,
+-     \\"scanSpeed\\": 500,
++     \\"scanSpeed\\": 234,
+    },
+  }"
 `;

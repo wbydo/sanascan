@@ -1,3 +1,5 @@
+import snapshotDiff from "snapshot-diff";
+
 import { reducer } from "sanascan/renderer/state";
 import { actions } from "sanascan/renderer/state/timer";
 
@@ -10,7 +12,9 @@ describe("isActiveが設定できる", () => {
         initialState,
         actions.setActive(i),
       );
-      expect(result).toMatchSnapshot();
+      expect(
+        snapshotDiff( initialState, result),
+      ).toMatchSnapshot();
     });
   }
 });
@@ -21,7 +25,9 @@ test("idが設定できる", () => {
     initialState,
     actions.setId(id),
   );
-  expect(result).toMatchSnapshot();
+  expect(
+    snapshotDiff( initialState, result),
+  ).toMatchSnapshot();
 });
 
 test("scanSpeedが設定できる", () => {
@@ -30,5 +36,7 @@ test("scanSpeedが設定できる", () => {
     initialState,
     actions.setScanSpeed(scanSpeed),
   );
-  expect(result).toMatchSnapshot();
+  expect(
+    snapshotDiff( initialState, result),
+  ).toMatchSnapshot();
 });
