@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import CharacterBoard from "./component/CharacterBoard";
-import Configure, { Props as ConfigureProps } from "./Configure";
+import Configure, { Props as ConfigureProps } from "./component/Configure";
 import * as styles from "./App.css";
 
 import { RootState, operations, selectors } from "../state/";
