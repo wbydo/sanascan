@@ -1,14 +1,16 @@
 import { createStore, applyMiddleware } from "redux";
-import { combineReducers } from "redux";
+import { combineReducers, Dispatch } from "redux";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import { reducer as configWindowReducer } from "./configWindow";
+import { operations as configWindowOperations } from "./configWindow";
 
 import { reducer as cursolReducer } from "./cursol";
 
 import { reducer as estimatorReducer } from "./estimator";
 import { middleware as estimatorMiddleware } from "./estimator";
+import { operations as estimatorOperations } from "./estimator";
 
 import { reducer as timerReducer } from "./timer";
 import { middleware as timerMiddleware } from "./timer";
@@ -52,3 +54,12 @@ export const store = createStore(
   reducer,
   enhancer,
 );
+
+export const operations = (dispatch: Dispatch) => {
+  return {
+    configureWindowOpen: configWindowOperations.windowOpen(dispatch),
+    resetEstimator: estimatorOperations.reset(dispatch),
+    sendKey: estimatorOperations.sendKey(dispatch),
+    startFetchEstimatorId: estimatorOperations.fetchId(dispatch),
+  };
+};

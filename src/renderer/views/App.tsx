@@ -6,11 +6,7 @@ import CharacterBoard from "./component/CharacterBoard";
 import Configure from "./Configure";
 import * as styles from "./App.css";
 
-import { RootState } from "../state/";
-
-import { actions as configWindowActions } from "../state/configWindow";
-import { actions as timerActions } from "../state/timer";
-import { actions as estimatorActions } from "../state/estimator";
+import { RootState, operations } from "../state/";
 
 // import { ipcRenderer } from "electron";
 
@@ -22,7 +18,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  openConfigureWindow: (scanSpeed: number) => void;
+  configureWindowOpen: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
   sendKey: (key: number) => void;
   resetEstimator: () => void;
@@ -50,7 +46,7 @@ class App extends React.Component<Props> {
           <CharacterBoard activeColumn={this.props.activeColumn}/>
         </div>
         {this.props.configureWindowIsActive && <Configure />}
-        <button onClick={this.openConfigureWindow}>設定</button>
+        <button onClick={this.configureWindowOpen}>設定</button>
         <button onClick={this.props.resetEstimator}>はじめから</button>
       </div>
     );
@@ -60,8 +56,8 @@ class App extends React.Component<Props> {
     return this.props.startFetchEstimatorId();
   }
 
-  private openConfigureWindow = () => {
-    this.props.openConfigureWindow(this.props.timerScanSpeed);
+  private configureWindowOpen = () => {
+    this.props.configureWindowOpen(this.props.timerScanSpeed);
   }
 
   private handleClick = () => {
@@ -78,16 +74,5 @@ export default connect(
       timerScanSpeed: state.timer.scanSpeed,
     };
   },
-  (dispatch: Dispatch): DispatchProps => {
-    return {
-      openConfigureWindow: (scanSpeed: number) => {
-        dispatch(timerActions.setActive(false));
-        dispatch(configWindowActions.setScanSpeed(scanSpeed));
-        dispatch(configWindowActions.setActive(true));
-      },
-      resetEstimator: () => dispatch(estimatorActions.reset()),
-      sendKey: (key: number) => dispatch(estimatorActions.sendKey(key)),
-      startFetchEstimatorId: () => dispatch(estimatorActions.fetchId("start")),
-    };
-  },
+  (dispatch: Dispatch): DispatchProps => operations(dispatch),
 )(App);
