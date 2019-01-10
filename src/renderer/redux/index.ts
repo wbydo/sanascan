@@ -7,9 +7,9 @@ import { reducer as configWindowReducer } from "./state/configWindow";
 import { reducer as cursolReducer } from "./state/cursol";
 import { reducer as estimatorReducer } from "./state/estimator";
 import { reducer as timerReducer } from "./state/timer";
-import { middleware as timerEventMiddleware } from "./cross/timerEvent";
 
-import { middleware as httpMiddleware } from "./cross/http";
+import { middleware as timerEventMiddleware } from "./cross/timerEvent";
+import { middlewares as httpMiddlewares } from "./cross/http";
 
 export interface RootState {
   configWindow: {
@@ -31,7 +31,7 @@ export interface RootState {
 }
 
 const middlewares = [
-  httpMiddleware,
+  ...httpMiddlewares,
   timerEventMiddleware,
 ];
 
