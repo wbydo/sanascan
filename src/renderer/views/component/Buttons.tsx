@@ -6,7 +6,7 @@ import { StateProps as AppStateProps } from "../App";
 import { DispatchProps as AppDispatchProps } from "../App";
 import { Props as _Props } from "../util";
 
-import DeveloperControl from "./DeveloperControl";
+import DeveloperControl from "../container/DeveloperControl";
 
 type StateProps = Pick<
   AppStateProps,

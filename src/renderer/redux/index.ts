@@ -65,15 +65,5 @@ export const store = createStore(
   enhancer,
 );
 
-export const selectors = (state: RootState) => {
-  return {
-    activeColumn: state.cursol.activeColumn,
-    configureWindowIsActive: state.configWindow.isActive,
-    configureWindowScanSpeed: state.configWindow.scanSpeed,
-    developerMode: state.developerMode,
-    result: state.estimator.result,
-    timerScanSpeed: state.timer.scanSpeed,
-  };
-};
-
+export { selectors } from "./selectors";
 export { operations } from "./operations";
