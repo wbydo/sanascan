@@ -14,10 +14,10 @@ exports[`activeColumnが0に戻る 1`] = `
 -     \\"activeColumn\\": 9,
 +     \\"activeColumn\\": 0,
     },
+    \\"developerMode\\": false,
     \\"estimator\\": Object {
       \\"id\\": null,
-      \\"result\\": \\"\\",
-    },"
+      \\"result\\": \\"\\","
 `;
 
 exports[`activeColumnが1増える 1`] = `
@@ -34,8 +34,8 @@ exports[`activeColumnが1増える 1`] = `
 -     \\"activeColumn\\": 0,
 +     \\"activeColumn\\": 1,
     },
+    \\"developerMode\\": false,
     \\"estimator\\": Object {
       \\"id\\": null,
-      \\"result\\": \\"\\",
-    },"
+      \\"result\\": \\"\\","
 `;

@@ -9,6 +9,7 @@ Object {
   "cursol": Object {
     "activeColumn": 0,
   },
+  "developerMode": false,
   "estimator": Object {
     "id": null,
     "result": "",

@@ -5,6 +5,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import { reducer as configWindowReducer } from "./state/configWindow";
 import { reducer as cursolReducer } from "./state/cursol";
+import { reducer as developerModeReducer } from "./state/developerMode";
 import { reducer as estimatorReducer } from "./state/estimator";
 import { reducer as timerReducer } from "./state/timer";
 
@@ -19,6 +20,7 @@ export interface RootState {
   cursol: {
     activeColumn: number;
   };
+  developerMode: boolean;
   timer: {
     id: number | null;
     isActive: boolean;
@@ -42,6 +44,7 @@ const enhancer = composeWithDevTools(
 export const reducer = combineReducers({
   configWindow: configWindowReducer,
   cursol: cursolReducer,
+  developerMode: developerModeReducer,
   estimator: estimatorReducer,
   timer: timerReducer,
 });
