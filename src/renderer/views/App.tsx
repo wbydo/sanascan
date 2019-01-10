@@ -3,27 +3,20 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
 import * as styles from "./App.css";
+import { Props as _Props } from "./util";
 
+import Buttons from "./component/Buttons";
 import CharacterBoard from "./component/CharacterBoard";
-import Configure, { Props as ConfigureProps } from "./component/Configure";
-import Buttons, { Props as ButtonsProps} from "./component/Buttons";
+import Configure from "./component/Configure";
 
 import { RootState, operations, selectors } from "../redux";
 
 // import { ipcRenderer } from "electron";
 
-interface StateProps {
-  configureWindowIsActive: boolean;
-  activeColumn: number;
-  result: string;
-}
+export type StateProps = ReturnType<typeof selectors>;
+export type DispatchProps = ReturnType<typeof operations>;
 
-interface DispatchProps {
-  startFetchEstimatorId: () => void;
-  sendKey: (key: number) => void;
-}
-
-export type Props = DispatchProps & StateProps & ConfigureProps & ButtonsProps;
+type Props = _Props<StateProps, DispatchProps>;
 
 class App extends React.Component<Props> {
   public render() {
@@ -44,16 +37,16 @@ class App extends React.Component<Props> {
 
   public componentDidMount = () => {
     if (!this.props.developerMode) {
-      this.props.startFetchEstimatorId();
+      this.props.dispatch.startFetchEstimatorId();
     }
   }
 
   private handleClick = () => {
-    this.props.sendKey(this.props.activeColumn);
+    this.props.dispatch.sendKey(this.props.activeColumn);
   }
 }
 
 export default connect(
   (state: RootState) => selectors(state),
-  (dispatch: Dispatch) => operations(dispatch),
+  (dispatch: Dispatch) => ({ dispatch: operations(dispatch) }),
 )(App);

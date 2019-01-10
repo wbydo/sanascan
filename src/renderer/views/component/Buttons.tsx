@@ -2,20 +2,23 @@ import * as React from "react";
 
 import * as styles from "./Buttons.css";
 
+import { StateProps as AppStateProps } from "../App";
+import { DispatchProps as AppDispatchProps } from "../App";
+import { Props as _Props } from "../util";
+
 import DeveloperControl from "./DeveloperControl";
 
-interface StateProps {
-  timerScanSpeed: number;
-  developerMode: boolean;
-}
+type StateProps = Pick<
+  AppStateProps,
+  "timerScanSpeed" | "developerMode"
+>;
 
-interface DispatchProps {
-  setDeveloperModeActivity: (isActive: boolean) => void;
-  configureWindowOpen: (scanSpeed: number) => void;
-  resetEstimator: () => void;
-}
+type DispatchProps = Pick<
+  AppDispatchProps,
+  "setDeveloperModeActivity" | "configureWindowOpen" | "resetEstimator"
+>;
 
-export type Props = StateProps & DispatchProps;
+type Props = _Props<StateProps, DispatchProps>;
 
 export default class Buttons extends React.Component<Props> {
   public render() {
@@ -23,14 +26,14 @@ export default class Buttons extends React.Component<Props> {
       <div id="buttons" className={styles.container}>
         <div>
           <button onClick={this.configureWindowOpen}>設定</button>
-          <button onClick={this.props.resetEstimator}>はじめから</button>
+          <button onClick={this.props.dispatch.resetEstimator}>はじめから</button>
         </div>
         <div>
           <input
-            type="checkbox"
-            checked={this.props.developerMode}
-            onClick={this.handleClickDeveloperMode}
-          />
+              type="checkbox"
+              checked={this.props.developerMode}
+              onClick={this.handleClickDeveloperMode}
+              />
           DeveloperMode
           {this.props.developerMode && <DeveloperControl />}
         </div>
@@ -39,10 +42,10 @@ export default class Buttons extends React.Component<Props> {
   }
 
   private configureWindowOpen = () => {
-    this.props.configureWindowOpen(this.props.timerScanSpeed);
+    this.props.dispatch.configureWindowOpen(this.props.timerScanSpeed);
   }
 
   private handleClickDeveloperMode = () => {
-    this.props.setDeveloperModeActivity(!this.props.developerMode);
+    this.props.dispatch.setDeveloperModeActivity(!this.props.developerMode);
   }
 }
