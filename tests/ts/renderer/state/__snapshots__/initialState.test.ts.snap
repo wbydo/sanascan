@@ -8,7 +8,9 @@ Object {
   },
   "cursol": Object {
     "activeColumn": 0,
-    "mode": "proposed",
+    "activeRow": 0,
+    "direction": "column",
+    "mode": "proposal",
   },
   "developerMode": true,
   "estimator": Object {

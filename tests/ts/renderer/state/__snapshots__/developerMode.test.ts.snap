@@ -5,11 +5,11 @@ exports[`isActiveが設定できる falseの場合 1`] = `
 - First value
 + Second value
 
-@@ -5,11 +5,11 @@
-    },
-    \\"cursol\\": Object {
+@@ -7,11 +7,11 @@
       \\"activeColumn\\": 0,
-      \\"mode\\": \\"proposed\\",
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
     },
 -   \\"developerMode\\": true,
 +   \\"developerMode\\": false,

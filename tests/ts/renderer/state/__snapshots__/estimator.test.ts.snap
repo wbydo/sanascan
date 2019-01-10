@@ -5,9 +5,9 @@ exports[`idが設定できる 1`] = `
 - First value
 + Second value
 
-@@ -7,11 +7,11 @@
-      \\"activeColumn\\": 0,
-      \\"mode\\": \\"proposed\\",
+@@ -9,11 +9,11 @@
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
     },
     \\"developerMode\\": true,
     \\"estimator\\": Object {
@@ -25,8 +25,8 @@ exports[`resultを設定できる 1`] = `
 - First value
 + Second value
 
-@@ -8,11 +8,11 @@
-      \\"mode\\": \\"proposed\\",
+@@ -10,11 +10,11 @@
+      \\"mode\\": \\"proposal\\",
     },
     \\"developerMode\\": true,
     \\"estimator\\": Object {

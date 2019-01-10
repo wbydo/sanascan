@@ -12,15 +12,25 @@ import { reducer as timerReducer } from "./state/timer";
 import { middlewares as timerEventMiddlewares } from "./cross/timerEvent";
 import { middlewares as httpMiddlewares } from "./cross/http";
 
+interface CursolProperty {
+  activeColumn: number;
+  activeRow: number;
+}
+
+export type CursolState = (
+  {mode: "normal", direction: "column"} & CursolProperty
+) | (
+  {mode: "normal", direction: "row"} & CursolProperty
+) | (
+  {mode: "proposal", direction: "column"} & CursolProperty
+);
+
 export interface RootState {
   configWindow: {
     isActive: boolean;
     scanSpeed: number;
   };
-  cursol: {
-    mode: "normal" | "proposed";
-    activeColumn: number;
-  };
+  cursol: CursolState;
   developerMode: boolean;
   timer: {
     id: number | null;
