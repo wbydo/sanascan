@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`activeColumnが0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,11 +2,11 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 9,
++     \\"activeColumn\\": 0,
+    },
+    \\"estimator\\": Object {
+      \\"id\\": null,
+      \\"result\\": \\"\\",
+    },"
+`;
+
+exports[`activeColumnが1増える 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,11 +2,11 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 0,
++     \\"activeColumn\\": 1,
+    },
+    \\"estimator\\": Object {
+      \\"id\\": null,
+      \\"result\\": \\"\\",
+    },"
+`;

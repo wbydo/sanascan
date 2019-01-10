@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`initialState 1`] = `
+Object {
+  "configWindow": Object {
+    "isActive": false,
+    "scanSpeed": 0,
+  },
+  "cursol": Object {
+    "activeColumn": 0,
+  },
+  "estimator": Object {
+    "id": null,
+    "result": "",
+  },
+  "timer": Object {
+    "id": null,
+    "isActive": false,
+    "scanSpeed": 500,
+  },
+}
+`;

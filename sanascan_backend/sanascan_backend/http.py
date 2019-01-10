@@ -15,6 +15,9 @@ from .key import Key
 class CORSMiddleware:
     def process_request(self, req: Request, resp: Response) -> None:
         resp.set_header('Access-Control-Allow-Origin', '*')
+        resp.set_header(
+                'Access-Control-Allow-Methods',
+                'GET,POST,PUT,DELETE,OPTIONS')
 
 
 class RootResource:

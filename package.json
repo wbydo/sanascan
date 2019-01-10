@@ -9,7 +9,8 @@
     "build:renderer": "webpack --config webpack.renderer.build.js",
     "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
     "serve:css": "tcm src/renderer --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve:test": "jest --watch",
+    "test": "jest"
   },
   "repository": "git+https://wbydo@bitbucket.org/wbydo/caluculator.git",
   "author": "wbydo <wbydo@users.noreply.github.com>",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/jest": "^23.3.12",
     "@types/node": "^10.12.0",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
@@ -30,6 +32,7 @@
     "electron-devtools-installer": "^2.2.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.6.0",
     "postcss-icss-values": "^2.0.1",
     "postcss-loader": "^3.0.0",
     "react": "^16.5.2",
@@ -37,7 +40,9 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.6",
+    "snapshot-diff": "^0.4.2",
     "style-loader": "^0.23.1",
+    "ts-jest": "^23.10.5",
     "ts-loader": "^5.2.2",
     "tslint": "^5.11.0",
     "tslint-loader": "^3.5.4",
