@@ -2,6 +2,9 @@ import { Dispatch } from "redux";
 
 import { operations as configWindowOperations } from "./state/configWindow";
 import { actions as configWindowActions } from "./state/configWindow";
+
+import { actions as cursolActions } from "./state/cursol";
+
 import { actions as timerActions } from "./state/timer";
 import { actions as developerModeActions } from "./state/developerMode";
 
@@ -27,6 +30,9 @@ export const operations = (dispatch: Dispatch) => {
     changeDisplayValue: configWindowOperations.setScanSpeed(dispatch),
     configureWindowClose: configWindowClose(dispatch),
     configureWindowOpen: configWindowOpen(dispatch),
+    developerMode: {
+      increment: () => dispatch(cursolActions.increment()),
+    },
     resetEstimator: () => dispatch(httpActions.reset()),
     sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
     setDeveloperModeActivity: (isActive: boolean) => dispatch(developerModeActions.setActive(isActive)),
