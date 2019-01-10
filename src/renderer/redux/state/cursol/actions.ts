@@ -5,3 +5,10 @@ export const increment = () => {
     type: types.INCREMENT,
   };
 };
+
+export const setMode = (mode: "normal" | "proposed") => {
+  return {
+    payload: { mode },
+    type: types.SET_MODE,
+  };
+};

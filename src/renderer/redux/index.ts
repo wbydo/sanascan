@@ -18,6 +18,7 @@ export interface RootState {
     scanSpeed: number;
   };
   cursol: {
+    mode: "normal" | "proposed";
     activeColumn: number;
   };
   developerMode: boolean;

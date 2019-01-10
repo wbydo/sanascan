@@ -13,11 +13,11 @@ exports[`activeColumnが0に戻る 1`] = `
     \\"cursol\\": Object {
 -     \\"activeColumn\\": 9,
 +     \\"activeColumn\\": 0,
+      \\"mode\\": \\"proposed\\",
     },
-    \\"developerMode\\": false,
+    \\"developerMode\\": true,
     \\"estimator\\": Object {
-      \\"id\\": null,
-      \\"result\\": \\"\\","
+      \\"id\\": null,"
 `;
 
 exports[`activeColumnが1増える 1`] = `
@@ -33,9 +33,34 @@ exports[`activeColumnが1増える 1`] = `
     \\"cursol\\": Object {
 -     \\"activeColumn\\": 0,
 +     \\"activeColumn\\": 1,
+      \\"mode\\": \\"proposed\\",
     },
-    \\"developerMode\\": false,
+    \\"developerMode\\": true,
+    \\"estimator\\": Object {
+      \\"id\\": null,"
+`;
+
+exports[`modeが設定出来る normalの場合 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -3,11 +3,11 @@
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+      \\"activeColumn\\": 0,
+-     \\"mode\\": \\"proposed\\",
++     \\"mode\\": \\"normal\\",
+    },
+    \\"developerMode\\": true,
     \\"estimator\\": Object {
       \\"id\\": null,
       \\"result\\": \\"\\","
+`;
+
+exports[`modeが設定出来る proposedの場合 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
 `;

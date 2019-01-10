@@ -19,5 +19,5 @@ exports[`isActiveが設定できる trueの場合 1`] = `
     },
     \\"cursol\\": Object {
       \\"activeColumn\\": 0,
-    },"
+      \\"mode\\": \\"proposed\\","
 `;

@@ -1,6 +1,5 @@
 import snapshotDiff from "snapshot-diff";
 
-import { store } from "sanascan/renderer/redux";
 import { reducer } from "sanascan/renderer/redux";
 
 import { actions } from "sanascan/renderer/redux/state/cursol";
@@ -22,7 +21,14 @@ test("activeColumnが1増える", () => {
 
 test("activeColumnが0に戻る", () => {
   const x = MAX_COLUMN_INDEX;
-  const state = { ...store.getState(), cursol: {activeColumn: x}};
+  const state = {
+    ...initialState,
+    cursol: {
+      ...initialState.cursol,
+      activeColumn: x,
+    },
+  };
+
   const result = reducer(
     state,
     actions.increment(),
@@ -31,4 +37,25 @@ test("activeColumnが0に戻る", () => {
   expect(
     snapshotDiff(state, result),
   ).toMatchSnapshot();
+});
+
+describe("modeが設定出来る", () => {
+  const thisTest = (i: "normal" | "proposed") => {
+    test(i + "の場合", () => {
+      const result = reducer(
+        initialState,
+        actions.setMode(i),
+      );
+
+      expect(
+        snapshotDiff( initialState, result),
+      ).toMatchSnapshot();
+    });
+  };
+
+  const normal = "normal";
+  thisTest(normal);
+
+  const proposed = "proposed";
+  thisTest(proposed);
 });

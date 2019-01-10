@@ -5,11 +5,11 @@ exports[`idが設定できる 1`] = `
 - First value
 + Second value
 
-@@ -6,11 +6,11 @@
-    \\"cursol\\": Object {
+@@ -7,11 +7,11 @@
       \\"activeColumn\\": 0,
+      \\"mode\\": \\"proposed\\",
     },
-    \\"developerMode\\": false,
+    \\"developerMode\\": true,
     \\"estimator\\": Object {
 -     \\"id\\": null,
 +     \\"id\\": 1234,
@@ -25,10 +25,10 @@ exports[`resultを設定できる 1`] = `
 - First value
 + Second value
 
-@@ -7,11 +7,11 @@
-      \\"activeColumn\\": 0,
+@@ -8,11 +8,11 @@
+      \\"mode\\": \\"proposed\\",
     },
-    \\"developerMode\\": false,
+    \\"developerMode\\": true,
     \\"estimator\\": Object {
       \\"id\\": null,
 -     \\"result\\": \\"\\",
