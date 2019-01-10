@@ -59,6 +59,7 @@ export const selectors = (state: RootState) => {
     activeColumn: state.cursol.activeColumn,
     configureWindowIsActive: state.configWindow.isActive,
     configureWindowScanSpeed: state.configWindow.scanSpeed,
+    developerMode: state.developerMode,
     result: state.estimator.result,
     timerScanSpeed: state.timer.scanSpeed,
   };

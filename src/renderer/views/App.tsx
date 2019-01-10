@@ -2,9 +2,11 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
+import * as styles from "./App.css";
+
 import CharacterBoard from "./component/CharacterBoard";
 import Configure, { Props as ConfigureProps } from "./component/Configure";
-import * as styles from "./App.css";
+import Buttons, { Props as ButtonsProps} from "./component/Buttons";
 
 import { RootState, operations, selectors } from "../redux";
 
@@ -13,18 +15,15 @@ import { RootState, operations, selectors } from "../redux";
 export interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
-  timerScanSpeed: number;
   result: string;
 }
 
 export interface DispatchProps {
-  configureWindowOpen: (scanSpeed: number) => void;
   startFetchEstimatorId: () => void;
   sendKey: (key: number) => void;
-  resetEstimator: () => void;
 }
 
-type Props = DispatchProps & StateProps & ConfigureProps;
+type Props = DispatchProps & StateProps & ConfigureProps & ButtonsProps;
 
 class App extends React.Component<Props> {
   public render() {
@@ -38,18 +37,13 @@ class App extends React.Component<Props> {
           <CharacterBoard activeColumn={this.props.activeColumn}/>
         </div>
         {this.props.configureWindowIsActive && <Configure { ...this.props }/>}
-        <button onClick={this.configureWindowOpen}>設定</button>
-        <button onClick={this.props.resetEstimator}>はじめから</button>
+        <Buttons { ...this.props }/>
       </div>
     );
   }
 
   public componentDidMount = () => {
     return this.props.startFetchEstimatorId();
-  }
-
-  private configureWindowOpen = () => {
-    this.props.configureWindowOpen(this.props.timerScanSpeed);
   }
 
   private handleClick = () => {

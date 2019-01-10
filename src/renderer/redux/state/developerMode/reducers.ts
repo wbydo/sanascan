@@ -5,7 +5,7 @@ import { Action as _Action } from "../../util";
 
 type Action = _Action<typeof actions>;
 
-const initialState = false;
+const initialState = true;
 
 export const reducer = (state: boolean | undefined, action: Action) => {
   if (action.type === types.SET_ACTIVE) {

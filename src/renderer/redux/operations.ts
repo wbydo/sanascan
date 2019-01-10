@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { operations as configWindowOperations } from "./state/configWindow";
 import { actions as configWindowActions } from "./state/configWindow";
 import { actions as timerActions } from "./state/timer";
+import { actions as developerModeActions } from "./state/developerMode";
 
 import { actions as timerEventActions } from "./cross/timerEvent";
 import { actions as httpActions } from "./cross/http";
@@ -28,6 +29,7 @@ export const operations = (dispatch: Dispatch) => {
     configureWindowOpen: configWindowOpen(dispatch),
     resetEstimator: () => dispatch(httpActions.reset()),
     sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
+    setDeveloperModeActivity: (isActive: boolean) => dispatch(developerModeActions.setActive(isActive)),
     startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
   };
 };
