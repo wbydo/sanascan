@@ -1,20 +1,20 @@
 import { Dispatch } from "redux";
 import { stringify } from "querystring";
 
-import { RootState } from ".";
+import { RootState } from "../..";
 
 import * as types from "./types";
 import * as actions from "./actions";
 import * as operations from "./operations";
 
-import { actions as estimatorActions } from "./estimator";
-import { actions as timerActions } from "./timer";
+import { actions as estimatorActions } from "../../state/estimator";
+import { actions as timerActions } from "../../state/timer";
 
-import { setTimeoutPromise } from "./util";
-import { Action as _Action } from "./util";
+import { setTimeoutPromise } from "../../util";
+import { Action as _Action } from "../../util";
 
-import { url as baseUrl } from "../constant";
-import SanascanError from "../error";
+import { url as baseUrl } from "../../../constant";
+import SanascanError from "../../../error";
 
 interface Store {
   getState: () => RootState;

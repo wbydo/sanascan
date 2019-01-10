@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 
-import { RootState } from "..";
+import { RootState } from "../..";
 
 import { actions as cursolActions } from "../cursol";
 
@@ -8,7 +8,7 @@ import { start, finish, setActive, setId } from "./actions";
 import { Action } from "./reducers";
 import * as types from "./types";
 
-import { setTimeoutPromise } from "../util";
+import { setTimeoutPromise } from "../../util";
 
 interface Store {
   getState: () => RootState;

@@ -6,7 +6,7 @@ import CharacterBoard from "./component/CharacterBoard";
 import Configure, { Props as ConfigureProps } from "./component/Configure";
 import * as styles from "./App.css";
 
-import { RootState, operations, selectors } from "../state/";
+import { RootState, operations, selectors } from "../redux";
 
 // import { ipcRenderer } from "electron";
 
@@ -59,5 +59,5 @@ class App extends React.Component<Props> {
 
 export default connect(
   (state: RootState) => selectors(state),
-  (dispatch: Dispatch) => operations.forViews(dispatch),
+  (dispatch: Dispatch) => operations(dispatch),
 )(App);

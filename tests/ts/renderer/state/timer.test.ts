@@ -1,7 +1,7 @@
 import snapshotDiff from "snapshot-diff";
 
-import { reducer } from "sanascan/renderer/state";
-import { actions } from "sanascan/renderer/state/timer";
+import { reducer } from "sanascan/renderer/redux";
+import { actions } from "sanascan/renderer/redux/state/timer";
 
 import { initialState } from "./initialState";
 

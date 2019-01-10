@@ -3,13 +3,13 @@ import { combineReducers} from "redux";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { middleware } from "./middleware";
+import { reducer as configWindowReducer } from "./state/configWindow";
+import { reducer as cursolReducer } from "./state/cursol";
+import { reducer as estimatorReducer } from "./state/estimator";
+import { reducer as timerReducer } from "./state/timer";
+import { middleware as timerMiddleware } from "./state/timer";
 
-import { reducer as configWindowReducer } from "./configWindow";
-import { reducer as cursolReducer } from "./cursol";
-import { reducer as estimatorReducer } from "./estimator";
-import { reducer as timerReducer } from "./timer";
-import { middleware as timerMiddleware } from "./timer";
+import { middleware as httpMiddleware } from "./cross/http";
 
 export interface RootState {
   configWindow: {
@@ -31,7 +31,7 @@ export interface RootState {
 }
 
 const middlewares = [
-  middleware,
+  httpMiddleware,
   timerMiddleware,
 ];
 
@@ -61,5 +61,4 @@ export const selectors = (state: RootState) => {
   };
 };
 
-import { forViews } from "./operations";
-export const operations = { forViews };
+export { operations } from "./operations";

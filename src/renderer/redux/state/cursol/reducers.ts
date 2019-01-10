@@ -3,11 +3,11 @@ import { combineReducers } from "redux";
 import * as actions from "./actions";
 import * as types from "./types";
 
-import SanaScanError from "../../error";
+import SanaScanError from "../../../error";
 
-import { MAX_COLUMN_INDEX } from "../../constant";
+import { MAX_COLUMN_INDEX } from "../../../constant";
 
-import { Action as _Action } from "../util";
+import { Action as _Action } from "../../util";
 export type Action = _Action<typeof actions>;
 
 interface RootState {

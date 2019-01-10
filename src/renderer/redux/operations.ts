@@ -1,13 +1,10 @@
 import { Dispatch } from "redux";
 
-import * as actions from "./actions";
+import { operations as configWindowOperations } from "./state/configWindow";
+import { actions as configWindowActions } from "./state/configWindow";
+import { actions as timerActions } from "./state/timer";
 
-import { operations as configWindowOperations } from "./configWindow";
-import { actions as configWindowActions } from "./configWindow";
-
-import { actions as estimatorActions } from "./estimator";
-
-import { actions as timerActions } from "./timer";
+import { actions as httpActions } from "./cross/http";
 
 const configWindowOpen = (dispatch: Dispatch) => (scanSpeed: number) => {
   dispatch(timerActions.setActive(false));
@@ -23,18 +20,13 @@ const configWindowClose = (dispatch: Dispatch) => (lastValue: number) => {
   dispatch(timerActions.start());
 };
 
-export const doneFetchedId = (dispatch: Dispatch, eid: number) => {
-  dispatch(actions.fetchId("done"));
-  dispatch(estimatorActions.setId(eid));
-};
-
-export const forViews = (dispatch: Dispatch) => {
+export const operations = (dispatch: Dispatch) => {
   return {
     changeDisplayValue: configWindowOperations.setScanSpeed(dispatch),
     configureWindowClose: configWindowClose(dispatch),
     configureWindowOpen: configWindowOpen(dispatch),
-    resetEstimator: () => dispatch(actions.reset()),
-    sendKey: (key: number) => dispatch(actions.sendKey(key)),
-    startFetchEstimatorId: () => dispatch(actions.fetchId("start")),
+    resetEstimator: () => dispatch(httpActions.reset()),
+    sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
+    startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
   };
 };

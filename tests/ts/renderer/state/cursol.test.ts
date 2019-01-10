@@ -1,9 +1,9 @@
 import snapshotDiff from "snapshot-diff";
 
-import { store } from "sanascan/renderer/state";
-import { reducer } from "sanascan/renderer/state";
+import { store } from "sanascan/renderer/redux";
+import { reducer } from "sanascan/renderer/redux";
 
-import { actions } from "sanascan/renderer/state/cursol";
+import { actions } from "sanascan/renderer/redux/state/cursol";
 
 import { MAX_COLUMN_INDEX } from "sanascan/renderer/constant";
 

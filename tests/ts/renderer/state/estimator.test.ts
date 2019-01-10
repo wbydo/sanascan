@@ -1,7 +1,7 @@
 import snapshotDiff from "snapshot-diff";
 
-import { reducer } from "sanascan/renderer/state";
-import { actions } from "sanascan/renderer/state/estimator";
+import { reducer } from "sanascan/renderer/redux";
+import { actions } from "sanascan/renderer/redux/state/estimator";
 
 import { initialState } from "./initialState";
 
