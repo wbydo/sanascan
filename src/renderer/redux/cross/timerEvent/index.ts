@@ -4,4 +4,4 @@ export {
   actions,
 };
 
-export { middleware } from "./middleware";
+export { middlewares } from "./middlewares";
