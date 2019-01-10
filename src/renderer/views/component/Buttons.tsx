@@ -2,6 +2,8 @@ import * as React from "react";
 
 import * as styles from "./Buttons.css";
 
+import DeveloperControl from "./DeveloperControl";
+
 interface StateProps {
   timerScanSpeed: number;
   developerMode: boolean;
@@ -30,8 +32,7 @@ export default class Buttons extends React.Component<Props> {
             onClick={this.handleClickDeveloperMode}
           />
           DeveloperMode
-          <button>INC</button>
-          <button>CLK</button>
+          {this.props.developerMode && <DeveloperControl />}
         </div>
       </div>
     );

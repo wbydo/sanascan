@@ -12,18 +12,18 @@ import { RootState, operations, selectors } from "../redux";
 
 // import { ipcRenderer } from "electron";
 
-export interface StateProps {
+interface StateProps {
   configureWindowIsActive: boolean;
   activeColumn: number;
   result: string;
 }
 
-export interface DispatchProps {
+interface DispatchProps {
   startFetchEstimatorId: () => void;
   sendKey: (key: number) => void;
 }
 
-type Props = DispatchProps & StateProps & ConfigureProps & ButtonsProps;
+export type Props = DispatchProps & StateProps & ConfigureProps & ButtonsProps;
 
 class App extends React.Component<Props> {
   public render() {
@@ -43,7 +43,9 @@ class App extends React.Component<Props> {
   }
 
   public componentDidMount = () => {
-    return this.props.startFetchEstimatorId();
+    if (!this.props.developerMode) {
+      this.props.startFetchEstimatorId();
+    }
   }
 
   private handleClick = () => {
