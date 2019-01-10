@@ -1,15 +1,5 @@
 import * as types from "./types";
 
-export const fetchId = (status: "start" | "done" | "error") => {
-  return {
-    error: status === "error",
-    payload: {
-      status,
-    },
-    type: types.FETCH_ID,
-  };
-};
-
 export const setId = (id: number) => {
   return {
     error: false,
@@ -20,16 +10,6 @@ export const setId = (id: number) => {
   };
 };
 
-export const sendKey = (key: number) => {
-  return {
-    error: false,
-    payload: {
-      key,
-    },
-    type: types.SEND_KEY,
-  };
-};
-
 export const setResult = (result: string) => {
   return {
     error: false,
@@ -37,12 +17,5 @@ export const setResult = (result: string) => {
       content: result,
     },
     type: types.SET_RESULT,
-  };
-};
-
-export const reset = () => {
-  return {
-    error: false,
-    type: types.RESET,
   };
 };

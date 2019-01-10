@@ -1,26 +1,27 @@
 import { Dispatch } from "redux";
 import { stringify } from "querystring";
 
-import { RootState } from "..";
+import { RootState } from ".";
 
 import * as types from "./types";
 import * as actions from "./actions";
+import * as operations from "./operations";
 
-import { url as baseUrl } from "../../constant";
+import { actions as estimatorActions } from "./estimator";
+import { actions as timerActions } from "./timer";
 
-import SanascanError from "../../error";
+import { setTimeoutPromise } from "./util";
+import { Action as _Action } from "./util";
 
-import { setTimeoutPromise } from "../util";
-
-import { actions as timerActions } from "../timer";
-
-import { Action } from "./reducers";
+import { url as baseUrl } from "../constant";
+import SanascanError from "../error";
 
 interface Store {
   getState: () => RootState;
   dispatch: Dispatch;
 }
 
+type Action = _Action<typeof actions>;
 type Middleware = (store: Store) => (next: Dispatch) => (action: Action) => void;
 
 const TRY_NUMBER = 10;
@@ -30,9 +31,8 @@ const tryFethIdOnce = async (storeDispatch: Dispatch) => {
   const response = await fetch(baseUrl, {method: "POST"});
   const result = await response.json();
 
-  if (result.eid !== undefined && (typeof result.eid === "number")) {
-    storeDispatch(actions.fetchId("done"));
-    storeDispatch(actions.setId(result.eid as number));
+  if (result.eid !== undefined && typeof result.eid === "number") {
+    operations.doneFetchedId(storeDispatch, result.eid as number);
     return;
   } else {
     throw new SanascanError();
@@ -86,7 +86,7 @@ const processReset = async (store: Store, next: Dispatch, action: Action) => {
     },
     method: "DELETE",
   });
-  store.dispatch(actions.setResult(""));
+  store.dispatch(estimatorActions.setResult(""));
   store.dispatch(timerActions.start());
 };
 
@@ -126,7 +126,7 @@ export const middleware: Middleware
         if (json.result === undefined) {
           throw new SanascanError();
         }
-        next(actions.setResult(json.result));
+        next(estimatorActions.setResult(json.result));
       });
       break;
 

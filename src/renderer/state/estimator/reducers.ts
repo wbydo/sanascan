@@ -23,10 +23,6 @@ const setId = (_: number | null | undefined, action: Action) => {
     throw new SanaScanError();
   }
 
-  if (action.payload.id === undefined) {
-    throw new SanaScanError();
-  }
-
   return action.payload.id;
 };
 

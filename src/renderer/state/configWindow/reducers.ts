@@ -17,7 +17,7 @@ const initialState: RootState = {
 };
 
 const isActiveReducer = (state: boolean | undefined, action: Action): boolean => {
-  if ((action.type === types.SET_ACTIVE) && action.payload && (action.payload.isActive !== undefined)) {
+  if (action.type === types.SET_ACTIVE) {
     return action.payload.isActive;
   }
 
@@ -33,7 +33,7 @@ const scanSpeedReducer = (state: number | undefined, action: Action): number => 
     return initialState.scanSpeed;
   }
 
-  if (action.type === types.SET_SCAN_SPEED && action.payload && action.payload.scanSpeed !== undefined) {
+  if (action.type === types.SET_SCAN_SPEED) {
     return action.payload.scanSpeed;
   }
   return state;

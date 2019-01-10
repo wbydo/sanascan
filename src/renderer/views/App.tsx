@@ -59,5 +59,5 @@ class App extends React.Component<Props> {
 
 export default connect(
   (state: RootState) => selectors(state),
-  (dispatch: Dispatch) => operations(dispatch),
+  (dispatch: Dispatch) => operations.forViews(dispatch),
 )(App);
