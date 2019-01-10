@@ -7,6 +7,13 @@ export const start = () => {
   };
 };
 
+export const kill = () => {
+  return {
+    error: false,
+    type: types.KILL,
+  };
+};
+
 export const finish = (id?: number) => {
   return {
     error: false,

@@ -1,4 +1,4 @@
-import { start, finish } from "./actions";
-export const actions = { start, finish }; // finishのexportをやめたい
+import { start, kill } from "./actions";
+export const actions = { start, kill };
 
 export { middlewares } from "./middlewares";

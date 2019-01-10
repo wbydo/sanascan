@@ -17,7 +17,7 @@ type Action = ReturnType<typeof actions.reset>;
 
 const reset = async (next: Dispatch, action: Action, state: RootState, storeDispatch: Dispatch) => {
   next(action);
-  storeDispatch(timerEventActions.finish());
+  storeDispatch(timerEventActions.kill());
 
   const id = state.estimator.id;
   if (id === null) {

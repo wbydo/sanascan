@@ -8,7 +8,7 @@ import { actions as timerEventActions } from "./cross/timerEvent";
 import { actions as httpActions } from "./cross/http";
 
 const configWindowOpen = (dispatch: Dispatch) => (scanSpeed: number) => {
-  dispatch(timerActions.setActive(false));
+  dispatch(timerEventActions.kill());
   dispatch(configWindowActions.setScanSpeed(scanSpeed));
   dispatch(configWindowActions.setActive(true));
 };

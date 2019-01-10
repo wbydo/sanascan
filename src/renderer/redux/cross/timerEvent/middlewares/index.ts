@@ -48,6 +48,11 @@ const middleware
       }
       break;
 
+    case types.KILL:
+      next(action);
+      next(timerActions.setActive(false));
+      break;
+
     default:
       next(action);
   }
