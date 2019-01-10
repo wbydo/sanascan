@@ -7,7 +7,7 @@ import { reducer as configWindowReducer } from "./state/configWindow";
 import { reducer as cursolReducer } from "./state/cursol";
 import { reducer as estimatorReducer } from "./state/estimator";
 import { reducer as timerReducer } from "./state/timer";
-import { middleware as timerMiddleware } from "./state/timer";
+import { middleware as timerEventMiddleware } from "./cross/timerEvent";
 
 import { middleware as httpMiddleware } from "./cross/http";
 
@@ -32,7 +32,7 @@ export interface RootState {
 
 const middlewares = [
   httpMiddleware,
-  timerMiddleware,
+  timerEventMiddleware,
 ];
 
 const enhancer = composeWithDevTools(

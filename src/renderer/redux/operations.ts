@@ -4,6 +4,7 @@ import { operations as configWindowOperations } from "./state/configWindow";
 import { actions as configWindowActions } from "./state/configWindow";
 import { actions as timerActions } from "./state/timer";
 
+import { actions as timerEventActions } from "./cross/timerEvent";
 import { actions as httpActions } from "./cross/http";
 
 const configWindowOpen = (dispatch: Dispatch) => (scanSpeed: number) => {
@@ -17,7 +18,7 @@ const configWindowClose = (dispatch: Dispatch) => (lastValue: number) => {
     dispatch(timerActions.setScanSpeed(lastValue));
   }
   dispatch(configWindowActions.setActive(false));
-  dispatch(timerActions.start());
+  dispatch(timerEventActions.start());
 };
 
 export const operations = (dispatch: Dispatch) => {

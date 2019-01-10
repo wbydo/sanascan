@@ -7,8 +7,9 @@ import * as types from "./types";
 import * as actions from "./actions";
 import * as operations from "./operations";
 
+import { actions as timerEventActions } from "../timerEvent";
+
 import { actions as estimatorActions } from "../../state/estimator";
-import { actions as timerActions } from "../../state/timer";
 
 import { setTimeoutPromise } from "../../util";
 import { Action as _Action } from "../../util";
@@ -68,14 +69,14 @@ const processFetchIdAction = (next: Dispatch, storeDispatch: Dispatch, action: R
 
     case "done":
       next(action);
-      storeDispatch(timerActions.start());
+      storeDispatch(timerEventActions.start());
       break;
   }
 };
 
 const processReset = async (store: Store, next: Dispatch, action: Action) => {
   next(action);
-  store.dispatch(timerActions.finish());
+  store.dispatch(timerEventActions.finish());
 
   const id = store.getState().estimator.id;
 
@@ -87,7 +88,7 @@ const processReset = async (store: Store, next: Dispatch, action: Action) => {
     method: "DELETE",
   });
   store.dispatch(estimatorActions.setResult(""));
-  store.dispatch(timerActions.start());
+  store.dispatch(timerEventActions.start());
 };
 
 export const middleware: Middleware

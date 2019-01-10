@@ -1,14 +1,17 @@
 import { Dispatch } from "redux";
 
-import { RootState } from "../..";
-
-import { actions as cursolActions } from "../cursol";
-
-import { start, finish, setActive, setId } from "./actions";
-import { Action } from "./reducers";
 import * as types from "./types";
+import * as actions from "./actions";
+
+import { RootState } from "../..";
+import { actions as cursolActions } from "../../state/cursol";
+import { actions as timerActions } from "../../state/timer";
 
 import { setTimeoutPromise } from "../../util";
+
+import { Action as _Action } from "../../util";
+
+type Action = _Action<typeof actions>;
 
 interface Store {
   getState: () => RootState;
@@ -26,10 +29,10 @@ export const middleware: Middleware
       next(action);
       if (!state.timer.isActive) {
         const id = Date.now();
-        next(setActive(true));
-        next(setId(id));
+        next(timerActions.setActive(true));
+        next(timerActions.setId(id));
         setTimeoutPromise(state.timer.scanSpeed).then(() => {
-          store.dispatch(finish(id));
+          store.dispatch(actions.finish(id));
         });
       }
       break;
@@ -40,10 +43,10 @@ export const middleware: Middleware
         break;
       }
 
-      next(setActive(false));
+      next(timerActions.setActive(false));
       if (action.payload.id === state.timer.id) {
         next(cursolActions.increment());
-        store.dispatch(start());
+        store.dispatch(actions.start());
       }
 
       break;
