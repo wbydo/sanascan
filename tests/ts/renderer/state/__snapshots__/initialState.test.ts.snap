@@ -8,15 +8,16 @@ Object {
   },
   "cursol": Object {
     "activeColumn": 0,
+    "activeRow": 0,
+    "direction": "column",
+    "mode": "proposal",
   },
-  "developerMode": false,
+  "developerMode": true,
   "estimator": Object {
     "id": null,
     "result": "",
   },
   "timer": Object {
-    "id": null,
-    "isActive": false,
     "scanSpeed": 500,
   },
 }

@@ -2,25 +2,25 @@
 
 exports[`isActiveが設定できる falseの場合 1`] = `
 "Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`isActiveが設定できる trueの場合 1`] = `
-"Snapshot Diff:
 - First value
 + Second value
 
-@@ -4,11 +4,11 @@
-      \\"scanSpeed\\": 0,
-    },
-    \\"cursol\\": Object {
+@@ -7,11 +7,11 @@
       \\"activeColumn\\": 0,
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
     },
--   \\"developerMode\\": false,
-+   \\"developerMode\\": true,
+-   \\"developerMode\\": true,
++   \\"developerMode\\": false,
     \\"estimator\\": Object {
       \\"id\\": null,
       \\"result\\": \\"\\",
     },
     \\"timer\\": Object {"
+`;
+
+exports[`isActiveが設定できる trueの場合 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
 `;

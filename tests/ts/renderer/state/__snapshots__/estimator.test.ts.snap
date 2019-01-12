@@ -5,19 +5,19 @@ exports[`idが設定できる 1`] = `
 - First value
 + Second value
 
-@@ -6,11 +6,11 @@
-    \\"cursol\\": Object {
-      \\"activeColumn\\": 0,
+@@ -9,11 +9,11 @@
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
     },
-    \\"developerMode\\": false,
+    \\"developerMode\\": true,
     \\"estimator\\": Object {
 -     \\"id\\": null,
 +     \\"id\\": 1234,
       \\"result\\": \\"\\",
     },
     \\"timer\\": Object {
-      \\"id\\": null,
-      \\"isActive\\": false,"
+      \\"scanSpeed\\": 500,
+    },"
 `;
 
 exports[`resultを設定できる 1`] = `
@@ -25,17 +25,17 @@ exports[`resultを設定できる 1`] = `
 - First value
 + Second value
 
-@@ -7,11 +7,11 @@
-      \\"activeColumn\\": 0,
+@@ -10,11 +10,11 @@
+      \\"mode\\": \\"proposal\\",
     },
-    \\"developerMode\\": false,
+    \\"developerMode\\": true,
     \\"estimator\\": Object {
       \\"id\\": null,
 -     \\"result\\": \\"\\",
 +     \\"result\\": \\"あらゆる現実を全て自分の方へねじ曲げたのだ\\",
     },
     \\"timer\\": Object {
-      \\"id\\": null,
-      \\"isActive\\": false,
-      \\"scanSpeed\\": 500,"
+      \\"scanSpeed\\": 500,
+    },
+  }"
 `;

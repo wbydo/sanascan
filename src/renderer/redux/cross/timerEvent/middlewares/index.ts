@@ -2,12 +2,11 @@ import { Dispatch } from "redux";
 
 import * as types from "../types";
 import * as actions from "../actions";
+import { selector } from "../selectors";
 
-import { actions as timerActions } from "../../../state/timer";
 import { actions as cursolActions } from "../../../state/cursol";
 
 import { Action as _Action } from "../../../util";
-import { setTimeoutPromise } from "../../../util";
 
 import { RootState } from "../../..";
 
@@ -18,46 +17,47 @@ export interface Store {
   dispatch: Dispatch;
 }
 
-const middleware
-    = (store: Store) => (next: Dispatch) => (action: Action) => {
+class SanascanTimer {
+  private timeout: ReturnType<typeof setInterval> | null = null;
 
-  const state = store.getState();
-  switch (action.type) {
-    case types.START:
-      next(action);
-      if (!state.timer.isActive) {
-        const id = Date.now();
-        next(timerActions.setActive(true));
-        next(timerActions.setId(id));
-        setTimeoutPromise(state.timer.scanSpeed).then(() => {
-          store.dispatch(actions.finish(id));
-        });
-      }
-      break;
+  public middleware
+      = (store: Store) => (next: Dispatch) => (action: Action) => {
 
-    case types.FINISH:
-      next(action);
-      if (state.timer.isActive === false) {
+    switch (action.type) {
+      case types.START:
+        next(action);
+        store.dispatch(actions.kill());
+
+        const { scanSpeed } = selector(store.getState());
+        this.start(store.dispatch, scanSpeed);
         break;
-      }
 
-      next(timerActions.setActive(false));
-      if (action.payload.id === state.timer.id) {
-        next(cursolActions.increment());
-        store.dispatch(actions.start());
-      }
-      break;
+      case types.KILL:
+        next(action);
+        this.kill();
+        break;
 
-    case types.KILL:
-      next(action);
-      next(timerActions.setActive(false));
-      break;
-
-    default:
-      next(action);
+      default:
+        next(action);
+    }
   }
-};
+
+  private kill = () => {
+    clearInterval(this.timeout!);
+    if (this.timeout !== null) {
+      this.timeout = null;
+    }
+  }
+
+  private start = (storeDispatch: Dispatch, scanSpeed: number) => {
+    this.timeout = setInterval(
+      () => storeDispatch(cursolActions.increment()),
+      scanSpeed,
+    );
+  }
+
+}
 
 export const middlewares = [
-  middleware,
+  new SanascanTimer().middleware,
 ];

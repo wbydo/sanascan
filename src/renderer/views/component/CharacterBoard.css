@@ -1,4 +1,4 @@
-@value tableHeight from "../../global.css";
+@value tableHeight, activeColor from "../../global.css";
 
 .characterBoard {
   border-collapse: collapse;
@@ -6,7 +6,12 @@
   height: tableHeight;
 }
 
-.data {
+.deactiveData {
   text-align: center;
   font-size: 20pt;
+}
+
+.activeData {
+  composes: deactiveData;
+  background-color: activeColor;
 }

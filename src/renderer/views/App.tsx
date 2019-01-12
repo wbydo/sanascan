@@ -27,7 +27,7 @@ class App extends React.Component<Props> {
       >
         <div>{this.props.result}</div>
         <div onClick={this.handleClick}>
-          <CharacterBoard activeColumn={this.props.activeColumn}/>
+          <CharacterBoard { ...this.props }/>
         </div>
         {this.props.configureWindowIsActive && <Configure { ...this.props }/>}
         <Buttons { ...this.props }/>

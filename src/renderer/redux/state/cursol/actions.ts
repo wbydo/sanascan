@@ -5,3 +5,17 @@ export const increment = () => {
     type: types.INCREMENT,
   };
 };
+
+export const setMode = (mode: "normal" | "proposal") => {
+  return {
+    payload: { mode },
+    type: types.SET_MODE,
+  };
+};
+
+export const setDirection = (direction: "column" | "row") => {
+  return {
+    payload: {direction},
+    type: types.SET_DIRECTION,
+  };
+};
