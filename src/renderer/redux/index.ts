@@ -33,8 +33,6 @@ export interface RootState {
   cursol: CursolState;
   developerMode: boolean;
   timer: {
-    id: number | null;
-    isActive: boolean;
     scanSpeed: number;
   };
   estimator: {

@@ -18,8 +18,6 @@ Object {
     "result": "",
   },
   "timer": Object {
-    "id": null,
-    "isActive": false,
     "scanSpeed": 500,
   },
 }
