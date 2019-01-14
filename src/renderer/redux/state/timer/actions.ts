@@ -8,14 +8,6 @@ export const setActive = (isActive: boolean) => {
   };
 };
 
-export const setId = (id: number) => {
-  return {
-    error: false,
-    payload: { id },
-    type: types.SET_ID,
-  };
-};
-
 export const setScanSpeed = (scanSpeed: number) => {
   return {
     error: false,

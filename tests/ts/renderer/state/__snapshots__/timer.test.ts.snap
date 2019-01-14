@@ -1,16 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`scanSpeedが設定できる 1`] = `
+exports[`isActiveが設定できる falseの場合 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`isActiveが設定できる trueの場合 1`] = `
 "Snapshot Diff:
 - First value
 + Second value
 
-@@ -16,8 +16,8 @@
+@@ -16,9 +16,9 @@
     \\"estimator\\": Object {
       \\"id\\": null,
       \\"result\\": \\"\\",
     },
     \\"timer\\": Object {
+-     \\"isActive\\": false,
++     \\"isActive\\": true,
+      \\"scanSpeed\\": 500,
+    },
+  }"
+`;
+
+exports[`scanSpeedが設定できる 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -17,8 +17,8 @@
+      \\"id\\": null,
+      \\"result\\": \\"\\",
+    },
+    \\"timer\\": Object {
+      \\"isActive\\": false,
 -     \\"scanSpeed\\": 500,
 +     \\"scanSpeed\\": 234,
     },

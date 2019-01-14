@@ -21,6 +21,7 @@ Object {
     "result": "",
   },
   "timer": Object {
+    "isActive": false,
     "scanSpeed": 500,
   },
 }

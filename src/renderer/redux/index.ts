@@ -36,6 +36,7 @@ export interface RootState {
     estimatorIsActive: boolean;
   };
   timer: {
+    isActive: boolean;
     scanSpeed: number;
   };
   estimator: {
