@@ -35,23 +35,19 @@ export class DeveloperControl extends React.Component<Props> {
             onClick={this.props.dispatch.toggleDeveloperModeTimerActivity}
             />
         Timer
-        <button
-        onClick={() => this.props.dispatch.developerMode.increment()}
-        >
-        INCREMENT
-        </button>
+        {this.props.developerMode.timer &&
+          <button
+              onClick={() => this.props.dispatch.developerMode.increment()}
+              >
+            INCREMENT
+          </button>
+        }
 
         <Selector
             state={this.props.cursol.direction}
             dispatch={this.props.dispatch.setCursolDirection}
             labels={["column", "row"]}
             />
-
-        <button
-            onClick={() => this.props.dispatch.startFetchEstimatorId()}
-            >
-          FETCH
-        </button>
         <button><del>CLICK</del></button>
       </span>
     );

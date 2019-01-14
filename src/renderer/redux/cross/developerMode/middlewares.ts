@@ -12,13 +12,16 @@ import { actions as developerModeActions } from "../../state/developerMode";
 import { actions as httpActions } from "../../cross/http";
 
 const toggle = (store: Store) => {
-  const { developerMode: { isActive }} = store.getState();
+  const { developerMode: { isActive, timer }} = store.getState();
   store.dispatch(developerModeActions.setActive(!isActive));
+  store.dispatch(timerActions.kill());
 
   if (isActive) {
-    store.dispatch(httpActions.fetchId("start"));
-  } else {
-    store.dispatch(timerActions.kill());
+    return store.dispatch(httpActions.fetchId("start"));
+  }
+
+  if (timer) {
+    return store.dispatch(timerActions.start());
   }
 };
 

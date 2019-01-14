@@ -31,6 +31,7 @@ class SanascanTimer {
       case types.KILL:
         next(action);
         this.kill();
+        store.dispatch(cursolActions.reset());
         store.dispatch(timerActions.setActive(false));
         break;
 

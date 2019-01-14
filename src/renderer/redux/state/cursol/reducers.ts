@@ -52,7 +52,7 @@ const incrementInNormalMode = (state: Extract<CursolState, {mode: "normal"}>): C
   }
 };
 
-const increment = (state: CursolState, _: ReturnType<typeof actions.increment>): CursolState => {
+const increment = (state: CursolState): CursolState => {
   if (state.mode === "proposal") {
     return incrementColumn(state);
   } else {
@@ -91,6 +91,14 @@ const setDirection = (state: CursolState, action: ReturnType<typeof actions.setD
   }
 };
 
+const reset = (state: CursolState): CursolState => {
+  return {
+    ...state,
+    activeColumn: 0,
+    activeRow: 0,
+  };
+};
+
 export const reducer = (state: CursolState | undefined, action: Action): CursolState => {
   if (state === undefined) {
     return initialState;
@@ -101,10 +109,13 @@ export const reducer = (state: CursolState | undefined, action: Action): CursolS
       return setMode(state, action);
 
     case (types.INCREMENT):
-      return increment(state, action);
+      return increment(state);
 
     case (types.SET_DIRECTION):
       return setDirection(state, action);
+
+    case (types.RESET):
+      return reset(state);
 
     default:
       return state;

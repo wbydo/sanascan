@@ -6,6 +6,12 @@ export const increment = () => {
   };
 };
 
+export const reset = () => {
+  return {
+    type: types.RESET,
+  };
+};
+
 export const setMode = (mode: "normal" | "proposal") => {
   return {
     payload: { mode },

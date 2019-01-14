@@ -1,5 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`RESET mode:normal direction: column 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,12 +2,12 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 4,
+-     \\"activeRow\\": 3,
++     \\"activeColumn\\": 0,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`RESET mode:normal direction: row 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,12 +2,12 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 4,
+-     \\"activeRow\\": 3,
++     \\"activeColumn\\": 0,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`RESET mode:proposal direction: column 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,12 +2,12 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 4,
+-     \\"activeRow\\": 3,
++     \\"activeColumn\\": 0,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
 exports[`directionが設定出来る mode:normal direction: column 1`] = `
 "Snapshot Diff:
 Compared values have no visual difference."

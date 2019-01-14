@@ -120,3 +120,48 @@ describe("increment", () => {
     });
   }
 });
+
+describe("RESET", () => {
+  const params = [{
+      change: {activeRow: MAX_ROW_INDEX},
+      direction: "row" as "column" | "row",
+      mode: "normal" as "normal" | "proposal",
+    }, {
+      change: {activeColumn: MAX_COLUMN_INDEX},
+      direction: "column" as "column" | "row",
+      mode: "normal" as "normal" | "proposal",
+    }, {
+      change: {activeColumn: MAX_COLUMN_INDEX},
+      direction: "column" as "column" | "row",
+      mode: "proposal" as "normal" | "proposal",
+    },
+  ];
+
+  for (const p of params) {
+    describe("mode:" + p.mode + " direction: " + p.direction, () => {
+      test("0に戻る", () => {
+
+        const target = reducer(
+          {
+            ...initialState,
+            cursol: {
+              ...initialState.cursol,
+              activeColumn: 4,
+              activeRow: 3,
+            },
+          },
+          actions.setDirection(p.direction),
+        );
+
+        const result = reducer(
+          target,
+          actions.reset(),
+        );
+
+        expect(
+          snapshotDiff(target, result),
+        ).toMatchSnapshot();
+      });
+    });
+  }
+});
