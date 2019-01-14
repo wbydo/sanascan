@@ -18,11 +18,11 @@ export class DeveloperControl extends React.Component<Props> {
       <span>
         <input
             type="checkbox"
-            checked={this.props.developerMode.estimatorIsActive}
+            checked={this.props.developerMode.estimator}
             onClick={
               () => {
                 return this.props.dispatch.setDeveloperModeEstimatorActivity(
-                  !this.props.developerMode.estimatorIsActive,
+                  !this.props.developerMode.estimator,
                 );
               }
             }

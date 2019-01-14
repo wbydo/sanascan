@@ -16,8 +16,8 @@ exports[`estimatorIsActiveが設定できる trueの場合 1`] = `
       \\"mode\\": \\"proposal\\",
     },
     \\"developerMode\\": Object {
--     \\"estimatorIsActive\\": false,
-+     \\"estimatorIsActive\\": true,
+-     \\"estimator\\": false,
++     \\"estimator\\": true,
       \\"isActive\\": true,
     },
     \\"estimator\\": Object {
@@ -35,7 +35,7 @@ exports[`isActiveが設定できる falseの場合 1`] = `
       \\"mode\\": \\"proposal\\",
     },
     \\"developerMode\\": Object {
-      \\"estimatorIsActive\\": false,
+      \\"estimator\\": false,
 -     \\"isActive\\": true,
 +     \\"isActive\\": false,
     },

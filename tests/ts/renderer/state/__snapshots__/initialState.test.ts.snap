@@ -13,7 +13,7 @@ Object {
     "mode": "proposal",
   },
   "developerMode": Object {
-    "estimatorIsActive": false,
+    "estimator": false,
     "isActive": true,
   },
   "estimator": Object {

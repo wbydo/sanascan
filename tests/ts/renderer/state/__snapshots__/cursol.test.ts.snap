@@ -21,7 +21,7 @@ exports[`directionが設定出来る mode:normal direction: row 1`] = `
       \\"mode\\": \\"normal\\",
     },
     \\"developerMode\\": Object {
-      \\"estimatorIsActive\\": false,
+      \\"estimator\\": false,
       \\"isActive\\": true,"
 `;
 
@@ -92,7 +92,7 @@ exports[`increment mode:normal direction: row 0に戻る 1`] = `
       \\"mode\\": \\"normal\\",
     },
     \\"developerMode\\": Object {
-      \\"estimatorIsActive\\": false,"
+      \\"estimator\\": false,"
 `;
 
 exports[`increment mode:normal direction: row 1増える 1`] = `
@@ -112,7 +112,7 @@ exports[`increment mode:normal direction: row 1増える 1`] = `
       \\"mode\\": \\"normal\\",
     },
     \\"developerMode\\": Object {
-      \\"estimatorIsActive\\": false,"
+      \\"estimator\\": false,"
 `;
 
 exports[`increment mode:proposal direction: column 0に戻る 1`] = `
@@ -170,7 +170,7 @@ exports[`modeが設定出来る normalの場合 1`] = `
 +     \\"mode\\": \\"normal\\",
     },
     \\"developerMode\\": Object {
-      \\"estimatorIsActive\\": false,
+      \\"estimator\\": false,
       \\"isActive\\": true,
     },"
 `;

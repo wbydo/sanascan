@@ -11,7 +11,7 @@ import { RootState } from "../../";
 type State = RootState["developerMode"];
 
 const initialState: State = {
-  estimatorIsActive: false,
+  estimator: false,
   isActive: true,
 };
 
@@ -33,13 +33,13 @@ const estimatorActivityReducer = (state: boolean | undefined, action: Action) =>
   }
 
   if ( state === undefined) {
-    return initialState.estimatorIsActive;
+    return initialState.estimator;
   }
 
   return state;
 };
 
 export const reducer = combineReducers({
-  estimatorIsActive: estimatorActivityReducer,
+  estimator: estimatorActivityReducer,
   isActive: isActiveReducer,
 });

@@ -7,7 +7,7 @@ exports[`idが設定できる 1`] = `
 
 @@ -12,11 +12,11 @@
     \\"developerMode\\": Object {
-      \\"estimatorIsActive\\": false,
+      \\"estimator\\": false,
       \\"isActive\\": true,
     },
     \\"estimator\\": Object {
@@ -26,7 +26,7 @@ exports[`resultを設定できる 1`] = `
 + Second value
 
 @@ -13,11 +13,11 @@
-      \\"estimatorIsActive\\": false,
+      \\"estimator\\": false,
       \\"isActive\\": true,
     },
     \\"estimator\\": Object {

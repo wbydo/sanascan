@@ -34,7 +34,7 @@ export interface RootState {
   cursol: CursolState;
   developerMode: {
     isActive: boolean;
-    estimatorIsActive: boolean;
+    estimator: boolean;
   };
   timer: {
     isActive: boolean;
