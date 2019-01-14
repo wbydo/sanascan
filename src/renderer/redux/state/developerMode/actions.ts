@@ -7,3 +7,11 @@ export const setActive = (isActive: boolean) => {
     type: types.SET_ACTIVE,
   };
 };
+
+export const setEstimatorActivity = (estimatorIsActive: boolean) => {
+  return {
+    error: false,
+    payload: { estimatorIsActive },
+    type: types.SET_ESTIMATOR_ACTIVITY,
+  };
+};

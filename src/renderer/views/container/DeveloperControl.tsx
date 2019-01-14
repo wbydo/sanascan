@@ -16,6 +16,19 @@ export class DeveloperControl extends React.Component<Props> {
   public render() {
     return(
       <span>
+        <input
+            type="checkbox"
+            checked={this.props.developerMode.estimatorIsActive}
+            onClick={
+              () => {
+                return this.props.dispatch.setDeveloperModeEstimatorActivity(
+                  !this.props.developerMode.estimatorIsActive,
+                );
+              }
+            }
+            />
+        ESTIMATOR
+
         <Selector
             state={this.props.cursol.direction}
             dispatch={this.props.dispatch.setCursolDirection}

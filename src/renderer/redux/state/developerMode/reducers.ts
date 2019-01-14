@@ -1,3 +1,5 @@
+import { combineReducers } from "redux";
+
 import * as actions from "./actions";
 import * as types from "./types";
 
@@ -9,17 +11,35 @@ import { RootState } from "../../";
 type State = RootState["developerMode"];
 
 const initialState: State = {
+  estimatorIsActive: false,
   isActive: true,
 };
 
-export const reducer = (state: State | undefined, action: Action): State => {
+const isActiveReducer = (state: boolean | undefined, action: Action) => {
   if (action.type === types.SET_ACTIVE) {
-    return { isActive: action.payload.isActive };
+    return action.payload.isActive;
   }
 
-  if (state === undefined) {
-    return initialState;
+  if ( state === undefined) {
+    return initialState.isActive;
   }
 
   return state;
 };
+
+const estimatorActivityReducer = (state: boolean | undefined, action: Action) => {
+  if (action.type === types.SET_ESTIMATOR_ACTIVITY) {
+    return action.payload.estimatorIsActive;
+  }
+
+  if ( state === undefined) {
+    return initialState.estimatorIsActive;
+  }
+
+  return state;
+};
+
+export const reducer = combineReducers({
+  estimatorIsActive: estimatorActivityReducer,
+  isActive: isActiveReducer,
+});

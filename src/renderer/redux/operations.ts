@@ -38,6 +38,9 @@ export const operations = (dispatch: Dispatch) => {
     setCursolDirection: (direction: "column" | "row") => dispatch(cursolActions.setDirection(direction)),
     setCursolMode: (mode: "normal" | "proposal") => dispatch(cursolActions.setMode(mode)),
     setDeveloperModeActivity: (isActive: boolean) => dispatch(developerModeActions.setActive(isActive)),
+    setDeveloperModeEstimatorActivity: (isActive: boolean) => {
+      return dispatch(developerModeActions.setEstimatorActivity(isActive));
+    },
     startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
   };
 };

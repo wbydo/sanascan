@@ -28,7 +28,7 @@ export default class Buttons extends React.Component<Props> {
               onClick={this.handleClickDeveloperMode}
               />
           DeveloperMode
-          {this.props.developerMode && <DeveloperControl />}
+          {this.props.developerMode.isActive && <DeveloperControl />}
         </div>
       </div>
     );
