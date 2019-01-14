@@ -5,7 +5,7 @@ import * as types from "../types";
 import * as operations from "../operations";
 
 import { Store } from "../../util";
-import { actions as timerEventActions } from "../../timerEvent";
+import { actions as timerActions } from "../../timer";
 
 import { setTimeoutPromise } from "../../../util";
 import { url as baseUrl } from "../../../../constant";
@@ -56,7 +56,7 @@ const processFetchIdAction = (next: Dispatch, action: ReturnType<typeof actions.
 
     case "done":
       next(action);
-      storeDispatch(timerEventActions.start());
+      storeDispatch(timerActions.start());
       break;
   }
 };

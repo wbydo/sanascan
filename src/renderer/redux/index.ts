@@ -9,7 +9,7 @@ import { reducer as developerModeReducer } from "./state/developerMode";
 import { reducer as estimatorReducer } from "./state/estimator";
 import { reducer as timerReducer } from "./state/timer";
 
-import { middlewares as timerEventMiddlewares } from "./cross/timerEvent";
+import { middlewares as timerMiddlewares } from "./cross/timer";
 import { middlewares as httpMiddlewares } from "./cross/http";
 import { middlewares as developerModeMiddlewares } from "./cross/developerMode";
 
@@ -48,7 +48,7 @@ export interface RootState {
 
 const middlewares = [
   ...httpMiddlewares,
-  ...timerEventMiddlewares,
+  ...timerMiddlewares,
   ...developerModeMiddlewares,
 ];
 

@@ -4,7 +4,7 @@ import * as types from "./types";
 import * as actions from "./actions";
 
 import { Store } from "../util";
-import { actions as timerEventActions } from "../timerEvent";
+import { actions as timerActions } from "../timer";
 
 import { Action as _Action } from "../../util";
 type Action = _Action<typeof actions>;
@@ -19,7 +19,7 @@ const toggle = (store: Store) => {
   if (isActive) {
     store.dispatch(httpActions.fetchId("start"));
   } else {
-    store.dispatch(timerEventActions.kill());
+    store.dispatch(timerActions.kill());
   }
 };
 

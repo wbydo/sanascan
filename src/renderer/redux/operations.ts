@@ -8,12 +8,12 @@ import { actions as cursolActions } from "./state/cursol";
 import { actions as timerActions } from "./state/timer";
 import { actions as developerModeActions } from "./state/developerMode";
 
-import { actions as timerEventActions } from "./cross/timerEvent";
+import { actions as crossTimerActions } from "./cross/timer";
 import { actions as httpActions } from "./cross/http";
 import { actions as crossDeveloperModeActions } from "./cross/developerMode";
 
 const configWindowOpen = (dispatch: Dispatch) => (scanSpeed: number) => {
-  dispatch(timerEventActions.kill());
+  dispatch(crossTimerActions.kill());
   dispatch(configWindowActions.setScanSpeed(scanSpeed));
   dispatch(configWindowActions.setActive(true));
 };
@@ -23,7 +23,7 @@ const configWindowClose = (dispatch: Dispatch) => (lastValue: number) => {
     dispatch(timerActions.setScanSpeed(lastValue));
   }
   dispatch(configWindowActions.setActive(false));
-  dispatch(timerEventActions.start());
+  dispatch(crossTimerActions.start());
 };
 
 export const operations = (dispatch: Dispatch) => {
