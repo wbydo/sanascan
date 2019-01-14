@@ -9,14 +9,14 @@ import Buttons from "./component/Buttons";
 import CharacterBoard from "./component/CharacterBoard";
 import Configure from "./component/Configure";
 
-import { RootState, operations, selectors } from "../redux";
+import { RootState, operations } from "../redux";
 
 // import { ipcRenderer } from "electron";
 
-export type StateProps = ReturnType<typeof selectors>;
-export type DispatchProps = ReturnType<typeof operations>;
+type StateProps = RootState;
+type DispatchProps = ReturnType<typeof operations>;
 
-type Props = _Props<StateProps, DispatchProps>;
+export type Props = _Props<StateProps, DispatchProps>;
 
 class App extends React.Component<Props> {
   public render() {
@@ -25,11 +25,11 @@ class App extends React.Component<Props> {
           id="App"
           className={styles.app}
       >
-        <div>{this.props.result}</div>
+        <div>{this.props.estimator.result}</div>
         <div onClick={this.handleClick}>
           <CharacterBoard { ...this.props }/>
         </div>
-        {this.props.configureWindowIsActive && <Configure { ...this.props }/>}
+        {this.props.configWindow.isActive && <Configure { ...this.props }/>}
         <Buttons { ...this.props }/>
       </div>
     );
@@ -42,11 +42,11 @@ class App extends React.Component<Props> {
   }
 
   private handleClick = () => {
-    this.props.dispatch.sendKey(this.props.activeColumn);
+    this.props.dispatch.sendKey(this.props.cursol.activeColumn);
   }
 }
 
 export default connect(
-  (state: RootState) => selectors(state),
+  (state: RootState) => state,
   (dispatch: Dispatch) => ({ dispatch: operations(dispatch) }),
 )(App);

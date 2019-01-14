@@ -5,19 +5,19 @@ exports[`isActiveが設定できる falseの場合 1`] = `
 - First value
 + Second value
 
-@@ -7,11 +7,11 @@
-      \\"activeColumn\\": 0,
+@@ -8,11 +8,11 @@
       \\"activeRow\\": 0,
       \\"direction\\": \\"column\\",
       \\"mode\\": \\"proposal\\",
     },
--   \\"developerMode\\": true,
-+   \\"developerMode\\": false,
+    \\"developerMode\\": Object {
+-     \\"isActive\\": true,
++     \\"isActive\\": false,
+    },
     \\"estimator\\": Object {
       \\"id\\": null,
       \\"result\\": \\"\\",
-    },
-    \\"timer\\": Object {"
+    },"
 `;
 
 exports[`isActiveが設定できる trueの場合 1`] = `

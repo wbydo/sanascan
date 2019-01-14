@@ -31,7 +31,9 @@ export interface RootState {
     scanSpeed: number;
   };
   cursol: CursolState;
-  developerMode: boolean;
+  developerMode: {
+    isActive: boolean;
+  };
   timer: {
     scanSpeed: number;
   };
@@ -63,5 +65,4 @@ export const store = createStore(
   enhancer,
 );
 
-export { selectors } from "./selectors";
 export { operations } from "./operations";

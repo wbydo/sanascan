@@ -20,9 +20,9 @@ exports[`directionが設定出来る mode:normal direction: row 1`] = `
 +     \\"direction\\": \\"row\\",
       \\"mode\\": \\"normal\\",
     },
-    \\"developerMode\\": true,
-    \\"estimator\\": Object {
-      \\"id\\": null,"
+    \\"developerMode\\": Object {
+      \\"isActive\\": true,
+    },"
 `;
 
 exports[`directionが設定出来る mode:proposal direction: column 1`] = `
@@ -52,7 +52,7 @@ exports[`increment mode:normal direction: column 0に戻る 1`] = `
       \\"direction\\": \\"column\\",
       \\"mode\\": \\"normal\\",
     },
-    \\"developerMode\\": true,"
+    \\"developerMode\\": Object {"
 `;
 
 exports[`increment mode:normal direction: column 1増える 1`] = `
@@ -72,7 +72,7 @@ exports[`increment mode:normal direction: column 1増える 1`] = `
       \\"direction\\": \\"column\\",
       \\"mode\\": \\"normal\\",
     },
-    \\"developerMode\\": true,"
+    \\"developerMode\\": Object {"
 `;
 
 exports[`increment mode:normal direction: row 0に戻る 1`] = `
@@ -91,8 +91,8 @@ exports[`increment mode:normal direction: row 0に戻る 1`] = `
       \\"direction\\": \\"row\\",
       \\"mode\\": \\"normal\\",
     },
-    \\"developerMode\\": true,
-    \\"estimator\\": Object {"
+    \\"developerMode\\": Object {
+      \\"isActive\\": true,"
 `;
 
 exports[`increment mode:normal direction: row 1増える 1`] = `
@@ -111,8 +111,8 @@ exports[`increment mode:normal direction: row 1増える 1`] = `
       \\"direction\\": \\"row\\",
       \\"mode\\": \\"normal\\",
     },
-    \\"developerMode\\": true,
-    \\"estimator\\": Object {"
+    \\"developerMode\\": Object {
+      \\"isActive\\": true,"
 `;
 
 exports[`increment mode:proposal direction: column 0に戻る 1`] = `
@@ -132,7 +132,7 @@ exports[`increment mode:proposal direction: column 0に戻る 1`] = `
       \\"direction\\": \\"column\\",
       \\"mode\\": \\"proposal\\",
     },
-    \\"developerMode\\": true,"
+    \\"developerMode\\": Object {"
 `;
 
 exports[`increment mode:proposal direction: column 1増える 1`] = `
@@ -152,7 +152,7 @@ exports[`increment mode:proposal direction: column 1増える 1`] = `
       \\"direction\\": \\"column\\",
       \\"mode\\": \\"proposal\\",
     },
-    \\"developerMode\\": true,"
+    \\"developerMode\\": Object {"
 `;
 
 exports[`modeが設定出来る normalの場合 1`] = `
@@ -169,10 +169,10 @@ exports[`modeが設定出来る normalの場合 1`] = `
 -     \\"mode\\": \\"proposal\\",
 +     \\"mode\\": \\"normal\\",
     },
-    \\"developerMode\\": true,
-    \\"estimator\\": Object {
-      \\"id\\": null,
-      \\"result\\": \\"\\","
+    \\"developerMode\\": Object {
+      \\"isActive\\": true,
+    },
+    \\"estimator\\": Object {"
 `;
 
 exports[`modeが設定出来る proposalの場合 1`] = `

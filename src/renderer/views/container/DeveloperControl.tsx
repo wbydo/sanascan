@@ -5,9 +5,9 @@ import {Dispatch} from "redux";
 import Selector from "../component/Selector";
 import { Props as _Props } from "../util";
 
-import { RootState, operations, selectors } from "../../redux";
+import { RootState, operations } from "../../redux";
 
-export type StateProps = ReturnType<typeof selectors>;
+export type StateProps = RootState;
 export type DispatchProps = ReturnType<typeof operations>;
 
 type Props = _Props<StateProps, DispatchProps>;
@@ -17,7 +17,7 @@ export class DeveloperControl extends React.Component<Props> {
     return(
       <span>
         <Selector
-            state={this.props.cursolDirection}
+            state={this.props.cursol.direction}
             dispatch={this.props.dispatch.setCursolDirection}
             labels={["column", "row"]}
             />
@@ -40,6 +40,6 @@ export class DeveloperControl extends React.Component<Props> {
 }
 
 export default connect(
-  (state: RootState) => selectors(state),
+  (state: RootState) => state,
   (dispatch: Dispatch) => ({ dispatch: operations(dispatch) }),
 )(DeveloperControl);

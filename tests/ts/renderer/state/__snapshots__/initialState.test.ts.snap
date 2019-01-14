@@ -12,7 +12,9 @@ Object {
     "direction": "column",
     "mode": "proposal",
   },
-  "developerMode": true,
+  "developerMode": Object {
+    "isActive": true,
+  },
   "estimator": Object {
     "id": null,
     "result": "",

@@ -2,17 +2,7 @@ import React from "react";
 
 import * as styles from "./Configure.css";
 
-import { StateProps as AppStateProps } from "../App";
-import { DispatchProps as AppDispatchProps } from "../App";
-import { Props as _Props } from "../util";
-
-type StateProps = Pick<AppStateProps, "configureWindowScanSpeed">;
-type DispatchProps = Pick<
-  AppDispatchProps,
-  "configureWindowClose" | "changeDisplayValue"
->;
-
-type Props = _Props<StateProps, DispatchProps>;
+import { Props } from "../App";
 
 export default class Configure extends React.Component<Props> {
   public render() {
@@ -20,7 +10,7 @@ export default class Configure extends React.Component<Props> {
       <div id="Configure" className={styles.frame}>
         <div className={styles.content}>
           <h1>環境設定</h1>
-          <input type="number" value={this.props.configureWindowScanSpeed} onChange={this.handleChange}/>
+          <input type="number" value={this.props.configWindow.scanSpeed} onChange={this.handleChange}/>
           <button onClick={this.deactivateConfigure}>Off</button>
         </div>
       </div>
@@ -28,7 +18,7 @@ export default class Configure extends React.Component<Props> {
   }
 
   private deactivateConfigure = () => {
-    this.props.dispatch.configureWindowClose(this.props.configureWindowScanSpeed);
+    this.props.dispatch.configureWindowClose(this.props.configWindow.scanSpeed);
   }
 
   private handleChange = (event: React.FormEvent<HTMLInputElement>) => {
