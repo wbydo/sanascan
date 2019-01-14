@@ -1,11 +1,10 @@
 import { Dispatch } from "redux";
 
-import { Store } from ".";
-
 import * as actions from "../actions";
 import * as types from "../types";
 import * as operations from "../operations";
 
+import { Store } from "../../util";
 import { actions as timerEventActions } from "../../timerEvent";
 
 import { setTimeoutPromise } from "../../../util";

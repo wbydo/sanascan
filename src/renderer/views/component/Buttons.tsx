@@ -25,7 +25,7 @@ export default class Buttons extends React.Component<Props> {
           <input
               type="checkbox"
               checked={this.props.developerMode.isActive}
-              onClick={this.handleClickDeveloperMode}
+              onClick={this.props.dispatch.toggleDeveloperModeActivity}
               />
           DeveloperMode
           {this.props.developerMode.isActive && <DeveloperControl />}
@@ -36,9 +36,5 @@ export default class Buttons extends React.Component<Props> {
 
   private configureWindowOpen = () => {
     this.props.dispatch.configureWindowOpen(this.props.timer.scanSpeed);
-  }
-
-  private handleClickDeveloperMode = () => {
-    this.props.dispatch.setDeveloperModeActivity(!this.props.developerMode.isActive);
   }
 }

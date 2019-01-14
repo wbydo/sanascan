@@ -1,10 +1,10 @@
 import { Dispatch } from "redux";
 import { stringify } from "querystring";
 
-import { Store } from ".";
-
 import * as actions from "../actions";
 import * as types from "../types";
+
+import { Store } from "../../util";
 
 import { RootState } from "../../..";
 import { actions as estimatorActions } from "../../../state/estimator";

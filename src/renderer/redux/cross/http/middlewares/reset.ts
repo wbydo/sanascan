@@ -1,10 +1,9 @@
 import { Dispatch } from "redux";
 
-import { Store } from ".";
-
 import * as actions from "../actions";
 import * as types from "../types";
 
+import { Store } from "../../util";
 import { actions as timerEventActions } from "../../timerEvent";
 
 import { RootState } from "../../..";

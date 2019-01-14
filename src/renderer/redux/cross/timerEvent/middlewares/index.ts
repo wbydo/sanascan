@@ -4,18 +4,13 @@ import * as types from "../types";
 import * as actions from "../actions";
 import { selector } from "../selectors";
 
-import { actions as cursolActions } from "../../../state/cursol";
+import { Store } from "../../util";
 
 import { Action as _Action } from "../../../util";
-
-import { RootState } from "../../..";
+import { actions as cursolActions } from "../../../state/cursol";
+import { actions as timerActions } from "../../../state/timer";
 
 type Action = _Action<typeof actions>;
-
-export interface Store {
-  getState: () => RootState;
-  dispatch: Dispatch;
-}
 
 class SanascanTimer {
   private timeout: ReturnType<typeof setInterval> | null = null;
@@ -30,11 +25,13 @@ class SanascanTimer {
 
         const { scanSpeed } = selector(store.getState());
         this.start(store.dispatch, scanSpeed);
+        store.dispatch(timerActions.setActive(true));
         break;
 
       case types.KILL:
         next(action);
         this.kill();
+        store.dispatch(timerActions.setActive(false));
         break;
 
       default:
