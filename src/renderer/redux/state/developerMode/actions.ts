@@ -15,3 +15,11 @@ export const setEstimatorActivity = (estimatorIsActive: boolean) => {
     type: types.SET_ESTIMATOR_ACTIVITY,
   };
 };
+
+export const setTimerActivity = (timerIsActive: boolean) => {
+  return {
+    error: false,
+    payload: { timerIsActive },
+    type: types.SET_TIMER_ACTIVITY,
+  };
+};

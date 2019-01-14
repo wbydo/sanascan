@@ -33,6 +33,7 @@ export const operations = (dispatch: Dispatch) => {
     configureWindowOpen: configWindowOpen(dispatch),
     developerMode: {
       increment: () => dispatch(cursolActions.increment()),
+      startTimer: () => dispatch(crossTimerActions.start()),
     },
     resetEstimator: () => dispatch(httpActions.reset()),
     sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
@@ -43,5 +44,6 @@ export const operations = (dispatch: Dispatch) => {
     },
     startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
     toggleDeveloperModeActivity: () => dispatch(crossDeveloperModeActions.toggle()),
+    toggleDeveloperModeTimerActivity : () => dispatch(crossDeveloperModeActions.toggleTimer()),
   };
 };

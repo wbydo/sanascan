@@ -35,6 +35,7 @@ export interface RootState {
   developerMode: {
     isActive: boolean;
     estimator: boolean;
+    timer: boolean;
   };
   timer: {
     isActive: boolean;

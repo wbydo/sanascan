@@ -13,6 +13,7 @@ type State = RootState["developerMode"];
 const initialState: State = {
   estimator: false,
   isActive: true,
+  timer: true,
 };
 
 const isActiveReducer = (state: boolean | undefined, action: Action) => {
@@ -39,7 +40,20 @@ const estimatorActivityReducer = (state: boolean | undefined, action: Action) =>
   return state;
 };
 
+const timerActivityReducer = (state: boolean | undefined, action: Action) => {
+  if (action.type === types.SET_TIMER_ACTIVITY) {
+    return action.payload.timerIsActive;
+  }
+
+  if ( state === undefined) {
+    return initialState.timer;
+  }
+
+  return state;
+};
+
 export const reducer = combineReducers({
   estimator: estimatorActivityReducer,
   isActive: isActiveReducer,
+  timer: timerActivityReducer,
 });

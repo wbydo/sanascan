@@ -5,3 +5,9 @@ export const toggle = () => {
     type: types.TOGGLE,
   };
 };
+
+export const toggleTimer = () => {
+  return {
+    type: types.TOGGLE_TIMER,
+  };
+};

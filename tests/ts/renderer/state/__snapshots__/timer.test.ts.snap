@@ -10,7 +10,7 @@ exports[`isActiveが設定できる trueの場合 1`] = `
 - First value
 + Second value
 
-@@ -16,9 +16,9 @@
+@@ -17,9 +17,9 @@
     \\"estimator\\": Object {
       \\"id\\": null,
       \\"result\\": \\"\\",
@@ -28,7 +28,7 @@ exports[`scanSpeedが設定できる 1`] = `
 - First value
 + Second value
 
-@@ -17,8 +17,8 @@
+@@ -18,8 +18,8 @@
       \\"id\\": null,
       \\"result\\": \\"\\",
     },

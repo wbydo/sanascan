@@ -5,10 +5,10 @@ exports[`idが設定できる 1`] = `
 - First value
 + Second value
 
-@@ -12,11 +12,11 @@
-    \\"developerMode\\": Object {
+@@ -13,11 +13,11 @@
       \\"estimator\\": false,
       \\"isActive\\": true,
+      \\"timer\\": true,
     },
     \\"estimator\\": Object {
 -     \\"id\\": null,
@@ -25,9 +25,9 @@ exports[`resultを設定できる 1`] = `
 - First value
 + Second value
 
-@@ -13,11 +13,11 @@
-      \\"estimator\\": false,
+@@ -14,11 +14,11 @@
       \\"isActive\\": true,
+      \\"timer\\": true,
     },
     \\"estimator\\": Object {
       \\"id\\": null,

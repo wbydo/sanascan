@@ -29,6 +29,18 @@ export class DeveloperControl extends React.Component<Props> {
             />
         ESTIMATOR
 
+        <input
+            type="checkbox"
+            checked={this.props.developerMode.timer}
+            onClick={this.props.dispatch.toggleDeveloperModeTimerActivity}
+            />
+        Timer
+        <button
+        onClick={() => this.props.dispatch.developerMode.increment()}
+        >
+        INCREMENT
+        </button>
+
         <Selector
             state={this.props.cursol.direction}
             dispatch={this.props.dispatch.setCursolDirection}
@@ -40,12 +52,6 @@ export class DeveloperControl extends React.Component<Props> {
             >
           FETCH
         </button>
-        <button
-            onClick={() => this.props.dispatch.developerMode.increment()}
-            >
-          INCREMENT
-        </button>
-        <button><del>START (WITHOUT ESTIMATOR)</del></button>
         <button><del>CLICK</del></button>
       </span>
     );

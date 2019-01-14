@@ -13,13 +13,23 @@ import { actions as httpActions } from "../../cross/http";
 
 const toggle = (store: Store) => {
   const { developerMode: { isActive }} = store.getState();
-
   store.dispatch(developerModeActions.setActive(!isActive));
 
   if (isActive) {
     store.dispatch(httpActions.fetchId("start"));
   } else {
     store.dispatch(timerActions.kill());
+  }
+};
+
+const toggleTimer = (store: Store) => {
+  const { developerMode: { timer }} = store.getState();
+  store.dispatch(developerModeActions.setTimerActivity(!timer));
+
+  if (timer) {
+    store.dispatch(timerActions.kill());
+  } else {
+    store.dispatch(timerActions.start());
   }
 };
 
@@ -30,6 +40,11 @@ const middleware
     case types.TOGGLE:
       next(action);
       toggle(store);
+      break;
+
+    case types.TOGGLE_TIMER:
+      next(action);
+      toggleTimer(store);
       break;
 
     default:

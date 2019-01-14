@@ -19,10 +19,10 @@ exports[`estimatorIsActiveが設定できる trueの場合 1`] = `
 -     \\"estimator\\": false,
 +     \\"estimator\\": true,
       \\"isActive\\": true,
+      \\"timer\\": true,
     },
     \\"estimator\\": Object {
-      \\"id\\": null,
-      \\"result\\": \\"\\","
+      \\"id\\": null,"
 `;
 
 exports[`isActiveが設定できる falseの場合 1`] = `
@@ -38,11 +38,11 @@ exports[`isActiveが設定できる falseの場合 1`] = `
       \\"estimator\\": false,
 -     \\"isActive\\": true,
 +     \\"isActive\\": false,
+      \\"timer\\": true,
     },
     \\"estimator\\": Object {
       \\"id\\": null,
-      \\"result\\": \\"\\",
-    },"
+      \\"result\\": \\"\\","
 `;
 
 exports[`isActiveが設定できる trueの場合 1`] = `

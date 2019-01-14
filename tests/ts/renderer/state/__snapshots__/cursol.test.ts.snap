@@ -172,7 +172,7 @@ exports[`modeが設定出来る normalの場合 1`] = `
     \\"developerMode\\": Object {
       \\"estimator\\": false,
       \\"isActive\\": true,
-    },"
+      \\"timer\\": true,"
 `;
 
 exports[`modeが設定出来る proposalの場合 1`] = `

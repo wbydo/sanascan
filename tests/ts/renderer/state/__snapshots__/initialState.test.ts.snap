@@ -15,6 +15,7 @@ Object {
   "developerMode": Object {
     "estimator": false,
     "isActive": true,
+    "timer": true,
   },
   "estimator": Object {
     "id": null,

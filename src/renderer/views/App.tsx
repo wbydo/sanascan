@@ -36,7 +36,12 @@ class App extends React.Component<Props> {
   }
 
   public componentDidMount = () => {
-    if (!this.props.developerMode) {
+    const { developerMode } = this.props;
+    if (developerMode.isActive && developerMode.timer) {
+      this.props.dispatch.developerMode.startTimer();
+    }
+
+    if (!developerMode.isActive) {
       this.props.dispatch.startFetchEstimatorId();
     }
   }
