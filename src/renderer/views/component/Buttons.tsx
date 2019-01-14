@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import * as styles from "./Buttons.css";
+import Selector from "./Selector";
 
 import { StateProps as AppStateProps } from "../App";
 import { DispatchProps as AppDispatchProps } from "../App";
@@ -10,12 +11,17 @@ import DeveloperControl from "../container/DeveloperControl";
 
 type StateProps = Pick<
   AppStateProps,
-  "timerScanSpeed" | "developerMode"
+  "timerScanSpeed"
+  | "developerMode"
+  | "cursolMode"
 >;
 
 type DispatchProps = Pick<
   AppDispatchProps,
-  "setDeveloperModeActivity" | "configureWindowOpen" | "resetEstimator"
+  "setDeveloperModeActivity"
+    | "configureWindowOpen"
+    | "resetEstimator"
+    | "setCursolMode"
 >;
 
 type Props = _Props<StateProps, DispatchProps>;
@@ -27,6 +33,11 @@ export default class Buttons extends React.Component<Props> {
         <div>
           <button onClick={this.configureWindowOpen}>設定</button>
           <button onClick={this.props.dispatch.resetEstimator}>はじめから</button>
+          <Selector
+              state={this.props.cursolMode}
+              dispatch={this.props.dispatch.setCursolMode}
+              labels={["normal", "proposal"]}
+              />
         </div>
         <div>
           <input
