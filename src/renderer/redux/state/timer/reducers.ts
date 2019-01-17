@@ -3,30 +3,26 @@ import { combineReducers } from "redux";
 import * as actions from "./actions";
 import * as types from "./types";
 
+import { RootState } from "../../";
 import { Action as _Action } from "../../util";
-
 export type Action = _Action<typeof actions>;
 
-interface RootState {
-  isActive: boolean;
-  scanSpeed: number;
-  id: number | null;
-}
+type State = RootState["timer"];
 
-const initialState: RootState = {
-  id: null,
+const initialState: State = {
   isActive: false,
   scanSpeed: 500,
 };
 
-const isActiveReducer = (state: boolean | undefined, action: Action): boolean => {
+const isActiveReducer = (state: boolean | undefined, action: Action) => {
   if (action.type === types.SET_ACTIVE) {
     return action.payload.isActive;
   }
 
-  if (state === undefined) {
+  if ( state === undefined) {
     return initialState.isActive;
   }
+
   return state;
 };
 
@@ -42,20 +38,7 @@ const scanSpeedReducer = (state: number | undefined, action: Action): number => 
   return state;
 };
 
-const idReducer = (state: number | null | undefined, action: Action): number | null => {
-  if (action.type === types.SET_ID) {
-    return action.payload.id;
-  }
-
-  if (state === undefined) {
-    return initialState.id;
-  }
-
-  return state;
-};
-
 export const reducer = combineReducers({
-  id: idReducer,
   isActive: isActiveReducer,
   scanSpeed: scanSpeedReducer,
 });

@@ -13,11 +13,3 @@ export const kill = () => {
     type: types.KILL,
   };
 };
-
-export const finish = (id?: number) => {
-  return {
-    error: false,
-    payload: { id },
-    type: types.FINISH,
-  };
-};

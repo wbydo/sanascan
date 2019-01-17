@@ -2,29 +2,21 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-import CharacterBoard from "./component/CharacterBoard";
-import Configure, { Props as ConfigureProps } from "./component/Configure";
 import * as styles from "./App.css";
+import { Props as _Props } from "./util";
 
-import { RootState, operations, selectors } from "../redux";
+import Buttons from "./component/Buttons";
+import CharacterBoard from "./component/CharacterBoard";
+import Configure from "./component/Configure";
+
+import { RootState, operations } from "../redux";
 
 // import { ipcRenderer } from "electron";
 
-export interface StateProps {
-  configureWindowIsActive: boolean;
-  activeColumn: number;
-  timerScanSpeed: number;
-  result: string;
-}
+type StateProps = RootState;
+type DispatchProps = ReturnType<typeof operations>;
 
-export interface DispatchProps {
-  configureWindowOpen: (scanSpeed: number) => void;
-  startFetchEstimatorId: () => void;
-  sendKey: (key: number) => void;
-  resetEstimator: () => void;
-}
-
-type Props = DispatchProps & StateProps & ConfigureProps;
+export type Props = _Props<StateProps, DispatchProps>;
 
 class App extends React.Component<Props> {
   public render() {
@@ -33,31 +25,33 @@ class App extends React.Component<Props> {
           id="App"
           className={styles.app}
       >
-        <div>{this.props.result}</div>
+        <div>{this.props.estimator.result}</div>
         <div onClick={this.handleClick}>
-          <CharacterBoard activeColumn={this.props.activeColumn}/>
+          <CharacterBoard { ...this.props }/>
         </div>
-        {this.props.configureWindowIsActive && <Configure { ...this.props }/>}
-        <button onClick={this.configureWindowOpen}>設定</button>
-        <button onClick={this.props.resetEstimator}>はじめから</button>
+        {this.props.configWindow.isActive && <Configure { ...this.props }/>}
+        <Buttons { ...this.props }/>
       </div>
     );
   }
 
   public componentDidMount = () => {
-    return this.props.startFetchEstimatorId();
-  }
+    const { developerMode } = this.props;
+    if (developerMode.isActive && developerMode.timer) {
+      this.props.dispatch.developerMode.startTimer();
+    }
 
-  private configureWindowOpen = () => {
-    this.props.configureWindowOpen(this.props.timerScanSpeed);
+    if (!developerMode.isActive) {
+      this.props.dispatch.startFetchEstimatorId();
+    }
   }
 
   private handleClick = () => {
-    this.props.sendKey(this.props.activeColumn);
+    this.props.dispatch.sendKey(this.props.cursol.activeColumn);
   }
 }
 
 export default connect(
-  (state: RootState) => selectors(state),
-  (dispatch: Dispatch) => operations(dispatch),
+  (state: RootState) => state,
+  (dispatch: Dispatch) => ({ dispatch: operations(dispatch) }),
 )(App);

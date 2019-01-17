@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`estimatorIsActiveが設定できる falseの場合 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`estimatorIsActiveが設定できる trueの場合 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -8,11 +8,11 @@
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+-     \\"estimator\\": false,
++     \\"estimator\\": true,
+      \\"isActive\\": true,
+      \\"timer\\": true,
+    },
+    \\"estimator\\": Object {
+      \\"id\\": null,"
+`;
+
+exports[`isActiveが設定できる falseの場合 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -9,11 +9,11 @@
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,
+-     \\"isActive\\": true,
++     \\"isActive\\": false,
+      \\"timer\\": true,
+    },
+    \\"estimator\\": Object {
+      \\"id\\": null,
+      \\"result\\": \\"\\","
+`;
+
+exports[`isActiveが設定できる trueの場合 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;

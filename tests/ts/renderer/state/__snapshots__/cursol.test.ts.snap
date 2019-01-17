@@ -1,6 +1,107 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`activeColumnが0に戻る 1`] = `
+exports[`RESET mode:normal direction: column 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,12 +2,12 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 4,
+-     \\"activeRow\\": 3,
++     \\"activeColumn\\": 0,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`RESET mode:normal direction: row 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,12 +2,12 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 4,
+-     \\"activeRow\\": 3,
++     \\"activeColumn\\": 0,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`RESET mode:proposal direction: column 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,12 +2,12 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 4,
+-     \\"activeRow\\": 3,
++     \\"activeColumn\\": 0,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`directionが設定出来る mode:normal direction: column 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`directionが設定出来る mode:normal direction: row 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -4,11 +4,11 @@
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+      \\"activeColumn\\": 0,
+      \\"activeRow\\": 0,
+-     \\"direction\\": \\"column\\",
++     \\"direction\\": \\"row\\",
+      \\"mode\\": \\"normal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,
+      \\"isActive\\": true,"
+`;
+
+exports[`directionが設定出来る mode:proposal direction: column 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`directionが設定出来る mode:proposal direction: row 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`increment mode:normal direction: column 0に戻る 1`] = `
 "Snapshot Diff:
 - First value
 + Second value
@@ -13,14 +114,14 @@ exports[`activeColumnが0に戻る 1`] = `
     \\"cursol\\": Object {
 -     \\"activeColumn\\": 9,
 +     \\"activeColumn\\": 0,
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"normal\\",
     },
-    \\"estimator\\": Object {
-      \\"id\\": null,
-      \\"result\\": \\"\\",
-    },"
+    \\"developerMode\\": Object {"
 `;
 
-exports[`activeColumnが1増える 1`] = `
+exports[`increment mode:normal direction: column 1増える 1`] = `
 "Snapshot Diff:
 - First value
 + Second value
@@ -33,9 +134,114 @@ exports[`activeColumnが1増える 1`] = `
     \\"cursol\\": Object {
 -     \\"activeColumn\\": 0,
 +     \\"activeColumn\\": 1,
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"normal\\",
     },
-    \\"estimator\\": Object {
-      \\"id\\": null,
-      \\"result\\": \\"\\",
-    },"
+    \\"developerMode\\": Object {"
+`;
+
+exports[`increment mode:normal direction: row 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -3,11 +3,11 @@
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+      \\"activeColumn\\": 0,
+-     \\"activeRow\\": 4,
++     \\"activeRow\\": 0,
+      \\"direction\\": \\"row\\",
+      \\"mode\\": \\"normal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`increment mode:normal direction: row 1増える 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -3,11 +3,11 @@
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+      \\"activeColumn\\": 0,
+-     \\"activeRow\\": 0,
++     \\"activeRow\\": 1,
+      \\"direction\\": \\"row\\",
+      \\"mode\\": \\"normal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,"
+`;
+
+exports[`increment mode:proposal direction: column 0に戻る 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,11 +2,11 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 9,
++     \\"activeColumn\\": 0,
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {"
+`;
+
+exports[`increment mode:proposal direction: column 1増える 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -2,11 +2,11 @@
+    \\"configWindow\\": Object {
+      \\"isActive\\": false,
+      \\"scanSpeed\\": 0,
+    },
+    \\"cursol\\": Object {
+-     \\"activeColumn\\": 0,
++     \\"activeColumn\\": 1,
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+      \\"mode\\": \\"proposal\\",
+    },
+    \\"developerMode\\": Object {"
+`;
+
+exports[`modeが設定出来る normalの場合 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ -5,11 +5,11 @@
+    },
+    \\"cursol\\": Object {
+      \\"activeColumn\\": 0,
+      \\"activeRow\\": 0,
+      \\"direction\\": \\"column\\",
+-     \\"mode\\": \\"proposal\\",
++     \\"mode\\": \\"normal\\",
+    },
+    \\"developerMode\\": Object {
+      \\"estimator\\": false,
+      \\"isActive\\": true,
+      \\"timer\\": true,"
+`;
+
+exports[`modeが設定出来る proposalの場合 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
 `;

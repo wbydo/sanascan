@@ -1,11 +1,10 @@
 import { Dispatch } from "redux";
 
-import { Store } from ".";
-
 import * as actions from "../actions";
 import * as types from "../types";
 
-import { actions as timerEventActions } from "../../timerEvent";
+import { Store } from "../../util";
+import { actions as timerActions } from "../../timer";
 
 import { RootState } from "../../..";
 import { actions as estimatorActions } from "../../../state/estimator";
@@ -17,7 +16,7 @@ type Action = ReturnType<typeof actions.reset>;
 
 const reset = async (next: Dispatch, action: Action, state: RootState, storeDispatch: Dispatch) => {
   next(action);
-  storeDispatch(timerEventActions.kill());
+  storeDispatch(timerActions.kill());
 
   const id = state.estimator.id;
   if (id === null) {
@@ -32,7 +31,7 @@ const reset = async (next: Dispatch, action: Action, state: RootState, storeDisp
     method: "DELETE",
   });
   storeDispatch(estimatorActions.setResult(""));
-  storeDispatch(timerEventActions.start());
+  storeDispatch(timerActions.start());
 };
 
 export const middleware

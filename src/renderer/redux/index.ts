@@ -5,22 +5,39 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import { reducer as configWindowReducer } from "./state/configWindow";
 import { reducer as cursolReducer } from "./state/cursol";
+import { reducer as developerModeReducer } from "./state/developerMode";
 import { reducer as estimatorReducer } from "./state/estimator";
 import { reducer as timerReducer } from "./state/timer";
 
-import { middlewares as timerEventMiddlewares } from "./cross/timerEvent";
+import { middlewares as timerMiddlewares } from "./cross/timer";
 import { middlewares as httpMiddlewares } from "./cross/http";
+import { middlewares as developerModeMiddlewares } from "./cross/developerMode";
+
+interface CursolProperty {
+  activeColumn: number;
+  activeRow: number;
+}
+
+export type CursolState = (
+  {mode: "normal", direction: "column"} & CursolProperty
+) | (
+  {mode: "normal", direction: "row"} & CursolProperty
+) | (
+  {mode: "proposal", direction: "column"} & CursolProperty
+);
 
 export interface RootState {
   configWindow: {
     isActive: boolean;
     scanSpeed: number;
   };
-  cursol: {
-    activeColumn: number;
+  cursol: CursolState;
+  developerMode: {
+    isActive: boolean;
+    estimator: boolean;
+    timer: boolean;
   };
   timer: {
-    id: number | null;
     isActive: boolean;
     scanSpeed: number;
   };
@@ -32,7 +49,8 @@ export interface RootState {
 
 const middlewares = [
   ...httpMiddlewares,
-  ...timerEventMiddlewares,
+  ...timerMiddlewares,
+  ...developerModeMiddlewares,
 ];
 
 const enhancer = composeWithDevTools(
@@ -42,6 +60,7 @@ const enhancer = composeWithDevTools(
 export const reducer = combineReducers({
   configWindow: configWindowReducer,
   cursol: cursolReducer,
+  developerMode: developerModeReducer,
   estimator: estimatorReducer,
   timer: timerReducer,
 });
@@ -50,15 +69,5 @@ export const store = createStore(
   reducer,
   enhancer,
 );
-
-export const selectors = (state: RootState) => {
-  return {
-    activeColumn: state.cursol.activeColumn,
-    configureWindowIsActive: state.configWindow.isActive,
-    configureWindowScanSpeed: state.configWindow.scanSpeed,
-    result: state.estimator.result,
-    timerScanSpeed: state.timer.scanSpeed,
-  };
-};
 
 export { operations } from "./operations";

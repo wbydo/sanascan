@@ -2,16 +2,7 @@ import React from "react";
 
 import * as styles from "./Configure.css";
 
-interface StateProps {
-  configureWindowScanSpeed: number;
-}
-
-interface DispatchProps {
-  configureWindowClose: (lastValue: number) => void;
-  changeDisplayValue: (scanSpeed: number) => void;
-}
-
-export type Props = StateProps & DispatchProps;
+import { Props } from "../App";
 
 export default class Configure extends React.Component<Props> {
   public render() {
@@ -19,7 +10,7 @@ export default class Configure extends React.Component<Props> {
       <div id="Configure" className={styles.frame}>
         <div className={styles.content}>
           <h1>環境設定</h1>
-          <input type="number" value={this.props.configureWindowScanSpeed} onChange={this.handleChange}/>
+          <input type="number" value={this.props.configWindow.scanSpeed} onChange={this.handleChange}/>
           <button onClick={this.deactivateConfigure}>Off</button>
         </div>
       </div>
@@ -27,12 +18,12 @@ export default class Configure extends React.Component<Props> {
   }
 
   private deactivateConfigure = () => {
-    this.props.configureWindowClose(this.props.configureWindowScanSpeed);
+    this.props.dispatch.configWindow.close(this.props.configWindow.scanSpeed);
   }
 
   private handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     const scanSpeed  = parseInt(target.value, 10); // 10進数の意
-    this.props.changeDisplayValue(scanSpeed);
+    this.props.dispatch.changeDisplayValue(scanSpeed);
   }
 }
