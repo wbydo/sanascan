@@ -36,6 +36,11 @@ const toggleTimer = (store: Store) => {
   }
 };
 
+const toggleEstimator = (store: Store) => {
+  const { developerMode: { estimator }} = store.getState();
+  store.dispatch(developerModeActions.setEstimatorActivity(!estimator));
+};
+
 const middleware
     = (store: Store) => (next: Dispatch) => (action: Action) => {
 
@@ -48,6 +53,11 @@ const middleware
     case types.TOGGLE_TIMER:
       next(action);
       toggleTimer(store);
+      break;
+
+    case types.TOGGLE_ESTIMATOR:
+      next(action);
+      toggleEstimator(store);
       break;
 
     default:

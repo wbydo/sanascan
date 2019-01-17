@@ -6,11 +6,10 @@ import { actions as configWindowActions } from "./state/configWindow";
 import { actions as cursolActions } from "./state/cursol";
 
 import { actions as timerActions } from "./state/timer";
-import { actions as developerModeActions } from "./state/developerMode";
 
 import { actions as crossTimerActions } from "./cross/timer";
 import { actions as httpActions } from "./cross/http";
-import { actions as crossDeveloperModeActions } from "./cross/developerMode";
+import { actions as developerModeActions } from "./cross/developerMode";
 
 const configWindowOpen = (dispatch: Dispatch) => (scanSpeed: number) => {
   dispatch(crossTimerActions.kill());
@@ -29,21 +28,25 @@ const configWindowClose = (dispatch: Dispatch) => (lastValue: number) => {
 export const operations = (dispatch: Dispatch) => {
   return {
     changeDisplayValue: configWindowOperations.setScanSpeed(dispatch),
-    configureWindowClose: configWindowClose(dispatch),
-    configureWindowOpen: configWindowOpen(dispatch),
+    configWindow: {
+      close: configWindowClose(dispatch),
+      open: configWindowOpen(dispatch),
+    },
     developerMode: {
+      estimator: {
+        toggle: () => dispatch(developerModeActions.toggleEstimator()),
+      },
       increment: () => dispatch(cursolActions.increment()),
       startTimer: () => dispatch(crossTimerActions.start()),
+      timer: {
+        toggle: () => dispatch(developerModeActions.toggleTimer()),
+      },
+      toggle: () => dispatch(developerModeActions.toggle()),
     },
     resetEstimator: () => dispatch(httpActions.reset()),
     sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
     setCursolDirection: (direction: "column" | "row") => dispatch(cursolActions.setDirection(direction)),
     setCursolMode: (mode: "normal" | "proposal") => dispatch(cursolActions.setMode(mode)),
-    setDeveloperModeEstimatorActivity: (isActive: boolean) => {
-      return dispatch(developerModeActions.setEstimatorActivity(isActive));
-    },
     startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
-    toggleDeveloperModeActivity: () => dispatch(crossDeveloperModeActions.toggle()),
-    toggleDeveloperModeTimerActivity : () => dispatch(crossDeveloperModeActions.toggleTimer()),
   };
 };

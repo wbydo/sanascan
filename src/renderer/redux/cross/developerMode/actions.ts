@@ -11,3 +11,9 @@ export const toggleTimer = () => {
     type: types.TOGGLE_TIMER,
   };
 };
+
+export const toggleEstimator = () => {
+  return {
+    type: types.TOGGLE_ESTIMATOR,
+  };
+};

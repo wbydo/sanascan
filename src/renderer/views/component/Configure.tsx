@@ -18,7 +18,7 @@ export default class Configure extends React.Component<Props> {
   }
 
   private deactivateConfigure = () => {
-    this.props.dispatch.configureWindowClose(this.props.configWindow.scanSpeed);
+    this.props.dispatch.configWindow.close(this.props.configWindow.scanSpeed);
   }
 
   private handleChange = (event: React.FormEvent<HTMLInputElement>) => {

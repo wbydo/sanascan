@@ -19,23 +19,17 @@ export class DeveloperControl extends React.Component<Props> {
         <input
             type="checkbox"
             checked={this.props.developerMode.estimator}
-            onClick={
-              () => {
-                return this.props.dispatch.setDeveloperModeEstimatorActivity(
-                  !this.props.developerMode.estimator,
-                );
-              }
-            }
+            onClick={this.props.dispatch.developerMode.estimator.toggle}
             />
         ESTIMATOR
 
         <input
             type="checkbox"
             checked={this.props.developerMode.timer}
-            onClick={this.props.dispatch.toggleDeveloperModeTimerActivity}
+            onClick={this.props.dispatch.developerMode.timer.toggle}
             />
         Timer
-        {this.props.developerMode.timer &&
+        {!this.props.developerMode.timer &&
           <button
               onClick={() => this.props.dispatch.developerMode.increment()}
               >
