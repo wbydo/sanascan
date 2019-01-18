@@ -10,6 +10,7 @@ from .estimator import Estimator
 from .lang_model import LangModel
 from .word import Word, TagWord
 from .key import Key
+from .yomi_property import ColNum, Position
 
 
 class CORSMiddleware:
@@ -58,11 +59,19 @@ class EIDResouce:
     def on_post(self, req: Request, resp: Response, *, eid: int) -> None:
         try:
             key_str = req.params['key']
+            mode = req.params['mode']
         except Exception:
             raise Exception(req.params)
 
-        klass = TagWord if TagWord.is_include(key_str) else int
-        key: Key = Key([klass(key_str)])
+        key: Key
+        if TagWord.is_include(key_str):
+            key = Key([TagWord(key_str)])
+        elif mode == 'normal':
+            key = Key([Position(key_str)])
+        elif mode == 'proposal':
+            key = Key([ColNum(int(key_str))])
+        else:
+            raise Exception(f'mode: {mode}')
 
         self._root[eid].add(key)
         words = self._root[eid].result
