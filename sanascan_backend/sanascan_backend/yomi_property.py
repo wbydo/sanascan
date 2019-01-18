@@ -22,5 +22,10 @@ class ColNum(int):
 
 # Position = NewType('Position', str)
 class Position(str):
-    def __new__(klass, yomi_prop: YomiProperty) -> 'Position':
-        return super().__new__(klass, yomi_prop.pos)  # type: ignore
+    def __new__(klass, arg: Union[YomiProperty, str]) -> 'Position':
+        if isinstance(arg, str):
+            return super().__new__(klass, arg)  # type: ignore
+        elif isinstance(arg, YomiProperty):
+            return super().__new__(klass, arg.pos)  # type: ignore
+        else:
+            raise TypeError()

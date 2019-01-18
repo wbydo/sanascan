@@ -68,7 +68,15 @@ class Key(Generic[T]):
 
     @classmethod
     def from_int(klass, arg: Iterable[Union[TagWord, int]]) -> 'Key[ColNum]':
-        return Key[ColNum](ColNum(i) if isinstance(i, int) else i for i in arg)
+        return Key[ColNum](
+            i if isinstance(i, TagWord) else ColNum(i) for i in arg
+        )
+
+    @classmethod
+    def from_str(klass, arg: Iterable[Union[TagWord, str]]) -> 'Key[Position]':
+        return Key[Position](
+            i if isinstance(i, TagWord) else Position(i) for i in arg
+        )
 
     def __init__(self, arg: Iterable[Union[TagWord, T]]) -> None:
         self._tpl = tuple(arg)

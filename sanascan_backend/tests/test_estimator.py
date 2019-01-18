@@ -5,7 +5,7 @@ from natto import MeCab
 from sanascan_backend.estimator import Estimator
 from sanascan_backend.word import Word, TagWord
 from sanascan_backend.key import Key
-from sanascan_backend.yomi_property import ColNum
+from sanascan_backend.yomi_property import ColNum, Position
 
 
 from tests.use_lang_model import UseLangModel
@@ -20,19 +20,23 @@ class TestEstimator(UseLangModel):
         sentence = '特に１Ｆのバーは最高'
 
         test_words = list(Word.from_sentence(sentence, MeCab()))
-        key = Key.from_words(test_words, ColNum)
 
-        estimator = Estimator(self.lm)
-        for k in key:
-            estimator.add(k)
-        estimator.finish()
+        for t in [ColNum, Position]:
+            with self.subTest(f'{t}の場合'):
+                key = Key.from_words(test_words, t)
 
-        result = estimator.result
-        self.assertEqual(test_words, result)
+                estimator = Estimator(self.lm)
+                for k in key:
+                    estimator.add(k)
+                estimator.finish()
 
-        with self.subTest():
-            estimator.reset()
-            self.assertEqual(len(estimator.wait_child), 1)
+                with self.subTest("答えが正しい"):
+                    result = estimator.result
+                    self.assertEqual(test_words, result)
+
+                with self.subTest("リセットがちゃんときく"):
+                    estimator.reset()
+                    self.assertEqual(len(estimator.wait_child), 1)
 
     def test_add_side_effect(
             self,
