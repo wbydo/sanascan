@@ -23,11 +23,6 @@ T = TypeVar('T', ColNum, Position)
 
 
 class Key(Generic[T]):
-    _InitType = Union[
-        Iterable[Union[TagWord, int]],
-        Iterable[Union[TagWord, str]]
-    ]
-
     _tpl: Tuple[Union[TagWord, T], ...]
 
     _trans: ClassVar[Dict[int, Optional[int]]] = {}

@@ -8,10 +8,10 @@ from collections import defaultdict
 
 from .word import Word
 from .key import Key
+from .yomi_property import ColNum, Position
 
 
 class ResultOfGetByKey(NamedTuple):
-
     word: Word
     key: Key
 
@@ -31,9 +31,9 @@ class Vocabulary():
             lambda: SearchFlag.STOP)
 
         for word in words:
-            key = Key.from_words([word])
-
-            self._add_data(key, word)
+            for t in [ColNum, Position]:
+                key = Key.from_words([word], t)
+                self._add_data(key, word)
 
     def _add_data(self, key: Key, word: Word) -> None:
         if not (key in self._datum.keys()):

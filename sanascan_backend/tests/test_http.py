@@ -6,6 +6,7 @@ from natto import MeCab
 from sanascan_backend.http import api
 from sanascan_backend.word import Word
 from sanascan_backend.key import Key
+from sanascan_backend.yomi_property import ColNum
 
 
 class TestHTTP(testing.TestCase):
@@ -20,7 +21,7 @@ class TestHTTP(testing.TestCase):
 
         sentence = '特に１Ｆのバーは最高'
         test_words = list(Word.from_sentence(sentence, MeCab()))
-        key = Key.from_words(test_words)
+        key = Key.from_words(test_words, ColNum)
 
         for k in key:
             params = {

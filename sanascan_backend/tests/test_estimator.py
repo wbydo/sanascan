@@ -5,6 +5,8 @@ from natto import MeCab
 from sanascan_backend.estimator import Estimator
 from sanascan_backend.word import Word, TagWord
 from sanascan_backend.key import Key
+from sanascan_backend.yomi_property import ColNum
+
 
 from tests.use_lang_model import UseLangModel
 
@@ -18,7 +20,7 @@ class TestEstimator(UseLangModel):
         sentence = '特に１Ｆのバーは最高'
 
         test_words = list(Word.from_sentence(sentence, MeCab()))
-        key = Key.from_words(test_words)
+        key = Key.from_words(test_words, ColNum)
 
         estimator = Estimator(self.lm)
         for k in key:
