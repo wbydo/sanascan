@@ -1,6 +1,8 @@
-from typing import Tuple, Iterable, List, Union, Iterator
+from typing import Tuple, Iterable, List, Union, Iterator, NewType, Dict
+from typing import Optional, Generic, TypeVar, Type, ClassVar
 
 from .word import Word, TagWord
+from .yomi_property import YomiProperty, ColNum, Position
 
 katakana_table = [
     'アイウエオヴァィゥェォ',
@@ -15,28 +17,66 @@ katakana_table = [
     'ワヲンー'
 ]
 
-NUM_TABLE = {c: idx for idx, col in enumerate(katakana_table) for c in col}
+Yomi = NewType('Yomi', str)
+
+T = TypeVar('T', ColNum, Position)
 
 
-class Key():
-    _tpl: Tuple[Union[TagWord, int], ...]
+class Key(Generic[T]):
+    _InitType = Union[
+        Iterable[Union[TagWord, int]],
+        Iterable[Union[TagWord, str]]
+    ]
+
+    _tpl: Tuple[Union[TagWord, T], ...]
+
+    _trans: ClassVar[Dict[int, Optional[int]]] = {}
+    _trans.update(str.maketrans('ヴァィゥェォ', 'ウアイウエオ'))
+    _trans.update(str.maketrans('ガギグゲゴ', 'カキクケコ'))
+    _trans.update(str.maketrans('ザジズゼゾ', 'サシスセソ'))
+    _trans.update(str.maketrans('ッダヂヅデド', 'ツタチツテト'))
+    _trans.update(str.maketrans('バビブベボパピプペポ', 'ハヒフヘホハヒフヘホ'))
+    _trans.update(str.maketrans('ャュョ', 'ヤユヨ'))
+
+    _TABLE: ClassVar[Dict[Yomi, YomiProperty]] = {}
+    for idx, col in enumerate(katakana_table):
+        for c in col:
+            pos = c.translate(_trans)
+            _TABLE[Yomi(c)] = YomiProperty(
+                col=idx,
+                pos=pos
+            )
 
     @classmethod
-    def from_words(klass, words: List[Word]) -> 'Key':
-        return Key(klass._process_words(words))
+    def from_words(
+            klass,
+            words: List[Word],
+            type_: Type[T]
+            ) -> 'Key':
 
-    @staticmethod
-    def _process_words(words: List[Word]) -> Iterable[Union[TagWord, int]]:
+        return klass(klass._process_words(words, type_))
+
+    @classmethod
+    def _process_words(
+            klass,
+            words: List[Word],
+            type_: Type[T],
+            ) -> Iterable[Union[TagWord, T]]:
+
         for w in words:
             if isinstance(w, TagWord):
                 yield w
             else:
                 for c in w.yomi:
-                    yield NUM_TABLE[c]
+                    y = Yomi(c)
+                    yield type_(klass._TABLE[y])
 
-    def __init__(self, args: Iterable[Union[TagWord, int]]) -> None:
+    @classmethod
+    def from_int(klass, arg: Iterable[Union[TagWord, int]]) -> 'Key[ColNum]':
+        return Key[ColNum](ColNum(i) if isinstance(i, int) else i for i in arg)
 
-        self._tpl = tuple(args)
+    def __init__(self, arg: Iterable[Union[TagWord, T]]) -> None:
+        self._tpl = tuple(arg)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Key):
