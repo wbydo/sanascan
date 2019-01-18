@@ -19,15 +19,7 @@ class Estimator:
         self.lang_model = lm
         self.vocab = lm.create_vocabrary()
 
-        self.wait_child = [[]]
-        self.wait_child[0].append(RootNode())
-
-        s_tag = cast(
-            TagWord,
-            self.wait_child[0][0]._word,
-        )
-
-        self.key = Key([s_tag])
+        self.reset()
 
     def add(self, key: Key) -> None:
         assert len(key) == 1
@@ -51,5 +43,13 @@ class Estimator:
         self.result = self.eos_node.sentence[1:-1]
 
     def reset(self) -> None:
-        self.__init__(self.lang_model)
         self.result = None
+        self.wait_child = [[]]
+        self.wait_child[0].append(RootNode())
+
+        s_tag = cast(
+            TagWord,
+            self.wait_child[0][0]._word,
+        )
+
+        self.key = Key([s_tag])
