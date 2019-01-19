@@ -17,7 +17,7 @@ export default class Buttons extends React.Component<Props> {
           <button onClick={this.props.dispatch.resetEstimator}>はじめから</button>
           <Selector
               state={this.props.cursol.mode}
-              dispatch={this.props.dispatch.setCursolMode}
+              dispatch={this.props.dispatch.cursol.changeMode}
               labels={["normal", "proposal"]}
               />
         </div>

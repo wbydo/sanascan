@@ -4,9 +4,9 @@ import { operations as configWindowOperations } from "./state/configWindow";
 import { actions as configWindowActions } from "./state/configWindow";
 
 import { actions as cursolActions } from "./state/cursol";
-
 import { actions as timerActions } from "./state/timer";
 
+import { operations as cursolOperations } from "./cross/cursol";
 import { actions as crossTimerActions } from "./cross/timer";
 import { actions as httpActions } from "./cross/http";
 import { actions as developerModeActions } from "./cross/developerMode";
@@ -32,6 +32,9 @@ export const operations = (dispatch: Dispatch) => {
       close: configWindowClose(dispatch),
       open: configWindowOpen(dispatch),
     },
+    cursol: {
+      changeMode: cursolOperations.changeMode(dispatch),
+    },
     developerMode: {
       estimator: {
         toggle: () => dispatch(developerModeActions.toggleEstimator()),
@@ -46,7 +49,6 @@ export const operations = (dispatch: Dispatch) => {
     resetEstimator: () => dispatch(httpActions.reset()),
     sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
     setCursolDirection: (direction: "column" | "row") => dispatch(cursolActions.setDirection(direction)),
-    setCursolMode: (mode: "normal" | "proposal") => dispatch(cursolActions.setMode(mode)),
     startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
   };
 };

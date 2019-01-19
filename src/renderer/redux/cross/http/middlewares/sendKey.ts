@@ -21,7 +21,10 @@ const sendKey = (next: Dispatch, action: ReturnType<typeof actions.sendKey>, sta
   }
 
   const url = new URL(id.toString(), baseUrl);
-  const query = stringify({key: action.payload.key.toString()});
+  const query = stringify({
+    key: action.payload.key.toString(),
+    mode: state.cursol.mode,
+  });
   fetch(url.toString(), {
     body: query.toString(),
     headers: {

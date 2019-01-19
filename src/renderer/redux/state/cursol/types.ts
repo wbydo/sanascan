@@ -1,11 +1,11 @@
-export const INCREMENT: "sanascan/cursol/INCREMENT"
-  = "sanascan/cursol/INCREMENT";
+export const INCREMENT: "sanascan/state/cursol/INCREMENT"
+  = "sanascan/state/cursol/INCREMENT";
 
-export const SET_MODE: "sanascan/cursol/SET_MODE"
-  = "sanascan/cursol/SET_MODE";
+export const SET_MODE: "sanascan/state/cursol/SET_MODE"
+  = "sanascan/state/cursol/SET_MODE";
 
-export const SET_DIRECTION: "sanascan/cursol/SET_DIRECTION"
-  = "sanascan/cursol/SET_DIRECTION";
+export const SET_DIRECTION: "sanascan/state/cursol/SET_DIRECTION"
+  = "sanascan/state/cursol/SET_DIRECTION";
 
-export const RESET: "sanascan/cursol/RESET"
-  = "sanascan/cursol/RESET";
+export const RESET: "sanascan/state/cursol/RESET"
+  = "sanascan/state/cursol/RESET";

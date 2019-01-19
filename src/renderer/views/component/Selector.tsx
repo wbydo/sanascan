@@ -3,7 +3,7 @@ import React from "react";
 interface Props<T extends string> {
   state: T;
   labels: T[];
-  dispatch: (mode: T) => {};
+  dispatch: (mode: T) => void;
 }
 
 export default class Selector<T extends string> extends React.Component<Props<T>> {
