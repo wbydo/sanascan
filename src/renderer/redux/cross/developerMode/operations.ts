@@ -19,3 +19,13 @@ export const changeMode = (dispatch: Dispatch) => (currentActivity: boolean, tim
     return;
   }
 };
+
+export const toggleTimerActivity = (dispatch: Dispatch) => (currentActivity: boolean) => {
+  dispatch(developerModeActions.setTimerActivity(!currentActivity));
+
+  if (currentActivity) {
+    dispatch(timerActions.kill());
+  } else {
+    dispatch(timerActions.start());
+  }
+};

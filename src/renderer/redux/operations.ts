@@ -45,7 +45,7 @@ export const operations = (dispatch: Dispatch) => {
       increment: () => dispatch(cursolActions.increment()),
       startTimer: () => dispatch(crossTimerActions.start()),
       timer: {
-        toggle: () => dispatch(developerModeActions.toggleTimer()),
+        toggleActivity: developerModeOperations.toggleTimerActivity(dispatch),
       },
     },
     resetEstimator: () => dispatch(httpActions.reset()),
