@@ -5,6 +5,7 @@ import pickle
 
 from falcon import API, MEDIA_JSON, Request, Response
 from falcon import HTTP_200, HTTP_201
+from jaconv import hira2kata
 
 from .estimator import Estimator
 from .lang_model import LangModel
@@ -67,7 +68,7 @@ class EIDResouce:
         if TagWord.is_include(key_str):
             key = Key([TagWord(key_str)])
         elif mode == 'normal':
-            key = Key([Position(key_str)])
+            key = Key([Position(hira2kata(key_str))])
         elif mode == 'proposal':
             key = Key([ColNum(int(key_str))])
         else:

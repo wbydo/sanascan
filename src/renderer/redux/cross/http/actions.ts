@@ -10,7 +10,7 @@ export const fetchId = (status: "start" | "done" | "error") => {
   };
 };
 
-export const sendKey = (key: number) => {
+export const sendKey = (key: number | string) => {
   return {
     error: false,
     payload: {

@@ -96,6 +96,7 @@ const reset = (state: CursolState): CursolState => {
     ...state,
     activeColumn: 0,
     activeRow: 0,
+    direction: "column",
   };
 };
 

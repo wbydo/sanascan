@@ -9,6 +9,7 @@ import { actions as timerActions } from "./state/timer";
 import { operations as cursolOperations } from "./cross/cursol";
 import { actions as crossTimerActions } from "./cross/timer";
 import { actions as httpActions } from "./cross/http";
+import { operations as clickOperations } from "./cross/click";
 
 import { operations as developerModeOperations } from "./cross/developerMode";
 
@@ -29,6 +30,7 @@ const configWindowClose = (dispatch: Dispatch) => (lastValue: number) => {
 export const operations = (dispatch: Dispatch) => {
   return {
     changeDisplayValue: configWindowOperations.setScanSpeed(dispatch),
+    click: clickOperations.click(dispatch),
     configWindow: {
       close: configWindowClose(dispatch),
       open: configWindowOpen(dispatch),
@@ -48,7 +50,6 @@ export const operations = (dispatch: Dispatch) => {
       toggleActivity: developerModeOperations.toggleActivity(dispatch),
     },
     resetEstimator: () => dispatch(httpActions.reset()),
-    sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
     setCursolDirection: (direction: "column" | "row") => dispatch(cursolActions.setDirection(direction)),
     startFetchEstimatorId: () => dispatch(httpActions.fetchId("start")),
   };

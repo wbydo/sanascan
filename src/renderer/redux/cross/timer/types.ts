@@ -1,5 +1,5 @@
-export const START: "sanascan/timerEvent/START"
-  = "sanascan/timerEvent/START";
+export const START: "sanascan/cross/timer/START"
+  = "sanascan/cross/timer/START";
 
-export const KILL: "sanascan/timerEvent/KILL"
-  = "sanascan/timerEvent/KILL";
+export const KILL: "sanascan/cross/timer/KILL"
+  = "sanascan/cross/timer/KILL";

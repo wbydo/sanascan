@@ -26,7 +26,7 @@ class App extends React.Component<Props> {
           className={styles.app}
       >
         <div>{this.props.estimator.result}</div>
-        <div onClick={this.handleClick}>
+        <div onClick={() => this.props.dispatch.click(this.props)}>
           <CharacterBoard { ...this.props }/>
         </div>
         {this.props.configWindow.isActive && <Configure { ...this.props }/>}
@@ -44,10 +44,6 @@ class App extends React.Component<Props> {
     if (!developerMode.isActive) {
       this.props.dispatch.startFetchEstimatorId();
     }
-  }
-
-  private handleClick = () => {
-    this.props.dispatch.sendKey(this.props.cursol.activeColumn);
   }
 }
 
