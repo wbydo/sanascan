@@ -9,7 +9,8 @@ import { actions as timerActions } from "./state/timer";
 import { operations as cursolOperations } from "./cross/cursol";
 import { actions as crossTimerActions } from "./cross/timer";
 import { actions as httpActions } from "./cross/http";
-import { actions as developerModeActions } from "./cross/developerMode";
+
+import { operations as developerModeOperations } from "./cross/developerMode";
 
 const configWindowOpen = (dispatch: Dispatch) => (scanSpeed: number) => {
   dispatch(crossTimerActions.kill());
@@ -37,14 +38,14 @@ export const operations = (dispatch: Dispatch) => {
     },
     developerMode: {
       estimator: {
-        toggle: () => dispatch(developerModeActions.toggleEstimator()),
+        toggle: developerModeOperations.toggleEstimatorActivity(dispatch),
       },
       increment: () => dispatch(cursolActions.increment()),
       startTimer: () => dispatch(crossTimerActions.start()),
       timer: {
-        toggle: () => dispatch(developerModeActions.toggleTimer()),
+        toggleActivity: developerModeOperations.toggleTimerActivity(dispatch),
       },
-      toggle: () => dispatch(developerModeActions.toggle()),
+      toggleActivity: developerModeOperations.toggleActivity(dispatch),
     },
     resetEstimator: () => dispatch(httpActions.reset()),
     sendKey: (key: number) => dispatch(httpActions.sendKey(key)),
