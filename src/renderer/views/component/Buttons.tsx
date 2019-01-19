@@ -39,7 +39,7 @@ export default class Buttons extends React.Component<Props> {
   }
 
   private changeActivity = () => {
-    this.props.dispatch.developerMode.changeMode(
+    this.props.dispatch.developerMode.toggleActivity(
       this.props.developerMode.isActive,
       this.props.developerMode.timer,
     );

@@ -4,8 +4,9 @@ import { actions as timerActions } from "../timer";
 import { actions as httpActions } from "../http";
 
 import { actions as developerModeActions } from "../../state/developerMode";
+import { actions as cursolActions } from "../../state/cursol";
 
-export const changeMode = (dispatch: Dispatch) => (currentActivity: boolean, timerActivity: boolean) => {
+export const toggleActivity = (dispatch: Dispatch) => (currentActivity: boolean, timerActivity: boolean) => {
   dispatch(developerModeActions.setActive(!currentActivity));
   dispatch(timerActions.kill());
 
@@ -28,4 +29,10 @@ export const toggleTimerActivity = (dispatch: Dispatch) => (currentActivity: boo
   } else {
     dispatch(timerActions.start());
   }
+};
+
+export const toggleEstimatorActivity = (dispatch: Dispatch) => (currentActivity: boolean) => {
+  dispatch(developerModeActions.setEstimatorActivity(!currentActivity));
+  dispatch(cursolActions.reset());
+  dispatch(httpActions.reset());
 };

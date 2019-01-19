@@ -19,7 +19,7 @@ export class DeveloperControl extends React.Component<Props> {
         <input
             type="checkbox"
             checked={this.props.developerMode.estimator}
-            onClick={this.props.dispatch.developerMode.estimator.toggle}
+            onClick={this.toggleEstimatorActivity}
             />
         ESTIMATOR
 
@@ -50,6 +50,11 @@ export class DeveloperControl extends React.Component<Props> {
   private toggleTimerActivity = () => {
     const currentActivity = this.props.developerMode.timer;
     this.props.dispatch.developerMode.timer.toggleActivity(currentActivity);
+  }
+
+  private toggleEstimatorActivity = () => {
+    const currentActivity = this.props.developerMode.estimator;
+    this.props.dispatch.developerMode.estimator.toggle(currentActivity);
   }
 }
 

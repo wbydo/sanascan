@@ -11,7 +11,6 @@ import { reducer as timerReducer } from "./state/timer";
 
 import { middlewares as timerMiddlewares } from "./cross/timer";
 import { middlewares as httpMiddlewares } from "./cross/http";
-import { middlewares as developerModeMiddlewares } from "./cross/developerMode";
 
 interface CursolProperty {
   activeColumn: number;
@@ -50,7 +49,6 @@ export interface RootState {
 const middlewares = [
   ...httpMiddlewares,
   ...timerMiddlewares,
-  ...developerModeMiddlewares,
 ];
 
 const enhancer = composeWithDevTools(
