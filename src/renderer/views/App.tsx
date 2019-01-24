@@ -26,7 +26,7 @@ class App extends React.Component<Props> {
           className={styles.app}
       >
         <div>{this.props.estimator.result}</div>
-        <div onClick={() => this.props.dispatch.click(this.props)}>
+        <div onMouseDown={() => this.props.dispatch.click(this.props)}>
           <CharacterBoard { ...this.props }/>
         </div>
         {this.props.configWindow.isActive && <Configure { ...this.props }/>}
