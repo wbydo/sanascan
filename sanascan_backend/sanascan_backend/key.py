@@ -8,13 +8,14 @@ katakana_table = [
     'アイウエオヴァィゥェォ',
     'カキクケコガギグゲゴ',
     'サシスセソザジズゼゾ',
-    'タチツテトッダヂヅデド',
+    'タチツテトダヂヅデド',
     'ナニヌネノ',
     'ハヒフヘホバビブベボパピプペポ',
     'マミムメモ',
-    'ヤユヨャュョ',
+    'ヤユヨ',
     'ラリルレロ',
-    'ワヲンー'
+    'ワヲン',
+    'ャュョッー'
 ]
 
 Yomi = NewType('Yomi', str)
@@ -29,9 +30,8 @@ class Key(Generic[T]):
     _trans.update(str.maketrans('ヴァィゥェォ', 'ウアイウエオ'))
     _trans.update(str.maketrans('ガギグゲゴ', 'カキクケコ'))
     _trans.update(str.maketrans('ザジズゼゾ', 'サシスセソ'))
-    _trans.update(str.maketrans('ッダヂヅデド', 'ツタチツテト'))
+    _trans.update(str.maketrans('ダヂヅデド', 'タチツテト'))
     _trans.update(str.maketrans('バビブベボパピプペポ', 'ハヒフヘホハヒフヘホ'))
-    _trans.update(str.maketrans('ャュョ', 'ヤユヨ'))
 
     _TABLE: ClassVar[Dict[Yomi, YomiProperty]] = {}
     for idx, col in enumerate(katakana_table):

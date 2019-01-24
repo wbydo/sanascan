@@ -112,7 +112,7 @@ exports[`increment mode:normal direction: column 0に戻る 1`] = `
       \\"scanSpeed\\": 0,
     },
     \\"cursol\\": Object {
--     \\"activeColumn\\": 9,
+-     \\"activeColumn\\": 10,
 +     \\"activeColumn\\": 0,
       \\"activeRow\\": 0,
       \\"direction\\": \\"column\\",
@@ -192,7 +192,7 @@ exports[`increment mode:proposal direction: column 0に戻る 1`] = `
       \\"scanSpeed\\": 0,
     },
     \\"cursol\\": Object {
--     \\"activeColumn\\": 9,
+-     \\"activeColumn\\": 10,
 +     \\"activeColumn\\": 0,
       \\"activeRow\\": 0,
       \\"direction\\": \\"column\\",

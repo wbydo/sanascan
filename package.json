@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron ./dist/main.js",
     "build:all": "webpack --config webpack.config.js",
-    "build:renderer": "webpack --config webpack.renderer.build.js",
+    "build:renderer": "webpack --config webpack.renderer.js",
     "serve": "webpack-dev-server --hot --config ./webpack.renderer.serve.js",
     "serve:css": "tcm src/renderer --watch",
     "serve:test": "jest --watch",
