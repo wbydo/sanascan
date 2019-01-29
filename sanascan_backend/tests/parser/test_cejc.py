@@ -35,6 +35,5 @@ class TestCEJC(unittest.TestCase):
         self.assertEqual(len(result.value), 9)
 
 
-
 if __name__ == '__main__':
     unittest.main()

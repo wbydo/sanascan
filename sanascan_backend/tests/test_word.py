@@ -2,6 +2,7 @@ import unittest
 from natto import MeCab
 
 from sanascan_backend.word import Word, TagWord
+from sanascan_backend.word_builder import AnalyzeByMeCab
 
 
 class TestWord(unittest.TestCase):
@@ -44,7 +45,7 @@ class TestWord(unittest.TestCase):
         )
 
     def test_from_sentence(self) -> None:
-        r1 = list(Word.from_sentence(
+        r1 = list(AnalyzeByMeCab.from_sentence(
             'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高',
             MeCab()
         ))

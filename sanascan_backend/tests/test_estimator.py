@@ -3,9 +3,10 @@ import unittest
 from natto import MeCab
 
 from sanascan_backend.estimator import Estimator
-from sanascan_backend.word import Word, TagWord
+from sanascan_backend.word import TagWord
 from sanascan_backend.key import Key
 from sanascan_backend.yomi_property import ColNum, Position
+from sanascan_backend.word_builder import AnalyzeByMeCab
 
 
 from tests.use_lang_model import UseLangModel
@@ -19,7 +20,7 @@ class TestEstimator(UseLangModel):
         # sentence = 'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高'
         sentence = '特に１Ｆのバーは最高'
 
-        test_words = list(Word.from_sentence(sentence, MeCab()))
+        test_words = list(AnalyzeByMeCab.from_sentence(sentence, MeCab()))
 
         for t in [ColNum, Position]:
             with self.subTest(f'{t}の場合'):
