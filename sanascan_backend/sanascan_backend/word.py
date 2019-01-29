@@ -1,5 +1,7 @@
 from typing import List, ClassVar, Tuple, Iterable
 
+from dataclasses import dataclass
+
 
 DELIMITER: str = '/'
 # MARK: Dict[str, str] = {
@@ -74,3 +76,11 @@ class TagWord(Word):
 
     def __str__(self) -> str:
         return self.surface
+
+
+@dataclass(init=True, repr=False, eq=True, frozen=True)
+class Sentence:
+    words: Tuple[Word, ...]
+
+    def __str__(self) -> str:
+        return Word.to_str(self.words)

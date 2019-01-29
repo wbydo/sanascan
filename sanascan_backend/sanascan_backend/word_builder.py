@@ -17,7 +17,7 @@ class MarkError(Exception):
 
 
 class WordBuilder:
-    symbol: ClassVar[Pattern] = re.compile(r'^(?:\W|_|・)+$')
+    symbol: ClassVar[Pattern] = re.compile(r'^(?:\W|_|・|◇)+$')
 
     hira: ClassVar[Pattern] = re.compile(r'^[ぁ-ゔ]+$')
     kata: ClassVar[Pattern] = re.compile(r'^(?:[ァ-ヶヰヱヵヮ]|ー|・)+$')
@@ -45,8 +45,12 @@ class WordBuilder:
             return True
         return False
 
-    def to_word(self) -> Word:
+    def to_word(self) -> Optional[Word]:
+        if self.is_symbol():
+            return None
+
         surface = self._formal_surface()
+
         if TagWord.is_include(self._formal_surface()):
             return TagWord(surface)
         else:
@@ -119,8 +123,8 @@ class BuilderFromMeCab(WordBuilder):
             if mec_node.is_eos():
                 break
 
-            res = klass(mec_node)
-            if res.is_symbol():
+            w = klass(mec_node).to_word()
+            if w is None:
                 continue
 
-            yield res.to_word()
+            yield w
