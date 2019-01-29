@@ -64,7 +64,7 @@ class Key(Generic[T]):
             else:
                 for c in w.yomi:
                     y = Yomi(c)
-                    yield type_(klass._TABLE[y])
+                    yield type_.create(klass._TABLE[y])
 
     @classmethod
     def from_int(klass, arg: Iterable[Union[TagWord, int]]) -> 'Key[ColNum]':
