@@ -3,29 +3,21 @@ from typing import List, ClassVar, Tuple, Iterable
 from dataclasses import dataclass
 
 
-DELIMITER: str = '/'
-# MARK: Dict[str, str] = {
-#     'unk': '<unk>',
-#     'eng': '<eng>',
-#     'num': '<num>',
-#     '<s>': '<s>',  # 要検討
-# }
-
-
 class Word:
     surface: str
     yomi: str
+    DELIMITER: ClassVar[str] = '/'
 
     @staticmethod
     def from_wakachigaki(wakachigaki: str) -> 'List[Word]':
         return [Word.from_str_of_singleword(w) for w in wakachigaki.split(' ')]
 
-    @staticmethod
-    def from_str_of_singleword(arg: str) -> 'Word':
+    @classmethod
+    def from_str_of_singleword(klass, arg: str) -> 'Word':
         if TagWord.is_include(arg):
             return TagWord(arg)
 
-        list_ = arg.split(DELIMITER)
+        list_ = arg.split(klass.DELIMITER)
 
         if len(list_) >= 3:
             raise ValueError()
@@ -56,7 +48,7 @@ class Word:
         return (self.surface, self.yomi)
 
     def __str__(self) -> str:
-        return f'{self.surface}{DELIMITER}{self.yomi}'
+        return f'{self.surface}{self.DELIMITER}{self.yomi}'
 
     def __repr__(self) -> str:
         return f'Word(\'{self.surface}\',\'{self.yomi}\')'
