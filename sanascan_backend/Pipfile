@@ -5,12 +5,14 @@ name = "pypi"
 
 [packages]
 setuptools = "*"
-"e1839a8" = {path = ".", editable = true}
+e1839a8 = {path = ".",editable = true}
 natto-py = "*"
 numpy = "*"
 jaconv = "*"
 falcon = "*"
 gunicorn = "*"
+pandas = "*"
+wbydo-parser = {editable = true,path = "./wbydo-parser"}
 
 [dev-packages]
 sphinx = "*"
@@ -18,6 +20,8 @@ sphinx-rtd-theme = "*"
 twine = "*"
 mypy = "*"
 "flake8" = "*"
+typing-extensions = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"
@@ -27,5 +31,6 @@ start = "gunicorn sanascan_backend.http:api"
 apidoc = "sphinx-apidoc -f -o ./source ./hoge"
 build = "sphinx-build -a ./source ./docs"
 test = "python -m unittest discover -s ./tests -v"
+test-parser = "python -m unittest discover -s ./tests/parser -v"
 type = "mypy sanascan_backend tests"
 lint = "flake8 sanascan_backend tests"
