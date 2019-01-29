@@ -7,7 +7,7 @@ from sanascan_backend.http import api
 from sanascan_backend.word import Word
 from sanascan_backend.key import Key
 from sanascan_backend.yomi_property import ColNum, Position
-from sanascan_backend.word_builder import AnalyzeByMeCab
+from sanascan_backend.word_builder import BuilderFromMeCab
 
 
 class TestHTTP(testing.TestCase):
@@ -25,7 +25,7 @@ class TestHTTP(testing.TestCase):
 
                 sentence = '特に１Ｆのバーは最高'
                 test_words = list(
-                    AnalyzeByMeCab.from_sentence(sentence, MeCab())
+                    BuilderFromMeCab.from_sentence(sentence, MeCab())
                 )
                 key = Key.from_words(test_words, t)
 

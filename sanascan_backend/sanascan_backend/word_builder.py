@@ -16,7 +16,7 @@ class MarkError(Exception):
     pass
 
 
-class AnalyzeMorph:
+class WordBuilder:
     symbol: ClassVar[Pattern] = re.compile(r'^(?:\W|_|・)+$')
 
     hira: ClassVar[Pattern] = re.compile(r'^[ぁ-ゔ]+$')
@@ -39,31 +39,39 @@ class AnalyzeMorph:
     def is_symbol(self) -> bool:
         if self._hinshi == '記号':
             return True
-        if AnalyzeMorph.symbol.match(self._surface):
+        if WordBuilder.symbol.match(self._surface):
             return True
-        if self._has_yomi and AnalyzeMorph.symbol.match(self._yomi):
+        if self._has_yomi and WordBuilder.symbol.match(self._yomi):
             return True
         return False
 
-    def surface(self) -> str:
+    def to_word(self) -> Word:
+        surface = self._formal_surface()
+        if TagWord.is_include(self._formal_surface()):
+            return TagWord(surface)
+        else:
+            yomi = self._formal_yomi()
+            return Word(surface=surface, yomi=yomi)
+
+    def _formal_surface(self) -> str:
         if self.is_symbol():
             raise SymbolError()
 
         if self._has_yomi:
             return self._surface
-        if AnalyzeMorph.hira.match(self._surface):
+        if WordBuilder.hira.match(self._surface):
             return self._surface
-        if AnalyzeMorph.kata.match(self._surface):
+        if WordBuilder.kata.match(self._surface):
             return self._surface
 
-        if AnalyzeMorph.eng.match(self._surface):
+        if WordBuilder.eng.match(self._surface):
             return TagWord('<eng>').surface
-        if AnalyzeMorph.num.match(self._surface):
+        if WordBuilder.num.match(self._surface):
             return TagWord('<num>').surface
 
         return TagWord('<unk>').surface
 
-    def yomi(self) -> str:
+    def _formal_yomi(self) -> str:
         if self.is_symbol():
             raise SymbolError()
 
@@ -71,10 +79,10 @@ class AnalyzeMorph:
             assert self._yomi is not None
             return self._conv_kata(self._yomi)
 
-        surface = self.surface()
-        if AnalyzeMorph.hira.match(surface):
+        surface = self._formal_surface()
+        if WordBuilder.hira.match(surface):
             return self._conv_kata(surface)
-        if AnalyzeMorph.kata.match(surface):
+        if WordBuilder.kata.match(surface):
             return self._conv_kata(surface)
 
         # if not (surface in MARK.values()):
@@ -83,12 +91,12 @@ class AnalyzeMorph:
         return surface
 
     def _conv_kata(self, str_: str) -> str:
-        tbl = AnalyzeMorph.old_kana_table
+        tbl = WordBuilder.old_kana_table
         katakana = cast(str, jaconv.hira2kata(str_))
         return katakana.translate(tbl).replace('・', '')
 
 
-class AnalyzeByMeCab(AnalyzeMorph):
+class BuilderFromMeCab(WordBuilder):
     def __init__(self, mecab_node: MeCabNode) -> None:
         features: List[str] = mecab_node.feature.split(',')
         self._hinshi = features[0]
@@ -115,7 +123,4 @@ class AnalyzeByMeCab(AnalyzeMorph):
             if res.is_symbol():
                 continue
 
-            if TagWord.is_include(res.surface()):
-                yield TagWord(res.surface())
-            else:
-                yield Word(surface=res.surface(), yomi=res.yomi())
+            yield res.to_word()
