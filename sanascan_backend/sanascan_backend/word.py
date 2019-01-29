@@ -1,4 +1,4 @@
-from typing import List, ClassVar, Tuple, Iterable
+from typing import List, ClassVar, Tuple
 
 from dataclasses import dataclass
 
@@ -23,10 +23,6 @@ class Word:
             raise ValueError()
 
         return Word(surface=list_[0], yomi=list_[1])
-
-    @staticmethod
-    def to_str(words: 'Iterable[Word]') -> str:
-        return ''.join([w.surface for w in words])
 
     def __init__(self, surface: str, yomi: str) -> None:
         self.surface = surface
@@ -72,7 +68,15 @@ class TagWord(Word):
 
 @dataclass(init=True, repr=False, eq=True, frozen=True)
 class Sentence:
+    DELIMITER: ClassVar[str] = ' '
     words: Tuple[Word, ...]
 
     def __str__(self) -> str:
-        return Word.to_str(self.words)
+        return self.DELIMITER.join(
+            [str(w) for w in self.words]
+        )
+
+    def format_surfaces(self) -> str:
+        return ''.join(
+            [w.surface for w in self.words]
+        )

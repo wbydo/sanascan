@@ -4,7 +4,7 @@ from enum import Enum
 from enum import auto
 from itertools import chain
 
-from .word import Word
+from .word import Word, Sentence
 from .vocabulary import Vocabulary
 
 
@@ -62,7 +62,8 @@ class LangModel:
         words = tuple(words)
         len_ = len(words)
         if len_ > self.order:
-            raise NgramError(Word.to_str(words))
+            sentence = Sentence(words)
+            raise NgramError(sentence.format_surfaces())
 
         if len_ == 1 and (words not in self._dic.keys()):
             raise NgramError(str(words) + 'は使用言語モデルの語彙にない')
