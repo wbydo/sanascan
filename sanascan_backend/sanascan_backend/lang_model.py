@@ -51,9 +51,10 @@ class LangModel:
 
             data_line = line.split('\t')
             prob = float(data_line[0])
-            word = tuple(Word.from_wakachigaki(data_line[1]))
+            wakachigaki = data_line[1]
+            sentence = Word.from_wakachigaki(wakachigaki)
             backoff = float(data_line[2]) if len(data_line) == 3 else 0
-            result[word] = LangModel.Data(prob=prob, backoff=backoff)
+            result[sentence.words] = LangModel.Data(prob=prob, backoff=backoff)
 
         self.order = ngram
         self._dic = result

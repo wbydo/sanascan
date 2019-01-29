@@ -9,8 +9,13 @@ class Word:
     DELIMITER: ClassVar[str] = '/'
 
     @staticmethod
-    def from_wakachigaki(wakachigaki: str) -> 'List[Word]':
-        return [Word.from_str_of_singleword(w) for w in wakachigaki.split(' ')]
+    def from_wakachigaki(wakachigaki: str) -> 'Sentence':
+        def _iter() -> Iterable[Word]:
+            delimiter = Sentence.DELIMITER
+            for w in wakachigaki.split(delimiter):
+                yield Word.from_str_of_singleword(w)
+
+        return Sentence.from_iter(_iter())
 
     @classmethod
     def from_str_of_singleword(klass, arg: str) -> 'Word':
