@@ -5,13 +5,17 @@ import pandas as pd
 import yaml
 
 from sanascan_backend.word import Word, Sentence
-from sanascan_backend.parser.cejc import SOS, SentenceParser, CEJC
+from sanascan_backend.cejc.parser import SOS, SentenceParser, CEJC
 from wbydo_parser.base import ParseError
 
-path = Path(__file__).parent.parent.parent / ('env.yml')
-with path.open() as f:
-    csv_path = yaml.load(f)['cejc']
-    df = pd.read_csv(csv_path, encoding='shift-jis')
+env_path = Path(__file__).parent.parent.parent / ('env.yml')
+
+with env_path.open() as f:
+    env = yaml.load(f)
+
+corpus_path = Path(env['cejc'])
+csv_path = corpus_path / 'data/C001/C001_001/C001_001-morphSUW.csv'
+df = pd.read_csv(csv_path, encoding='shift-jis')
 
 
 class TestCEJC(unittest.TestCase):
