@@ -4,7 +4,7 @@ from falcon import testing
 from natto import MeCab
 
 from sanascan_backend.http import api
-from sanascan_backend.word import Word
+from sanascan_backend.word import Sentence
 from sanascan_backend.key import Key
 from sanascan_backend.yomi_property import ColNum, Position
 from sanascan_backend.word_builder import BuilderFromMeCab
@@ -23,11 +23,11 @@ class TestHTTP(testing.TestCase):
                 self.assertIn('eid', resp.keys())
                 eid = resp['eid']
 
-                sentence = '特に１Ｆのバーは最高'
-                test_words = list(
-                    BuilderFromMeCab.from_sentence(sentence, MeCab())
+                test_words = BuilderFromMeCab.from_plaintext(
+                    '特に１Ｆのバーは最高', MeCab()
                 )
-                key = Key.from_words(test_words, t)
+                sentence = Sentence.from_iter(test_words)
+                key = Key.from_sentence(sentence, t)
 
                 for k in key:
                     params = {
@@ -40,7 +40,7 @@ class TestHTTP(testing.TestCase):
                 get_result = self.simulate_get(f'/{eid}')
                 self.assertLess(get_result.status_code, 400)
 
-                correct = Word.to_str(test_words)
+                correct = sentence.format_surfaces()
                 self.assertEqual(correct, get_result.json['result'])
 
 

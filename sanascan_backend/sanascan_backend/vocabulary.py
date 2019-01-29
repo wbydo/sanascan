@@ -6,7 +6,7 @@ from enum import auto
 
 from collections import defaultdict
 
-from .word import Word
+from .word import Word, Sentence
 from .key import Key
 from .yomi_property import ColNum, Position
 
@@ -32,7 +32,8 @@ class Vocabulary():
 
         for word in words:
             for t in [ColNum, Position]:
-                key = Key.from_words([word], t)
+                s = Sentence.from_iter([word])
+                key = Key.from_sentence(s, t)
                 self._add_data(key, word)
 
     def _add_data(self, key: Key, word: Word) -> None:

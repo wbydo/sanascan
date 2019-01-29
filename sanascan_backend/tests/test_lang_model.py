@@ -1,18 +1,24 @@
+from typing import cast
+
 import unittest
 import pickle
 
-from sanascan_backend.word import Word
+from sanascan_backend.word import Word, Sentence
+from sanascan_backend.lang_model import LangModel
 
 from tests.use_lang_model import UseLangModel
 
 
 class TestLangModel(UseLangModel):
+    lm: LangModel
+
     def setUp(self) -> None:
-        self.lm = self.__class__.LM
+        self.lm = cast(LangModel, self.LM)
 
     def test_score(self, msg: str = 'lm.scoreが何らかの値を返すか\'だけの\'テスト') -> None:
         words = [Word(surface='ホテル', yomi='ホテル')]
-        self.lm.score(words)
+        s = Sentence.from_iter(words)
+        self.lm.score(s)
 
     def test_vocab(
             self,

@@ -9,8 +9,13 @@ class Word:
     DELIMITER: ClassVar[str] = '/'
 
     @staticmethod
-    def from_wakachigaki(wakachigaki: str) -> 'List[Word]':
-        return [Word.from_str_of_singleword(w) for w in wakachigaki.split(' ')]
+    def from_wakachigaki(wakachigaki: str) -> 'Sentence':
+        def _iter() -> Iterable[Word]:
+            delimiter = Sentence.DELIMITER
+            for w in wakachigaki.split(delimiter):
+                yield Word.from_str_of_singleword(w)
+
+        return Sentence.from_iter(_iter())
 
     @classmethod
     def from_str_of_singleword(klass, arg: str) -> 'Word':
@@ -23,10 +28,6 @@ class Word:
             raise ValueError()
 
         return Word(surface=list_[0], yomi=list_[1])
-
-    @staticmethod
-    def to_str(words: 'Iterable[Word]') -> str:
-        return ''.join([w.surface for w in words])
 
     def __init__(self, surface: str, yomi: str) -> None:
         self.surface = surface
@@ -72,7 +73,19 @@ class TagWord(Word):
 
 @dataclass(init=True, repr=False, eq=True, frozen=True)
 class Sentence:
+    DELIMITER: ClassVar[str] = ' '
     words: Tuple[Word, ...]
 
+    @classmethod
+    def from_iter(klass, words: Iterable[Word]) -> 'Sentence':
+        return klass(tuple(words))
+
     def __str__(self) -> str:
-        return Word.to_str(self.words)
+        return self.DELIMITER.join(
+            [str(w) for w in self.words]
+        )
+
+    def format_surfaces(self) -> str:
+        return ''.join(
+            [w.surface for w in self.words]
+        )

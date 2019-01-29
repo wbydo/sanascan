@@ -1,7 +1,7 @@
 from typing import List
 
 from .lang_model import LangModel
-from .word import Word, TagWord
+from .word import Word, TagWord, Sentence
 
 
 class Node:
@@ -29,7 +29,8 @@ class Node:
 
     def _calc_score(self, other: 'Node', lm: LangModel) -> float:
         ngram = other.sentence[-(lm.order - 1):] + [self._word]
-        return other.score + lm.score(ngram)
+        s = Sentence.from_iter(ngram)
+        return other.score + lm.score(s)
 
 
 class RootNode(Node):

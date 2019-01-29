@@ -1,7 +1,7 @@
 import unittest
 from natto import MeCab
 
-from sanascan_backend.word import Word, TagWord
+from sanascan_backend.word import Word, TagWord, Sentence
 from sanascan_backend.word_builder import BuilderFromMeCab
 
 
@@ -36,7 +36,8 @@ class TestWord(unittest.TestCase):
             Word(surface='日余', yomi='ピヨ'),
         ]
 
-        self.assertEqual(Word.to_str(words), '歩下普が日余')
+        sentence = Sentence.from_iter(words)
+        self.assertEqual(sentence.format_surfaces(), '歩下普が日余')
 
     def test_eq(self) -> None:
         self.assertNotEqual(
@@ -45,7 +46,7 @@ class TestWord(unittest.TestCase):
         )
 
     def test_from_sentence(self) -> None:
-        r1 = list(BuilderFromMeCab.from_sentence(
+        r1 = list(BuilderFromMeCab.from_plaintext(
             'ホテル内の飲食店が充実しており、特に１Ｆのバーは重厚なインテリアで、雰囲気が良く最高',
             MeCab()
         ))

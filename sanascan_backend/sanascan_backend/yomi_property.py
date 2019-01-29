@@ -9,23 +9,23 @@ class YomiProperty:
     pos: str
 
 
-# ColNum = NewType('ColNum', int)
 class ColNum(int):
-    def __new__(klass, arg: Union[YomiProperty, int]) -> 'ColNum':
+    @classmethod
+    def create(klass, arg: Union[YomiProperty, int]) -> 'ColNum':
         if isinstance(arg, int):
-            return super().__new__(klass, arg)  # type: ignore
+            return klass(arg)
         elif isinstance(arg, YomiProperty):
-            return super().__new__(klass, arg.col)  # type: ignore
+            return klass(arg.col)
         else:
             raise TypeError()
 
 
-# Position = NewType('Position', str)
 class Position(str):
-    def __new__(klass, arg: Union[YomiProperty, str]) -> 'Position':
+    @classmethod
+    def create(klass, arg: Union[YomiProperty, str]) -> 'Position':
         if isinstance(arg, str):
-            return super().__new__(klass, arg)  # type: ignore
+            return klass(arg)
         elif isinstance(arg, YomiProperty):
-            return super().__new__(klass, arg.pos)  # type: ignore
+            return klass(arg.pos)
         else:
             raise TypeError()

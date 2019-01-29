@@ -1,6 +1,6 @@
 import unittest
 
-from sanascan_backend.word import Word, TagWord
+from sanascan_backend.word import Word, TagWord, Sentence
 from sanascan_backend.key import Key
 from sanascan_backend.yomi_property import ColNum, Position
 
@@ -14,23 +14,27 @@ class TestKey(unittest.TestCase):
 
     def test_from_words_by_colnum(self) -> None:
         with self.subTest():
-            k1 = Key.from_words([self.hoge], ColNum)
+            s = Sentence.from_iter([self.hoge])
+            k1 = Key.from_sentence(s, ColNum)
             k2 = Key.from_int([5, 1])
             self.assertEqual(k1, k2)
 
         with self.subTest():
-            k1 = Key.from_words([self.hoge, self.fuga], ColNum)
+            s = Sentence.from_iter([self.hoge, self.fuga])
+            k1 = Key.from_sentence(s, ColNum)
             k2 = Key.from_int([5, 1, 5, 1])
             self.assertEqual(k1, k2)
 
     def test_from_words_by_position(self) -> None:
         with self.subTest():
-            k1 = Key.from_words([self.hoge], Position)
+            s = Sentence.from_iter([self.hoge])
+            k1 = Key.from_sentence(s, Position)
             k2 = Key.from_str(['ホ', 'ケ'])
             self.assertEqual(k1, k2)
 
         with self.subTest():
-            k1 = Key.from_words([self.hoge, self.fuga], Position)
+            s = Sentence.from_iter([self.hoge, self.fuga])
+            k1 = Key.from_sentence(s, Position)
             k2 = Key.from_str(['ホ', 'ケ', 'フ', 'カ'])
             self.assertEqual(k1, k2)
 

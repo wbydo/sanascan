@@ -9,7 +9,7 @@ from jaconv import hira2kata
 
 from .estimator import Estimator
 from .lang_model import LangModel
-from .word import Word, TagWord
+from .word import TagWord, Sentence
 from .key import Key
 from .yomi_property import ColNum, Position
 
@@ -80,9 +80,11 @@ class EIDResouce:
         if words is None:
             raise Exception('Estimator has no result')
 
+        sentence = Sentence.from_iter(words)
+
         resp.data = json.dumps({
             'eid': eid,
-            'result': Word.to_str(words),
+            'result': sentence.format_surfaces(),
         }).encode('utf-8')
         resp.content_type = MEDIA_JSON
         resp.status = HTTP_200
@@ -95,9 +97,11 @@ class EIDResouce:
         if words is None:
             raise Exception()
 
+        sentence = Sentence.from_iter(words)
+
         resp.data = json.dumps({
             'id': eid,
-            'result': Word.to_str(words)
+            'result': sentence.format_surfaces(),
         }).encode('utf-8')
 
         resp.content_type = MEDIA_JSON
