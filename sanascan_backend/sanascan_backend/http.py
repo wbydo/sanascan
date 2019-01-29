@@ -80,7 +80,7 @@ class EIDResouce:
         if words is None:
             raise Exception('Estimator has no result')
 
-        sentence = Sentence(tuple(words))
+        sentence = Sentence.from_iter(words)
 
         resp.data = json.dumps({
             'eid': eid,
@@ -97,7 +97,7 @@ class EIDResouce:
         if words is None:
             raise Exception()
 
-        sentence = Sentence(tuple(words))
+        sentence = Sentence.from_iter(words)
 
         resp.data = json.dumps({
             'id': eid,

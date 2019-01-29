@@ -1,4 +1,4 @@
-from typing import List, ClassVar, Tuple
+from typing import List, ClassVar, Tuple, Iterable
 
 from dataclasses import dataclass
 
@@ -70,6 +70,10 @@ class TagWord(Word):
 class Sentence:
     DELIMITER: ClassVar[str] = ' '
     words: Tuple[Word, ...]
+
+    @classmethod
+    def from_iter(klass, words: Iterable[Word]) -> 'Sentence':
+        return klass(tuple(words))
 
     def __str__(self) -> str:
         return self.DELIMITER.join(

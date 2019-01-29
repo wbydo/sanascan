@@ -112,13 +112,13 @@ class BuilderFromMeCab(WordBuilder):
             self._yomi = features[7]
 
     @classmethod
-    def from_sentence(
+    def from_plaintext(
             klass,
-            sentence: str,
+            text: str,
             mecab: MeCab,
             ) -> 'Iterable[Word]':
 
-        normalized = jaconv.normalize(sentence)
+        normalized = jaconv.normalize(text)
         for mec_node in mecab.parse(normalized, as_nodes=True):
             if mec_node.is_eos():
                 break

@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Set, Tuple, Iterable, IO
+from typing import Dict, Set, Tuple, IO
 from enum import Enum
 from enum import auto
 from itertools import chain
@@ -58,13 +58,12 @@ class LangModel:
         self.order = ngram
         self._dic = result
 
-    def score(self, words: Iterable[Word]) -> float:
-        words = tuple(words)
-        len_ = len(words)
+    def score(self, sentence: Sentence) -> float:
+        len_ = len(sentence.words)
         if len_ > self.order:
-            sentence = Sentence(words)
             raise NgramError(sentence.format_surfaces())
 
+        words = sentence.words
         if len_ == 1 and (words not in self._dic.keys()):
             raise NgramError(str(words) + 'は使用言語モデルの語彙にない')
 
@@ -72,7 +71,8 @@ class LangModel:
             return self._dic[words].prob
         else:
             context = words[:-1]
-            p = self.score(words[1:])
+            s = Sentence.from_iter(words[1:])
+            p = self.score(s)
 
             if context in self._dic.keys():
                 backoff = self._dic[context].backoff
