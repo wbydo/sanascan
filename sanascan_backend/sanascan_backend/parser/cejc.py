@@ -1,9 +1,10 @@
-from typing import ClassVar, List
+from typing import ClassVar, List, Tuple
 from dataclasses import dataclass
 
 import pandas as pd
 
 from wbydo_parser.base import Parser, Result, ParseError
+from wbydo_parser.multi import OneOrMore
 
 
 @dataclass(init=True, repr=True, eq=True, frozen=True)
@@ -41,3 +42,21 @@ class SOS(SentenceHeadFrag):
 class NotSOS(SentenceHeadFrag):
     def __init__(self) -> None:
         super().__init__(flag='I')
+
+
+class Sentence(Parser[Tuple[pd.Series, ...], pd.DataFrame]):
+    def __call__(
+            self,
+            input: pd.DataFrame
+            ) -> Result[Tuple[pd.Series, ...], pd.DataFrame]:
+
+        sos_parser = SOS()
+        sos_result = sos_parser(input)
+
+        other_parser = OneOrMore(NotSOS())
+        other_result = other_parser(sos_result.next)
+
+        return Result(
+            value=(sos_result.value, *other_result.value),
+            next=other_result.next
+        )

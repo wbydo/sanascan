@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import yaml
 
-from sanascan_backend.parser.cejc import SOS
+from sanascan_backend.parser.cejc import SOS, Sentence
 from wbydo_parser.base import ParseError
 
 path = Path(__file__).parent.parent.parent / ('env.yml')
@@ -28,6 +28,12 @@ class TestCEJC(unittest.TestCase):
 
             e = cm.exception
             self.assertIsInstance(e.next, pd.DataFrame)
+
+    def test_sentence(self) -> None:
+        parser = Sentence()
+        result = parser(df.iloc[1:, :])
+        self.assertEqual(len(result.value), 9)
+
 
 
 if __name__ == '__main__':
