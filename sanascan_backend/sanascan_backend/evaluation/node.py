@@ -1,4 +1,10 @@
+from typing import TYPE_CHECKING, Optional, Tuple, Iterable
+
 from .score import Score
+from ..word import Word
+
+if TYPE_CHECKING:
+    from .dp_matching import DPMatching
 
 
 class IllegalAlgorithmError(Exception):
@@ -6,7 +12,24 @@ class IllegalAlgorithmError(Exception):
 
 
 class Node:
-    def __init__(self, x, y, ref, est, dpm, root=False):
+    _x: int
+    _y: int
+    _matching_score: Score
+    _dpm: 'DPMatching'
+
+    is_root: bool
+    parent: Optional['Node']
+    score: Optional[Score]
+
+    def __init__(
+            self,
+            x: int,
+            y: int,
+            ref: Word,
+            est: Word,
+            dpm: 'DPMatching',
+            root: bool = False) -> None:
+
         self._x = x
         self._y = y
         self._matching_score = self._calc_matching_score(ref, est)
@@ -21,40 +44,16 @@ class Node:
         else:
             self._set_parent()
 
-    def __repr__(self):
-        return f'Node(x={self._x}, y={self._y})'
-
-    def position(self):
+    def position(self) -> Tuple[int, int]:
         return self._x, self._y
 
-    def __eq__(self, other):
-        if not isinstance(other, type(self)):
-            raise TypeError()
-
-        if self.is_root and other.is_root:
-            return True
-
-        return tuple(self) == tuple(other)
-
-    def __hash__(self):
-        return hash(tuple(self))
-
-    def __tuple__(self):
-        if self.is_root:
-            return self.position()
-
-        if not self._parent:
-            raise IllegalAlgorithmError('親ノードが決定していない')
-
-        return self.position() + self._parent.position()
-
-    def _is_match(self):
+    def _is_match(self) -> bool:
         ms = self._matching_score
         if ms.perfect == 1 or ms.yomi == 1:
             return True
         return False
 
-    def _parent_candidates(self):
+    def _parent_candidates(self) -> Iterable['Node']:
         # 局所的制約に関する処理
         if self._x >= 1 and self._y >= 1:
             yield self._dpm.get_node(self._x-1, self._y-1)
@@ -63,16 +62,7 @@ class Node:
         if self._y >= 1:
             yield self._dpm.get_node(self._x, self._y-1)
 
-    def _prev_path(self):
-        if not self.parent:
-            raise IllegalAlgorithmError('親ノードが決定していない')
-
-        return (
-            self._x - self._parent._x,
-            self._y - self._parent._y
-        )
-
-    def _calc_matching_score(self, ref, est):
+    def _calc_matching_score(self, ref: Word, est: Word) -> Score:
         # 重み関数に関する処理 1/2
         if ref == est:
             return Score(perfect=1)
@@ -80,7 +70,7 @@ class Node:
             return Score(yomi=1)
         return Score()
 
-    def _calc_score(self, other):
+    def _calc_score(self, other: 'Node') -> Score:
         # 重み関数に関する処理 2/2
         if (other._x == self._x - 1) and (other._y == self._y - 1):
             penalty = Score()
@@ -90,9 +80,10 @@ class Node:
             else:
                 penalty = Score(miss=-1)
 
+        assert other.score is not None
         return other.score + self._matching_score + penalty
 
-    def _set_parent(self):
+    def _set_parent(self) -> None:
         parent = None
         max_score = Score()
         for can in self._parent_candidates():

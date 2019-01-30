@@ -3,16 +3,27 @@ from functools import total_ordering
 
 @total_ordering
 class Score:
-    def __init__(self, perfect=0, yomi=0, miss=0, ignore=False):
+    perfect: int
+    yomi: int
+    miss: int
+    ignore: bool
+
+    def __init__(
+            self,
+            perfect: int = 0,
+            yomi: int = 0,
+            miss: int = 0,
+            ignore: bool = False) -> None:
+
         self.perfect = perfect
         self.yomi = yomi
         self.miss = miss
         self.ignore = ignore
 
-    def __repr__(self):
-        return f'Score(perfect={self.perfect}, yomi={self.yomi}, miss={self.miss}, ignore={self.ignore})'
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Score):
+            return NotImplemented
 
-    def __eq__(self, other):
         if not self.perfect == other.perfect:
             return False
         if not self.yomi == other.yomi:
@@ -23,10 +34,10 @@ class Score:
             return False
         return True
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.perfect, self.yomi, self.miss, self.ignore))
 
-    def __lt__(self, other):
+    def __lt__(self, other: 'Score') -> bool:
         # この条件だとother.ignore == Trueでもselfが小さいことになる
         # そんなに影響ないのでこうしておく
         if self.ignore:
@@ -46,7 +57,7 @@ class Score:
 
         return False
 
-    def __add__(self, other):
+    def __add__(self, other: 'Score') -> 'Score':
         return Score(
             perfect=self.perfect + other.perfect,
             yomi=self.yomi + other.yomi,

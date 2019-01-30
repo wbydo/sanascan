@@ -1,8 +1,27 @@
+from typing import List, Dict, Tuple, Optional, Iterable
+
 from .node import Node
+from .score import Score
+
+from ..word import Word
 
 
 class DPMatching:
-    def __init__(self, ref_words, est_words):
+    _max_x: int
+    _max_y: int
+
+    _ref_words: List[Word]
+    _est_words: List[Word]
+
+    _nodes: Dict[Tuple[int, int], Node]
+    end_node: Node
+    score: Optional[Score]
+
+    def __init__(
+            self,
+            ref_words: List[Word],
+            est_words: List[Word]) -> None:
+
         self._max_x = len(ref_words) - 1
         self._max_y = len(est_words) - 1
 
@@ -14,7 +33,7 @@ class DPMatching:
         self.end_node = self.get_node(self._max_x, self._max_y)
         self.score = self.end_node.score
 
-    def get_node(self, x, y):
+    def get_node(self, x: int, y: int) -> Node:
         if x > self._max_x or y > self._max_y:
             raise ValueError()
 
@@ -34,9 +53,10 @@ class DPMatching:
         self._nodes[pos] = node
         return node
 
-    def nodes(self):
+    def nodes(self) -> Iterable[Node]:
         e = self.end_node
         while(not e.is_root):
             yield e
+            assert e.parent is not None
             e = e.parent
         yield e

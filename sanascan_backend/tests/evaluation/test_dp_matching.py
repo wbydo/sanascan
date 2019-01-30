@@ -2,6 +2,7 @@ import unittest
 
 from sanascan_backend.word import Word, TagWord
 from sanascan_backend.evaluation.dp_matching import DPMatching
+from sanascan_backend.evaluation.score import Score
 
 
 class TestDPMatching(unittest.TestCase):
@@ -62,7 +63,8 @@ class TestDPMatching(unittest.TestCase):
 
         dpm = DPMatching(ref, est)
 
-        self.fail(dpm.end_node.score)
+        s = Score(perfect=24, yomi=0, miss=0, ignore=False)
+        self.assertEqual(dpm.end_node.score, s)
 
 
 if __name__ == '__main__':
