@@ -1,87 +1,54 @@
-from typing import TYPE_CHECKING, Optional, Tuple, Iterable
+from typing import TYPE_CHECKING, Optional, Iterable
+
+from dataclasses import dataclass, field
 
 from .score import Score
-from ..word import Word
+from .position import Position
 
 if TYPE_CHECKING:
     from .dp_matching import DPMatching
 
 
-class IllegalAlgorithmError(Exception):
-    pass
-
-
+@dataclass(init=True, repr=False, eq=False, frozen=False)
 class Node:
-    _x: int
-    _y: int
-    _matching_score: Score
+    _pos: Position
     _dpm: 'DPMatching'
 
-    is_root: bool
-    parent: Optional['Node']
-    score: Optional[Score]
+    parent: Optional['Node'] = field(init=False)
+    score: Optional[Score] = field(init=False)
 
-    def __init__(
-            self,
-            x: int,
-            y: int,
-            ref: Word,
-            est: Word,
-            dpm: 'DPMatching',
-            root: bool = False) -> None:
-
-        self._x = x
-        self._y = y
-        self._matching_score = self._calc_matching_score(ref, est)
-        self._dpm = dpm  # いらないかも？
-
-        self.is_root = root
-        self.parent = None
-        self.score = None
-
-        if self.is_root:
-            self.score = self._matching_score
+    def __post_init__(self) -> None:
+        if self.is_root():
+            self.score = self._calc_matching_score()
+            self.parent = None
         else:
-            self._set_parent()
+            parent = None
+            max_score = Score()
+            for can in self._parent_candidates():
+                score = self._calc_score(can)
 
-    def position(self) -> Tuple[int, int]:
-        return self._x, self._y
+                if int(score) >= int(max_score):
+                    parent = can
+                    max_score = score
+
+            self.score = max_score
+            self.parent = parent
 
     def _parent_candidates(self) -> Iterable['Node']:
-        # 局所的制約に関する処理
-        if self._x - 1 >= 0 and self._y - 1 >= 0:
-            yield self._dpm.get_node(self._x-1, self._y-1)
-        if self._x - 2 >= 0 and self._y - 1 >= 0:
-            yield self._dpm.get_node(self._x-2, self._y-1)
-        if self._x - 1 >= 0 and self._y - 2 >= 0:
-            yield self._dpm.get_node(self._x-1, self._y-2)
+        for pos in self._pos.parent_positions():
+            yield self._dpm.get_node(pos)
 
-    def _calc_matching_score(self, ref: Word, est: Word) -> Score:
-        # 読みだけで正解とするときはここを弄る
-        return Score(correct=1) if ref == est else Score(substitute=1)
+    def _calc_matching_score(self) -> Score:
+        if self._dpm.is_match(self._pos):
+            return Score(correct=1)
+        else:
+            return Score(substitute=1)
 
     def _calc_score(self, other: 'Node') -> Score:
-        if (other._x == self._x - 1) and (other._y == self._y - 1):
-            penalty = Score()
-        elif (other._x == self._x - 2) and (other._y == self._y - 1):
-            penalty = Score(dropout=1)
-        elif (other._x == self._x - 1) and (other._y == self._y - 2):
-            penalty = Score(insert=1)
-        else:
-            raise Exception()
+        penalty = self._pos.penalty(other._pos)
 
         assert other.score is not None
-        return other.score + self._matching_score + penalty
+        return other.score + self._calc_matching_score() + penalty
 
-    def _set_parent(self) -> None:
-        parent = None
-        max_score = Score()
-        for can in self._parent_candidates():
-            score = self._calc_score(can)
-
-            if int(score) >= int(max_score):
-                parent = can
-                max_score = score
-
-        self.score = max_score
-        self.parent = parent
+    def is_root(self) -> bool:
+        return self._pos.is_root()

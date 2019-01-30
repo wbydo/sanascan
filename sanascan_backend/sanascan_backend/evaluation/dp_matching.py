@@ -1,62 +1,38 @@
-from typing import List, Dict, Tuple, Optional, Iterable
+from typing import Dict
 
-from .node import Node
-from .score import Score
+from dataclasses import dataclass, field
 
-from ..word import Word
+from .node import Node, Position
+
+from ..word import Word, Sentence
 
 
+@dataclass(init=True, repr=False, eq=False, frozen=False)
 class DPMatching:
-    _max_x: int
-    _max_y: int
+    _ref: Sentence
+    _est: Sentence
 
-    _ref_words: List[Word]
-    _est_words: List[Word]
+    _nodes: Dict[Position, Node] = field(init=False)
+    end_node: Node = field(init=False)
 
-    _nodes: Dict[Tuple[int, int], Node]
-    end_node: Node
-    score: Optional[Score]
-
-    def __init__(
-            self,
-            ref_words: List[Word],
-            est_words: List[Word]) -> None:
-
-        self._max_x = len(ref_words) - 1
-        self._max_y = len(est_words) - 1
-
-        self._ref_words = ref_words
-        self._est_words = est_words
-
+    def __post_init__(self) -> None:
         self._nodes = {}
 
-        self.end_node = self.get_node(self._max_x, self._max_y)
-        self.score = self.end_node.score
+        max_ref = len(self._ref.words) - 1
+        max_est = len(self._est.words) - 1
+        pos = Position(ref=max_ref, est=max_est)
+        self.end_node = self.get_node(pos)
 
-    def get_node(self, x: int, y: int) -> Node:
-        if x > self._max_x or y > self._max_y:
-            raise ValueError()
-
-        pos = (x, y)
+    def get_node(self, pos: Position) -> Node:
         if pos in self._nodes:
             return self._nodes[pos]
 
-        is_root = True if x == 0 and y == 0 else False
-        node = Node(
-            x=pos[0],
-            y=pos[1],
-            ref=self._ref_words[x],
-            est=self._est_words[y],
-            dpm=self,
-            root=is_root
-        )
+        node = Node(_pos=pos, _dpm=self)
         self._nodes[pos] = node
         return node
 
-    def nodes(self) -> Iterable[Node]:
-        e = self.end_node
-        while(not e.is_root):
-            yield e
-            assert e.parent is not None
-            e = e.parent
-        yield e
+    def is_match(self, pos: Position) -> bool:
+        # 読みだけで正解とするときはここを弄る
+        ref: Word = self._ref.words[pos.ref]
+        est: Word = self._est.words[pos.est]
+        return ref == est
