@@ -1,60 +1,38 @@
-from typing import List, Dict, Optional, Iterable
+from typing import Dict
+
+from dataclasses import dataclass, field
 
 from .node import Node, Position
-from .score import Score
 
-from ..word import Word
+from ..word import Word, Sentence
 
 
+@dataclass(init=True, repr=False, eq=False, frozen=False)
 class DPMatching:
-    _max_ref: int
-    _max_est: int
+    _ref: Sentence
+    _est: Sentence
 
-    _ref: List[Word]
-    _est: List[Word]
+    _nodes: Dict[Position, Node] = field(init=False)
+    end_node: Node = field(init=False)
 
-    _nodes: Dict[Position, Node]
-    end_node: Node
-    score: Optional[Score]
-
-    def __init__(
-            self,
-            ref_words: List[Word],
-            est_words: List[Word]) -> None:
-
-        self._max_ref = len(ref_words) - 1
-        self._max_est = len(est_words) - 1
-
-        self._ref = ref_words
-        self._est = est_words
-
+    def __post_init__(self) -> None:
         self._nodes = {}
 
-        pos = Position(ref=self._max_ref, est=self._max_est)
+        max_ref = len(self._ref.words) - 1
+        max_est = len(self._est.words) - 1
+        pos = Position(ref=max_ref, est=max_est)
         self.end_node = self.get_node(pos)
-        self.score = self.end_node.score
 
     def get_node(self, pos: Position) -> Node:
         if pos in self._nodes:
             return self._nodes[pos]
 
-        node = Node(
-            _pos=pos,
-            _dpm=self,
-        )
+        node = Node(_pos=pos, _dpm=self)
         self._nodes[pos] = node
         return node
 
-    def nodes(self) -> Iterable[Node]:
-        e = self.end_node
-        while(not e.is_root):
-            yield e
-            assert e.parent is not None
-            e = e.parent
-        yield e
-
     def is_match(self, pos: Position) -> bool:
         # 読みだけで正解とするときはここを弄る
-        ref: Word = self._ref[pos.ref]
-        est: Word = self._est[pos.est]
+        ref: Word = self._ref.words[pos.ref]
+        est: Word = self._est.words[pos.est]
         return ref == est
