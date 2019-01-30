@@ -7,64 +7,102 @@ from sanascan_backend.evaluation.score import Score
 
 class TestDPMatching(unittest.TestCase):
     def test_dpmatching(self) -> None:
-        ref = [
-            Word('ホテル', 'ホテル'),
-            Word('内', 'ナイ'),
-            Word('の', 'ノ'),
-            Word('飲食', 'インショク'),
-            Word('店', 'テン'),
-            Word('が', 'ガ'),
-            Word('充実', 'ジュウジツ'),
-            Word('し', 'シ'),
-            Word('て', 'テ'),
-            Word('おり', 'オリ'),
-            Word('特に', 'トクニ'),
-            TagWord('<num>'),
-            TagWord('<eng>'),
-            Word('の', 'ノ'),
-            Word('バー', 'バー'),
-            Word('は', 'ハ'),
-            Word('重厚', 'ジュウコウ'),
-            Word('な', 'ナ'),
-            Word('インテリア', 'インテリア'),
-            Word('で', 'デ'),
-            Word('雰囲気', 'フンイキ'),
-            Word('が', 'ガ'),
-            Word('良く', 'ヨク'),
-            Word('最高', 'サイコウ')
-        ]
+        with self.subTest('correct'):
+            ref = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
 
-        est = [
-            Word('ホテル', 'ホテル'),
-            Word('内', 'ナイ'),
-            Word('の', 'ノ'),
-            Word('飲食', 'インショク'),
-            Word('店', 'テン'),
-            Word('が', 'ガ'),
-            Word('充実', 'ジュウジツ'),
-            Word('し', 'シ'),
-            Word('て', 'テ'),
-            Word('おり', 'オリ'),
-            Word('特に', 'トクニ'),
-            TagWord('<num>'),
-            TagWord('<eng>'),
-            Word('の', 'ノ'),
-            Word('バー', 'バー'),
-            Word('は', 'ハ'),
-            Word('重厚', 'ジュウコウ'),
-            Word('な', 'ナ'),
-            Word('インテリア', 'インテリア'),
-            Word('で', 'デ'),
-            Word('雰囲気', 'フンイキ'),
-            Word('が', 'ガ'),
-            Word('良く', 'ヨク'),
-            Word('最高', 'サイコウ')
-        ]
+            est = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
 
-        dpm = DPMatching(ref, est)
+            dpm = DPMatching(ref, est)
 
-        s = Score(perfect=24, yomi=0, miss=0, ignore=False)
-        self.assertEqual(dpm.end_node.score, s)
+            s = Score(correct=6)
+            self.assertEqual(dpm.end_node.score, s)
+
+        with self.subTest('dropout'):
+            ref = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
+
+            est = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
+
+            dpm = DPMatching(ref, est)
+
+            s = Score(correct=5, dropout=1)
+            self.assertEqual(dpm.end_node.score, s)
+
+        with self.subTest('insert'):
+            ref = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
+
+            est = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
+
+            dpm = DPMatching(ref, est)
+
+            s = Score(correct=6, insert=1)
+            self.assertEqual(dpm.end_node.score, s)
+
+        with self.subTest('substitute'):
+            ref = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('店', 'テン'),
+                Word('が', 'ガ'),
+            ]
+
+            est = [
+                Word('ホテル', 'ホテル'),
+                Word('内', 'ナイ'),
+                Word('の', 'ノ'),
+                Word('飲食', 'インショク'),
+                Word('さん', 'サン'),
+                Word('が', 'ガ'),
+            ]
+
+            dpm = DPMatching(ref, est)
+
+            s = Score(correct=5, substitute=1)
+            self.assertEqual(dpm.end_node.score, s)
+
 
 
 if __name__ == '__main__':

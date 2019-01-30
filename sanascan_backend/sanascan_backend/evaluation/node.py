@@ -47,38 +47,28 @@ class Node:
     def position(self) -> Tuple[int, int]:
         return self._x, self._y
 
-    def _is_match(self) -> bool:
-        ms = self._matching_score
-        if ms.perfect == 1 or ms.yomi == 1:
-            return True
-        return False
-
     def _parent_candidates(self) -> Iterable['Node']:
         # 局所的制約に関する処理
-        if self._x >= 1 and self._y >= 1:
+        if self._x - 1 >= 0 and self._y - 1 >= 0:
             yield self._dpm.get_node(self._x-1, self._y-1)
-        if self._x >= 1:
-            yield self._dpm.get_node(self._x-1, self._y)
-        if self._y >= 1:
-            yield self._dpm.get_node(self._x, self._y-1)
+        if self._x - 2 >= 0 and self._y - 1 >= 0:
+            yield self._dpm.get_node(self._x-2, self._y-1)
+        if self._x - 1 >= 0 and self._y - 2 >= 0:
+            yield self._dpm.get_node(self._x-1, self._y-2)
 
     def _calc_matching_score(self, ref: Word, est: Word) -> Score:
-        # 重み関数に関する処理 1/2
-        if ref == est:
-            return Score(perfect=1)
-        if ref.yomi == est.yomi:
-            return Score(yomi=1)
-        return Score()
+        # 読みだけで正解とするときはここを弄る
+        return Score(correct=1) if ref == est else Score(substitute=1)
 
     def _calc_score(self, other: 'Node') -> Score:
-        # 重み関数に関する処理 2/2
         if (other._x == self._x - 1) and (other._y == self._y - 1):
             penalty = Score()
+        elif (other._x == self._x - 2) and (other._y == self._y - 1):
+            penalty = Score(dropout=1)
+        elif (other._x == self._x - 1) and (other._y == self._y - 2):
+            penalty = Score(insert=1)
         else:
-            if self._is_match() or other._is_match():
-                penalty = Score(ignore=True)
-            else:
-                penalty = Score(miss=-1)
+            raise Exception()
 
         assert other.score is not None
         return other.score + self._matching_score + penalty
@@ -89,7 +79,7 @@ class Node:
         for can in self._parent_candidates():
             score = self._calc_score(can)
 
-            if score >= max_score:
+            if int(score) >= int(max_score):
                 parent = can
                 max_score = score
 
