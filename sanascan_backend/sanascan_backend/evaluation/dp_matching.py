@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple, Optional, Iterable
+from typing import List, Dict, Optional, Iterable
 
-from .node import Node
+from .node import Node, Position
 from .score import Score
 
 from ..word import Word
@@ -13,7 +13,7 @@ class DPMatching:
     _ref_words: List[Word]
     _est_words: List[Word]
 
-    _nodes: Dict[Tuple[int, int], Node]
+    _nodes: Dict[Position, Node]
     end_node: Node
     score: Optional[Score]
 
@@ -30,23 +30,22 @@ class DPMatching:
 
         self._nodes = {}
 
-        self.end_node = self.get_node(self._max_x, self._max_y)
+        pos = Position(self._max_x, self._max_y)
+        self.end_node = self.get_node(pos)
         self.score = self.end_node.score
 
-    def get_node(self, x: int, y: int) -> Node:
-        if x > self._max_x or y > self._max_y:
+    def get_node(self, pos: Position) -> Node:
+        if pos.ref > self._max_x or pos.est > self._max_y:
             raise ValueError()
 
-        pos = (x, y)
         if pos in self._nodes:
             return self._nodes[pos]
 
-        is_root = True if x == 0 and y == 0 else False
+        is_root = True if pos.ref == 0 and pos.est == 0 else False
         node = Node(
-            x=pos[0],
-            y=pos[1],
-            ref=self._ref_words[x],
-            est=self._est_words[y],
+            pos,
+            ref=self._ref_words[pos.ref],
+            est=self._est_words[pos.est],
             dpm=self,
             root=is_root
         )
