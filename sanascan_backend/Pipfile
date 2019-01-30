@@ -22,6 +22,7 @@ mypy = "*"
 "flake8" = "*"
 typing-extensions = "*"
 pyyaml = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.7"
