@@ -44,7 +44,7 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=6)
-            acc = 1
+            acc = float(1)
 
             self._common(ref, est, s, acc)
 
@@ -67,7 +67,7 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=5, dropout=1)
-            acc = (5-1) / 6
+            acc = float(5-1) / 6
             self._common(ref, est, s, acc)
 
         with self.subTest('insert'):
@@ -91,7 +91,7 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=6, insert=1)
-            acc = (6-1) / 6
+            acc = float(6-1) / 6
             self._common(ref, est, s, acc)
 
         with self.subTest('substitute'):
