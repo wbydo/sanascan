@@ -3,8 +3,19 @@ from typing import Dict
 from dataclasses import dataclass, field
 
 from .node import Node, Position
+from .score import Score
 
 from ..word import Word, Sentence
+
+
+@dataclass(init=True, repr=True, eq=True, frozen=False)
+class WordAccuracy:
+    size: int
+    score: Score
+    accuracy: float = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.accuracy = int(self.score) / self.size
 
 
 @dataclass(init=True, repr=False, eq=False, frozen=False)
@@ -36,3 +47,13 @@ class DPMatching:
         ref: Word = self._ref.words[pos.ref]
         est: Word = self._est.words[pos.est]
         return ref == est
+
+    def get_accuracy(self) -> WordAccuracy:
+        # __init__と同時に再帰的に求まっているはず
+        assert self.end_node is not None
+        assert self.end_node.score is not None
+
+        return WordAccuracy(
+            size=len(self._ref.words),
+            score=self.end_node.score
+        )

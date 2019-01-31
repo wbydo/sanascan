@@ -12,7 +12,8 @@ class TestDPMatching(unittest.TestCase):
             self,
             ref: List[Word],
             est: List[Word],
-            s: Score) -> None:
+            s: Score,
+            acc: float) -> None:
 
         dpm = DPMatching(
             Sentence.from_iter(ref),
@@ -20,6 +21,7 @@ class TestDPMatching(unittest.TestCase):
         )
 
         self.assertEqual(dpm.end_node.score, s)
+        self.assertAlmostEqual(dpm.get_accuracy().accuracy, acc)
 
     def test_dpmatching(self) -> None:
         with self.subTest('correct'):
@@ -42,8 +44,9 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=6)
+            acc = 1
 
-            self._common(ref, est, s)
+            self._common(ref, est, s, acc)
 
         with self.subTest('dropout'):
             ref = [
@@ -64,7 +67,8 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=5, dropout=1)
-            self._common(ref, est, s)
+            acc = (5-1) / 6
+            self._common(ref, est, s, acc)
 
         with self.subTest('insert'):
             ref = [
@@ -87,7 +91,8 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=6, insert=1)
-            self._common(ref, est, s)
+            acc = (6-1) / 6
+            self._common(ref, est, s, acc)
 
         with self.subTest('substitute'):
             ref = [
@@ -109,7 +114,8 @@ class TestDPMatching(unittest.TestCase):
             ]
 
             s = Score(correct=5, substitute=1)
-            self._common(ref, est, s)
+            acc = (5-1) / 6
+            self._common(ref, est, s, acc)
 
 
 if __name__ == '__main__':
