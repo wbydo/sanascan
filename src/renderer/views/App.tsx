@@ -25,7 +25,7 @@ class App extends React.Component<Props> {
           id="App"
           className={styles.app}
       >
-        <div>{this.props.estimator.result}</div>
+        <div className={styles.result}>{this.props.estimator.result || " "}</div>
         <div onMouseDown={() => this.props.dispatch.click(this.props)}>
           <CharacterBoard { ...this.props }/>
         </div>

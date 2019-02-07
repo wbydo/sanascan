@@ -1,3 +1,9 @@
 .app {
   position: relative;
 }
+
+.result {
+  font-family: "YuMin-Medium";
+  font-size: 52pt;
+  height: 100px;
+}

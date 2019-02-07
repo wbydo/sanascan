@@ -4,11 +4,12 @@
   border-collapse: collapse;
   width: 100%;
   height: tableHeight;
+  font-family: "YuMin-Medium";
+  font-size: 46pt;
 }
 
 .deactiveData {
   text-align: center;
-  font-size: 20pt;
 }
 
 .activeData {
