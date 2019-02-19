@@ -1,7 +1,7 @@
-from typing import Tuple, Iterable, List, Union, Iterator, NewType, Dict
+from typing import Tuple, Iterable, Union, Iterator, NewType, Dict
 from typing import Optional, Generic, TypeVar, Type, ClassVar
 
-from .word import Word, TagWord
+from .word import TagWord, Sentence
 from .yomi_property import YomiProperty, ColNum, Position
 
 katakana_table = [
@@ -43,28 +43,28 @@ class Key(Generic[T]):
             )
 
     @classmethod
-    def from_words(
+    def from_sentence(
             klass,
-            words: List[Word],
+            sentence: Sentence,
             type_: Type[T]
             ) -> 'Key':
 
-        return klass(klass._process_words(words, type_))
+        return klass(klass._process_words(sentence, type_))
 
     @classmethod
     def _process_words(
             klass,
-            words: List[Word],
+            sentence: Sentence,
             type_: Type[T],
             ) -> Iterable[Union[TagWord, T]]:
 
-        for w in words:
+        for w in sentence.words:
             if isinstance(w, TagWord):
                 yield w
             else:
                 for c in w.yomi:
                     y = Yomi(c)
-                    yield type_(klass._TABLE[y])
+                    yield type_.create(klass._TABLE[y])
 
     @classmethod
     def from_int(klass, arg: Iterable[Union[TagWord, int]]) -> 'Key[ColNum]':

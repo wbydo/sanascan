@@ -1,10 +1,10 @@
 import re
-from typing import Dict, Set, Tuple, Iterable, IO
+from typing import Dict, Set, Tuple, IO
 from enum import Enum
 from enum import auto
 from itertools import chain
 
-from .word import Word
+from .word import Word, Sentence
 from .vocabulary import Vocabulary
 
 
@@ -51,19 +51,20 @@ class LangModel:
 
             data_line = line.split('\t')
             prob = float(data_line[0])
-            word = tuple(Word.from_wakachigaki(data_line[1]))
+            wakachigaki = data_line[1]
+            sentence = Word.from_wakachigaki(wakachigaki)
             backoff = float(data_line[2]) if len(data_line) == 3 else 0
-            result[word] = LangModel.Data(prob=prob, backoff=backoff)
+            result[sentence.words] = LangModel.Data(prob=prob, backoff=backoff)
 
         self.order = ngram
         self._dic = result
 
-    def score(self, words: Iterable[Word]) -> float:
-        words = tuple(words)
-        len_ = len(words)
+    def score(self, sentence: Sentence) -> float:
+        len_ = len(sentence.words)
         if len_ > self.order:
-            raise NgramError(Word.to_str(words))
+            raise NgramError(sentence.format_surfaces())
 
+        words = sentence.words
         if len_ == 1 and (words not in self._dic.keys()):
             raise NgramError(str(words) + 'は使用言語モデルの語彙にない')
 
@@ -71,7 +72,8 @@ class LangModel:
             return self._dic[words].prob
         else:
             context = words[:-1]
-            p = self.score(words[1:])
+            s = Sentence.from_iter(words[1:])
+            p = self.score(s)
 
             if context in self._dic.keys():
                 backoff = self._dic[context].backoff
